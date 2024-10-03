@@ -16,6 +16,15 @@ gem "ransack", "~> 3.2"
 gem "pagy", "~> 5.10"
 gem "image_processing", "~> 1.2"
 gem "faker", "~> 2"
+gem 'capybara'
+gem 'selenium-webdriver'
+gem 'webdrivers'
+gem 'sidekiq'
+gem 'sidekiq-status'
+gem 'rest-client'
+gem 'httparty'
+gem 'streamio-ffmpeg'
+gem "ruby-openai"
 
 # Front-end
 gem "sprockets-rails", "~> 3.4"
@@ -23,6 +32,11 @@ gem "jsbundling-rails", "~> 1.0"
 gem "cssbundling-rails", "~> 1.1"
 gem "turbo-rails", "~> 1.3"
 gem "heroicon", "~> 1.0"
+
+group :development, :test do
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-byebug'
+end
 
 group :development do
   gem "web-console"

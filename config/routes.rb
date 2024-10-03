@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   root "home#index"
 
   resource :user, only: %i[edit update destroy]
+  resources :channels, only: [:index, :create, :update, :show, :edit]
 
   get "/pages/:page" => "pages#show", as: :page
 

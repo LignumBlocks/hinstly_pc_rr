@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
   has_and_belongs_to_many :roles
+  has_many :channels
 
   def name
     @name ||= self[:name].presence || email.split("@").first

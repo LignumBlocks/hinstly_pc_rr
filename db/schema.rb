@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_03_152033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "channels", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.string "source"
+    t.datetime "checked_at"
+    t.integer "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -68,9 +78,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "validation_sources", force: :cascade do |t|
-    t.string "name"
-    t.string "url_query"
+  create_table "videos", force: :cascade do |t|
+    t.string "state"
+    t.datetime "processed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
