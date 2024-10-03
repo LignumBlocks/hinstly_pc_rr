@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>FinanceScrapper</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title><%= page_title %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="icon" href="/favicon.ico">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+</head>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
-
-  <body>
-    <%= yield %>
-  </body>
+<body class="<%= body_class %>">
+<%= render "application/header" %>
+<%= render "application/flash_messages" %>
+<main>
+  <div class="sm:ml-64">
+    <div class="dark:border-gray-700">
+      <%= yield %>
+    </div>
+  </div>
+</main>
+<%#= render "application/footer" %>
+<%= render "application/remote_modal" %>
+</body>
 </html>

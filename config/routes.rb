@@ -1,11 +1,14 @@
-require 'sidekiq/web'
-
 Rails.application.routes.draw do
-  mount Sidekiq::Web => '/sidekiq'
+  devise_for :users, controllers: {
+    omniauth_callbacks: 'users/omniauth_callbacks',
+  }
+  root "home#index"
 
-  namespace :api, defaults: { format: :json } do
-    namespace :v1 do
-      post 'convert', to: 'videos#convert'
-    end
-  end
+  resource :user, only: %i[edit update destroy]
+
+  get "/pages/:page" => "pages#show", as: :page
+
+  match '/404', to: 'errors#not_found', via: :all
+  match '/422', to: 'errors#internal_server_error', via: :all
+  match '/500', to: 'errors#internal_server_error', via: :all
 end

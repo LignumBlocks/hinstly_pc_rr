@@ -6,17 +6,12 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module FinanceScrapper
+module RailsRalixTailwind
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
+    # Load Rails defaults
     config.load_defaults 7.0
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    # This tells Rails to serve error pages from the app itself, rather than using static error pages in public/
+    config.exceptions_app = self.routes
   end
 end

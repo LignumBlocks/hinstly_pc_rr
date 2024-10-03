@@ -1,24 +1,41 @@
-# README
+# 🚀 Rails + Ralix + Tailwind
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+> Starter Kit to build modern Rails applications fast
 
-Things you may want to cover:
+Powered by:
 
-* Ruby version
+- [Rails](https://rubyonrails.org)
+- [Ralix](https://github.com/ralixjs/ralix)
+- [Tailwind CSS](https://tailwindcss.com)
+- [PostgreSQL](https://www.postgresql.org)
+- [Turbo](https://turbo.hotwired.dev)
+- [esbuild](https://esbuild.github.io)
 
-* System dependencies
+Rails v7 application template ready to start building your next project, with a pre-configured modern front-end stack and some extras:
 
-* Configuration
+- 🎨 Minimalistic and responsive, clean layout
+- 📦 Icons pack, via [Heroicons](https://heroicons.com)
+- 🔐 Authentication, via [Devise](https://github.com/heartcombo/devise) + [OmniAuth](https://github.com/omniauth/omniauth) for Social Logins
+- 👥 Authorization, via [CanCanCan](https://github.com/CanCanCommunity/cancancan)
+- 🔍 Searching, via [Ransack](https://github.com/activerecord-hackery/ransack)
+- 📝 Rich text edition, via [Trix](https://trix-editor.org)
+- 🔢 Pagination, via [Pagy](https://github.com/ddnexus/pagy)
+- 📄 Static pages controller (About, Terms, ...)
+- 🔴 Custom errors pages: 404, 422, 500
+- 📚 *Ready-to-use* components: Tables, Buttons, Forms, Cards, Modals and Tooltips
 
-* Database creation
+## Install
 
-* Database initialization
+Clone this repository (or use the GitHub *template* button), then `cd` into the folder and run:
 
-* How to run the test suite
+```
+> bin/setup
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Run
 
-* Deployment instructions
+Start the development server:
 
-* ...
+```
+> bin/dev
+```
