@@ -45,9 +45,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_152033) do
   create_table "channels", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
-    t.string "source"
+    t.string "external_source"
+    t.string "external_source_id"
     t.datetime "checked_at"
-    t.integer "state"
+    t.integer "state", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

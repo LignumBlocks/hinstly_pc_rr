@@ -59,20 +59,28 @@
           <%= image_tag url_for(channel.avatar), class: "w-12 h-12 rounded" %>
           <div class="ps-3">
             <div class="text-base font-semibold"><%= channel.name %></div>
-            <div class="font-normal text-gray-500"><%= "description" %></div>
+            <div class="font-normal text-gray-500"><%= channel.external_source %></div>
           </div>
         </td>
 
         <td class="px-4 py-4 text-center">
-          <span class="<%= class_for_boolean(channel.state) %> inline-block"><%= class_for_channel_state(channel.state) %></span>
+          <span class="<%= class_for_state(channel) %> inline-block"><%= channel.state.capitalize %></span>
         </td>
 
-        <td class="px-4 py-4 text-center">
+        <td class="px-4 py-4 text-center ">
           <%= channel.checked_at&.strftime("%d/%m/%Y") %>
         </td>
 
-        <td class="px-4 py-4 text-center">
-          <%= button_to 'Edit', edit_channels_path(channel.id), class: 'btn-sm btn-success' %>
+        <td class="px-4 py-4 text-right">
+          <%= form_with url: process_videos_channel_path(id: channel.id), method: :post do %>
+            <%= button_tag class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" do %>
+              <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z" clip-rule="evenodd"/>
+              </svg>
+
+              <span class="sr-only">Process videos for this channel</span>
+            <% end %>
+          <% end %>
         </td>
       </tr>
     <% end %>
@@ -118,12 +126,21 @@
           <div >
             <div class="sm:col-span-2">
               <%= form.label :name, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-              <%= form.text_field :name, required: true, class:"p-2 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %>
+              <%= form.text_field :name, required: true, placeholder:"@channel", class:"p-2 w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" %>
             </div>
           </div>
         </div>
+        <div class="flex items-center p-4 mb-2 mt-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 w-full" role="alert">
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">Note:</span> Please insert the Tiktok channel name
+          </div>
+        </div>
         <div class="flex mt-4">
-          <%= form.submit class:"btn btn-primary" %>
+          <%= form.submit class:"btn btn-primary w-full" %>
         </div>
       <% end %>
     </div>

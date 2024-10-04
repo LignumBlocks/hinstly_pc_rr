@@ -6,6 +6,11 @@ Rails.application.routes.draw do
 
   resource :user, only: %i[edit update destroy]
   resources :channels, only: [:index, :create, :update, :show, :edit]
+  resource :channel do
+    member do
+      post :process_videos
+    end
+  end
 
   get "/pages/:page" => "pages#show", as: :page
 
