@@ -1,0 +1,2 @@
+class ValidationSource < ApplicationRecord
+end

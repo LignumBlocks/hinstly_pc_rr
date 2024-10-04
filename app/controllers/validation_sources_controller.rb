@@ -1,0 +1,2 @@
+class ValidationSourcesController < ApplicationController
+end
