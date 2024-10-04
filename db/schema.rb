@@ -42,6 +42,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "channels", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.string "external_source"
+    t.string "external_source_id"
+    t.datetime "checked_at"
+    t.integer "state", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -71,6 +82,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
   create_table "validation_sources", force: :cascade do |t|
     t.string "name"
     t.string "url_query"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "videos", force: :cascade do |t|
+    t.string "state"
+    t.datetime "processed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
