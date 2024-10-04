@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   resource :user, only: %i[edit update destroy]
   resources :channels, only: [:index, :create, :update, :show, :edit]
+  resources :validation_sources
+
   resource :channel do
     member do
       post :process_videos

@@ -9834,3 +9834,1906 @@ Migrating to CreateValidationSources (20241003192452)
   [1m[36mActiveRecord::InternalMetadata Load (2.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
   [1m[35m (0.7ms)[0m  [1m[34mSELECT pg_advisory_unlock(8532810299449219455)[0m
   [1m[36mActiveRecord::SchemaMigration Pluck (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (1.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (1.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (5020.1ms)[0m  [1m[35mDROP DATABASE IF EXISTS "hintsly_development"[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (38.0ms)[0m  [1m[35mDROP DATABASE IF EXISTS "hintsly_development"[0m
+  [1m[35m (55.0ms)[0m  [1m[35mDROP DATABASE IF EXISTS "hintsly_test"[0m
+  [1m[35m (374.7ms)[0m  [1m[35mCREATE DATABASE "hintsly_development" ENCODING = 'unicode'[0m
+  [1m[35m (111.5ms)[0m  [1m[35mCREATE DATABASE "hintsly_test" ENCODING = 'unicode'[0m
+  [1m[35m (25.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (18.5ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT pg_try_advisory_lock(8532810299449219455)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to DeviseCreateUsers (20220831213127)
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (7.7ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "email" character varying DEFAULT '' NOT NULL, "encrypted_password" character varying DEFAULT '' NOT NULL, "reset_password_token" character varying, "reset_password_sent_at" timestamp(6), "remember_created_at" timestamp(6), "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (3.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (3.4ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_reset_password_token" ON "users" ("reset_password_token")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.5ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20220831213127"]]
+  [1m[36mTRANSACTION (1.5ms)[0m  [1m[35mCOMMIT[0m
+Migrating to AddNameToUsers (20220831235947)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.4ms)[0m  [1m[35mALTER TABLE "users" ADD "name" character varying[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20220831235947"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateActiveStorageTables (20221005175500)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (5.7ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" bigserial primary key, "key" character varying NOT NULL, "filename" character varying NOT NULL, "content_type" character varying, "metadata" text, "service_name" character varying NOT NULL, "byte_size" bigint NOT NULL, "checksum" character varying, "created_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key")[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" bigserial primary key, "name" character varying NOT NULL, "record_type" character varying NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_c3b3935057"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+)[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id")[0m
+  [1m[35m (3.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id")[0m
+  [1m[35m (7.5ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" bigserial primary key, "blob_id" bigint NOT NULL, "variation_digest" character varying NOT NULL, CONSTRAINT "fk_rails_993965df05"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+)[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20221005175500"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRoles (20231204023041)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (6.4ms)[0m  [1m[35mCREATE TABLE "roles" ("id" bigserial primary key, "name" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231204023041"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateRolesUsersJoinTable (20231204023133)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE "roles_users" ("role_id" bigint NOT NULL, "user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20231204023133"]]
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateChannels (20241003152016)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "channels" ("id" bigserial primary key, "user_id" integer, "name" character varying, "external_source" character varying, "external_source_id" character varying, "checked_at" timestamp(6), "state" integer DEFAULT 0, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20241003152016"]]
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateVideos (20241003152033)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE TABLE "videos" ("id" bigserial primary key, "state" character varying, "processed_at" timestamp(6), "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20241003152033"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateValidationSources (20241003192452)
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (7.3ms)[0m  [1m[35mCREATE TABLE "validation_sources" ("id" bigserial primary key, "name" character varying, "url_query" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20241003192452"]]
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.6ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2024-10-04 17:55:41.463411"], ["updated_at", "2024-10-04 17:55:41.463411"]]
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT pg_advisory_unlock(8532810299449219455)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mRole Load (0.5ms)[0m  [1m[34mSELECT "roles".* FROM "roles"[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRole Create (0.5ms)[0m  [1m[32mINSERT INTO "roles" ("name", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["name", "admin"], ["created_at", "2024-10-04 17:56:03.441016"], ["updated_at", "2024-10-04 17:56:03.441016"]]
+  [1m[36mTRANSACTION (7.1ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "admin@hintsly.dev"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.4ms)[0m  [1m[32mINSERT INTO "users" ("email", "encrypted_password", "reset_password_token", "reset_password_sent_at", "remember_created_at", "created_at", "updated_at", "name") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["email", "admin@hintsly.dev"], ["encrypted_password", "[FILTERED]"], ["reset_password_token", "[FILTERED]"], ["reset_password_sent_at", "[FILTERED]"], ["remember_created_at", nil], ["created_at", "2024-10-04 17:56:03.807520"], ["updated_at", "2024-10-04 17:56:03.807520"], ["name", nil]]
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mUser::HABTM_Roles Create (0.4ms)[0m  [1m[32mINSERT INTO "roles_users" ("role_id", "user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4)[0m  [["role_id", 1], ["user_id", 1], ["created_at", "2024-10-04 17:56:04.057617"], ["updated_at", "2024-10-04 17:56:04.057617"]]
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+Started GET "/users/sign_in" for 192.168.16.1 at 2024-10-04 13:56:40 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Devise::SessionsController#new as HTML
+  Rendering layout layouts/devise.html.erb
+  Rendering devise/sessions/new.html.erb within layouts/devise
+  Rendered application/_error_messages.html.erb (Duration: 5.7ms | Allocations: 284)
+  Rendered devise/sessions/new.html.erb within layouts/devise (Duration: 206.2ms | Allocations: 6869)
+  Rendered layout layouts/devise.html.erb (Duration: 1625.9ms | Allocations: 66621)
+Completed 500 Internal Server Error in 12394ms (ActiveRecord: 3.4ms | Allocations: 1055894)
+
+
+  
+ActionView::Template::Error (Asset `application.css` was not declared to be precompiled in production.
+Declare links to your assets in `app/assets/config/manifest.js`.
+
+  //= link application.css
+
+and restart your server):
+     6:     <%= csrf_meta_tags %>
+     7:     <%= csp_meta_tag %>
+     8:     <link rel="icon" href="/favicon.ico">
+     9:     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    10:     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    11:   </head>
+    12: 
+  
+app/views/layouts/devise.html.erb:9
+Started GET "/users/sign_in" for 192.168.16.1 at 2024-10-04 13:59:51 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Devise::SessionsController#new as HTML
+  Rendering layout layouts/devise.html.erb
+  Rendering devise/sessions/new.html.erb within layouts/devise
+  Rendered application/_error_messages.html.erb (Duration: 6.5ms | Allocations: 284)
+  Rendered devise/sessions/new.html.erb within layouts/devise (Duration: 75.0ms | Allocations: 6045)
+  Rendered application/_flash_messages.html.erb (Duration: 7.0ms | Allocations: 425)
+  Rendered layout layouts/devise.html.erb (Duration: 99.1ms | Allocations: 7519)
+Completed 200 OK in 2135ms (Views: 2074.6ms | ActiveRecord: 3.2ms | Allocations: 311804)
+
+
+Started POST "/users/sign_in" for 192.168.16.1 at 2024-10-04 14:00:01 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by Devise::SessionsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "user"=>{"email"=>"admin@hintsly.dev", "password"=>"[FILTERED]", "remember_me"=>"0"}, "commit"=>"Sign in"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["email", "admin@hintsly.dev"], ["LIMIT", 1]]
+Redirected to http://192.168.27.28:3000/
+Completed 302 Found in 342ms (ActiveRecord: 0.7ms | Allocations: 7824)
+
+
+Started GET "/" for 192.168.16.1 at 2024-10-04 14:00:01 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by HomeController#index as TURBO_STREAM
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 9.5ms | Allocations: 221)
+  Rendered application/_header.html.erb (Duration: 10.3ms | Allocations: 1160)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 34)
+  Rendered layout layouts/application.html.erb (Duration: 42.1ms | Allocations: 2555)
+Completed 200 OK in 70ms (Views: 57.9ms | ActiveRecord: 0.3ms | Allocations: 5319)
+
+
+Started GET "/channels" for 192.168.16.1 at 2024-10-04 14:00:05 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 6.1ms | Allocations: 349)
+  [1m[36mChannel Load (0.4ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 27.1ms | Allocations: 4346)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 581)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 30.0ms | Allocations: 5546)
+Completed 200 OK in 186ms (Views: 35.1ms | ActiveRecord: 3.6ms | Allocations: 36392)
+
+
+Started GET "/channels" for 192.168.16.1 at 2024-10-04 14:03:28 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 7.7ms | Allocations: 341)
+  [1m[36mChannel Load (0.3ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 29.2ms | Allocations: 3967)
+  Rendered application/_header.html.erb (Duration: 9.2ms | Allocations: 1039)
+  Rendered application/_flash_messages.html.erb (Duration: 7.0ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 72.1ms | Allocations: 6440)
+Completed 200 OK in 102ms (Views: 86.5ms | ActiveRecord: 0.9ms | Allocations: 10166)
+
+
+Started GET "/channels" for 192.168.16.1 at 2024-10-04 14:07:40 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 5.8ms | Allocations: 341)
+  [1m[36mChannel Load (0.3ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 26.1ms | Allocations: 3966)
+  Rendered application/_header.html.erb (Duration: 23.0ms | Allocations: 5390)
+  Rendered layout layouts/application.html.erb (Duration: 70.4ms | Allocations: 10283)
+Completed 500 Internal Server Error in 98ms (ActiveRecord: 1.1ms | Allocations: 13961)
+
+
+  
+ActionView::Template::Error (undefined local variable or method `validation_sources' for #<ActionView::Base:0x0000000000f3e8>):
+    60:             </button>
+    61:             <ul id="dropdown-example" class="hidden py-2 space-y-2 list-none">
+    62:               <li>
+    63:                 <a href="<%= validation_sources %>" class="flex text-gray-100 items-center p-2 rounded dark:text-white hover:bg-[#F19E4B] dark:bg-inure-orange group">
+    64:                   <span class="flex-1 ms-3 whitespace-nowrap"><%= t("menu.sources") %></span>
+    65:                 </a>
+    66:               </li>
+  
+app/views/application/_header.html.erb:63
+app/views/layouts/application.html.erb:14
+Started GET "/channels" for 192.168.16.1 at 2024-10-04 14:14:59 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 7.2ms | Allocations: 341)
+  [1m[36mChannel Load (0.3ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 28.5ms | Allocations: 4055)
+  Rendered application/_header.html.erb (Duration: 9.2ms | Allocations: 1059)
+  Rendered application/_flash_messages.html.erb (Duration: 8.4ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 76.7ms | Allocations: 6556)
+Completed 200 OK in 165ms (Views: 90.5ms | ActiveRecord: 7.5ms | Allocations: 28245)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:15:03 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 16)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 10.7ms | Allocations: 2326)
+  Rendered layout layouts/application.html.erb (Duration: 11.6ms | Allocations: 2408)
+Completed 500 Internal Server Error in 22ms (ActiveRecord: 0.3ms | Allocations: 4925)
+
+
+  
+ActionView::Template::Error (No Ransack::Search object was provided to search_form_for!):
+     6:     </div>
+     7:     <div class="flex items-center justify-end flex-column flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
+     8:       <div class="mr-4 mt-2">
+     9:         <%= search_form_for @q, data: { turbo_frame: "search" } do |f| %>
+    10:           <label for="simple-search" class="sr-only">Search</label>
+    11:           <div class="relative w-full">
+    12:             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+  
+app/views/validation_sources/index.html.erb:9
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:17:03 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.4ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.7ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 7.7ms | Allocations: 3770)
+  Rendered application/_header.html.erb (Duration: 0.9ms | Allocations: 608)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 12.5ms | Allocations: 5010)
+Completed 200 OK in 305ms (Views: 14.4ms | ActiveRecord: 17.3ms | Allocations: 22312)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:17:08 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.6ms | Allocations: 3454)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 8.3ms | Allocations: 4548)
+Completed 200 OK in 15ms (Views: 9.1ms | ActiveRecord: 0.9ms | Allocations: 7204)
+
+
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mValidationSource Create (2.4ms)[0m  [1m[32mINSERT INTO "validation_sources" ("name", "url_query", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "COmo programar en Delphi"], ["url_query", "http://neverinthelife.com/query"], ["created_at", "2024-10-04 18:27:03.604271"], ["updated_at", "2024-10-04 18:27:03.604271"]]
+  [1m[36mTRANSACTION (10.3ms)[0m  [1m[35mCOMMIT[0m
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:27:14 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.7ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 33.2ms | Allocations: 18884)
+  Rendered layout layouts/application.html.erb (Duration: 34.2ms | Allocations: 18959)
+Completed 500 Internal Server Error in 52ms (ActiveRecord: 10.7ms | Allocations: 24422)
+
+
+  
+ActionView::Template::Error (undefined method `edit_validation_source_path' for #<ActionView::Base:0x0000000001bd78>
+Did you mean?  edit_rails_conductor_inbound_email_path):
+    63:         </td>
+    64: 
+    65:         <td class="px-4 py-4 text-center">
+    66:           <%= button_to 'Edit', edit_validation_source_path(source), class: 'btn-sm btn-success' %>
+    67:         </td>
+    68:       </tr>
+    69:     <% end %>
+  
+app/views/validation_sources/index.html.erb:66
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:27:41 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 21.8ms | Allocations: 5365)
+  Rendered layout layouts/application.html.erb (Duration: 22.9ms | Allocations: 5440)
+Completed 500 Internal Server Error in 30ms (ActiveRecord: 1.0ms | Allocations: 7845)
+
+
+  
+ActionView::Template::Error (undefined method `edit_validation_source_path' for #<ActionView::Base:0x0000000001bf08>
+Did you mean?  edit_rails_conductor_inbound_email_path):
+    63:         </td>
+    64: 
+    65:         <td class="px-4 py-4 text-center">
+    66:           <%= button_to 'Edit', edit_validation_source_path(source), class: 'btn-sm btn-success' %>
+    67:         </td>
+    68:       </tr>
+    69:     <% end %>
+  
+app/views/validation_sources/index.html.erb:66
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:29:49 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 9.1ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 34.0ms | Allocations: 6249)
+  Rendered application/_header.html.erb (Duration: 10.1ms | Allocations: 1068)
+  Rendered application/_flash_messages.html.erb (Duration: 9.0ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 82.3ms | Allocations: 8754)
+Completed 200 OK in 112ms (Views: 98.0ms | ActiveRecord: 0.9ms | Allocations: 12271)
+
+
+Started GET "/channels?q%5Bname_cont%5D=delphi" for 192.168.16.1 at 2024-10-04 14:32:12 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  Parameters: {"q"=>{"name_cont"=>"delphi"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1 AND "channels"."name" ILIKE '%delphi%'[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 16)
+  [1m[36mChannel Load (0.3ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 AND "channels"."name" ILIKE '%delphi%' ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 17.1ms | Allocations: 3711)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 593)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 20.4ms | Allocations: 4921)
+Completed 200 OK in 47ms (Views: 26.5ms | ActiveRecord: 2.5ms | Allocations: 11064)
+
+
+Started GET "/channels?q%5Bname_cont%5D=" for 192.168.16.1 at 2024-10-04 14:32:16 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  Parameters: {"q"=>{"name_cont"=>""}}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.8ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mChannel Load (0.8ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 11.1ms | Allocations: 2037)
+  Rendered application/_header.html.erb (Duration: 1.5ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 17.9ms | Allocations: 3126)
+Completed 200 OK in 33ms (Views: 19.4ms | ActiveRecord: 2.4ms | Allocations: 5777)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:32:21 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.1ms | Allocations: 3692)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.9ms | Allocations: 4786)
+Completed 200 OK in 14ms (Views: 8.8ms | ActiveRecord: 1.0ms | Allocations: 7226)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 14:40:07 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"La biblia", "url_query"=>"http://baracoa.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"KpjYes7c21W4zM9o9DsKuZ3-cX6wu6H6dGG7mdrZdU7GwovafD13qjMYDxeXdD9TF0IU1Skmz98fH1eGcr_wBw", "name"=>"La biblia", "url_query"=>"http://baracoa.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 15ms (ActiveRecord: 5.9ms | Allocations: 5089)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:32:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:40:08 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.6ms | Allocations: 3683)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.7ms | Allocations: 4777)
+Completed 200 OK in 15ms (Views: 8.5ms | ActiveRecord: 1.3ms | Allocations: 7215)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 14:41:29 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Prueba", "url_query"=>"http://baracoa.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.6ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"H2mbdS7xU03SKnveF9FCTFCm0AnQTmMygvGrx7LZJSbzM8jVnBD_sln-u6F0nnem2hq1oknTDRfpj0fYGr-gbw", "name"=>"Prueba", "url_query"=>"http://baracoa.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 7ms (ActiveRecord: 0.6ms | Allocations: 1967)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:32:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:41:29 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.3ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 7.1ms | Allocations: 3693)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 9.9ms | Allocations: 4787)
+Completed 200 OK in 16ms (Views: 10.5ms | ActiveRecord: 1.0ms | Allocations: 7205)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 14:56:52 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Prueba", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save"}
+  [1m[36mUser Load (1.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"6Yfxluv9Kqy2tYqjq_x1Bll0FhIubqnpvAkufMrZDaUF3aI2WRyGUz1hStzIs0Ds08hzubfzx8zXd8JjYr-I7A", "name"=>"Prueba", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 160ms (ActiveRecord: 20.0ms | Allocations: 10483)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:36:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 14:56:55 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.5ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 17.3ms | Allocations: 5979)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 20.6ms | Allocations: 7212)
+Completed 200 OK in 60ms (Views: 22.4ms | ActiveRecord: 1.3ms | Allocations: 18507)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:00:00 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Lola", "url_query"=>"http://baracoa.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"gpxUDqUDtMS0FWM1g2fyWDg0jtlp77v4Y1sEHKmdYjZuxgeuF-IYOz_Bo0rgKMeysojrcvBy1d0IJegDAfvnfw", "name"=>"Lola", "url_query"=>"http://baracoa.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 500 Internal Server Error in 59ms (ActiveRecord: 4.5ms | Allocations: 10853)
+
+
+  
+NameError (undefined local variable or method `validation_source_params' for #<ValidationSourcesController:0x00000000028b68>
+Did you mean?  validation_source_path
+               validation_source_url
+               validation_sources_path
+               validation_sources_url):
+  
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:00:31 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 9.6ms | Allocations: 6227)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 12.7ms | Allocations: 7460)
+Completed 200 OK in 263ms (Views: 12.1ms | ActiveRecord: 4.1ms | Allocations: 22460)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:00:41 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"hintsly-postgre", "url_query"=>"werwerwerwerwer", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"zYoHrORX49ztav87Epy5FL_iAW09TMDQdMbr8rQJvKkh0FQMVrZPI2a-P0Rx04z-NV5kxqTRrvUfuAftHG854A", "name"=>"hintsly-postgre", "url_query"=>"werwerwerwerwer", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 500 Internal Server Error in 19ms (ActiveRecord: 0.3ms | Allocations: 5181)
+
+
+  
+NameError (undefined local variable or method `validation_source_params' for #<ValidationSourcesController:0x00000000028d70>
+Did you mean?  validation_source_path
+               validation_source_url
+               validation_sources_path
+               validation_sources_url):
+  
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:01:47 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 9.7ms | Allocations: 6232)
+  Rendered application/_header.html.erb (Duration: 0.8ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 13.3ms | Allocations: 7465)
+Completed 200 OK in 76ms (Views: 13.2ms | ActiveRecord: 7.0ms | Allocations: 24722)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:01:53 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"hintsly-postgre", "url_query"=>"werwerwerwerwer", "commit"=>"Save"}
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"loSatzziJT22f56QaJ4pZwyI6WPiaylAloYpNOPmfFl63skXjgOJwj2rXu8L0RyNhjSMyHv2R2X9-MUrS4D5EA", "name"=>"hintsly-postgre", "url_query"=>"werwerwerwerwer", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 17ms (ActiveRecord: 0.8ms | Allocations: 2150)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:36:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:01:54 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.6ms | Allocations: 3687)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 12.0ms | Allocations: 4781)
+Completed 200 OK in 18ms (Views: 12.8ms | ActiveRecord: 0.9ms | Allocations: 7289)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:07:22 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Roiky", "url_query"=>"werwerwerwerwer", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"hP6hXaqAzpKwzRVgiru06MLYJsEiqtYz_vnMl8kQceRopPL9GGFibTsZ1R_p9IECSGRDars3uBaVhyCIYXb0rQ", "name"=>"Roiky", "url_query"=>"werwerwerwerwer", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 45ms (ActiveRecord: 2.8ms | Allocations: 7840)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:35:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:19:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:07:24 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 10.6ms | Allocations: 6257)
+  Rendered application/_header.html.erb (Duration: 0.8ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 14.1ms | Allocations: 7490)
+Completed 200 OK in 55ms (Views: 13.4ms | ActiveRecord: 4.1ms | Allocations: 19122)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:07:58 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"hintsly-postgre", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"aiHopbUxFLRb4GqHtOp98zIg1a-wSpYJff6pBBpKQC2Ge7sFB9C4S9A0qvjXpUgZuJywBCnX-CwWgEUbsizFZA", "name"=>"hintsly-postgre", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 38ms (ActiveRecord: 3.4ms | Allocations: 7773)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:33:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:17:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:08:00 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 11.1ms | Allocations: 6260)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 14.4ms | Allocations: 7493)
+Completed 200 OK in 56ms (Views: 13.9ms | ActiveRecord: 3.9ms | Allocations: 19127)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:10:26 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"El titi Carrey", "url_query"=>"http://baracoa.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"NX56Ue0paTsXT4GEUPKTjDs5-EogGMsO5GgDj1bhTfDZJCnxX8jFxJybQfszvaZmsYWd4bmFpSuPFu-Q_ofIuQ", "name"=>"El titi Carrey", "url_query"=>"http://baracoa.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Objeto ValidationSource: #<ValidationSource id: nil, name: "...", url_query: "...", created_at: nil, updated_at: nil>
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:22:in `create'
+  [1m[36mValidationSource Create (0.5ms)[0m  [1m[32mINSERT INTO "validation_sources" ("name", "url_query", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "..."], ["url_query", "..."], ["created_at", "2024-10-04 19:10:28.072469"], ["updated_at", "2024-10-04 19:10:28.072469"]]
+  ↳ app/controllers/validation_sources_controller.rb:22:in `create'
+  [1m[36mTRANSACTION (7.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:22:in `create'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 61ms (ActiveRecord: 13.4ms | Allocations: 12169)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:10:28 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 6.3ms | Allocations: 5006)
+  Rendered application/_header.html.erb (Duration: 0.8ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 34)
+  Rendered layout layouts/application.html.erb (Duration: 9.7ms | Allocations: 6245)
+Completed 200 OK in 47ms (Views: 11.2ms | ActiveRecord: 1.9ms | Allocations: 17759)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:10:34 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.8ms | Allocations: 3906)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.0ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | Allocations: 5000)
+Completed 200 OK in 14ms (Views: 8.4ms | ActiveRecord: 0.9ms | Allocations: 7645)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:17:54 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 11.4ms | Allocations: 6254)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 15.4ms | Allocations: 7488)
+Completed 200 OK in 91ms (Views: 16.8ms | ActiveRecord: 7.1ms | Allocations: 26972)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:18:01 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Prueba", "url_query"=>"http://baracoa.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"pxwGdCD7o9rTT3NWypHMOct_3sk3LKVHx4-Pwu8815RLRlXUkhoPJVibsymp3vnTQcO7Yq6xy2Ks8WPdR1pS3Q", "name"=>"Prueba", "url_query"=>"http://baracoa.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 4ms (ActiveRecord: 0.3ms | Allocations: 2135)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:33:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:17:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:18:02 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.7ms | Allocations: 3912)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.7ms | Allocations: 5006)
+Completed 200 OK in 15ms (Views: 8.4ms | ActiveRecord: 1.0ms | Allocations: 7518)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:18:42 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"hintsly-postgre", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"JeuYazVJd7wxxzzgtjyKABgwbTZVJOliMJsnL-GtHVbJscvLh6jbQ7oT_J_Vc7_qkowIncy5h0db5cswScuYHw", "name"=>"hintsly-postgre", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 4ms (ActiveRecord: 0.3ms | Allocations: 1955)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:33:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:17:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:18:43 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.4ms | Allocations: 3904)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | Allocations: 4998)
+Completed 200 OK in 14ms (Views: 8.5ms | ActiveRecord: 0.9ms | Allocations: 7422)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:22:57 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Lola", "url_query"=>"http://baracoa.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"4n08tizLrzi1UJYsWC0cZwP7eZCWat-wEQEwvi5-zUYOJ28WnioDxz6EVlM7YimNiUccOw_3sZV6f9yhhhhIDw", "name"=>"Lola", "url_query"=>"http://baracoa.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 4ms (ActiveRecord: 0.3ms | Allocations: 1988)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:33:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:17:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:22:57 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.6ms | Allocations: 3904)
+  Rendered application/_header.html.erb (Duration: 0.5ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.0ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.5ms | Allocations: 4998)
+Completed 200 OK in 14ms (Views: 8.4ms | ActiveRecord: 0.9ms | Allocations: 7454)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:36:30 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"Prueba", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"p6WniekJAa17hgThFl7xQZcwLemf-eHcY2qB51Zyi7VL__QpW-itUvBSxJ51EcSrHYxIQgZkj_kIFG34_hQO_A", "name"=>"Prueba", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 14ms (ActiveRecord: 5.8ms | Allocations: 5009)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:33:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:17:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:36:30 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 6.1ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 26.7ms | Allocations: 5780)
+  Rendered application/_header.html.erb (Duration: 9.8ms | Allocations: 1068)
+  Rendered application/_flash_messages.html.erb (Duration: 8.3ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 72.1ms | Allocations: 8285)
+Completed 200 OK in 101ms (Views: 85.3ms | ActiveRecord: 1.4ms | Allocations: 11756)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:39:38 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"hintsly-postgre", "url_query"=>"werwerwerwerwer", "commit"=>"Save"}
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"SvJZ_N7bYll7ChtTKHxBWa0Nu17tyWoNKD2n7NEoBiWmqApcbDrOpvDe2yxLM3SzJ7He9XRUBChDQ0vzeU6DbA", "name"=>"hintsly-postgre", "url_query"=>"werwerwerwerwer", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 11ms (ActiveRecord: 0.7ms | Allocations: 2126)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:33:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:17:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:39:39 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:5:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.8ms | Allocations: 3944)
+  Rendered application/_header.html.erb (Duration: 0.5ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.0ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 8.7ms | Allocations: 5038)
+Completed 200 OK in 15ms (Views: 9.5ms | ActiveRecord: 1.0ms | Allocations: 7567)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:45:37 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "name"=>"hintsly-postgre", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"0pttQwvnd7-hPy0EeevIzICs6gDI9TDJSudGLlrOC9Y-wT7juQbbQCrr7XsapP0mChCPq1FoXuwhmaox8qiOnw", "name"=>"hintsly-postgre", "url_query"=>"http://kjdfksdf.com", "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 49ms (ActiveRecord: 6.5ms | Allocations: 10434)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:34:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:18:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:45:39 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 16)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.2ms | Allocations: 3451)
+  Rendered layout layouts/application.html.erb (Duration: 5.1ms | Allocations: 3532)
+Completed 500 Internal Server Error in 68ms (ActiveRecord: 1.0ms | Allocations: 16064)
+
+
+  
+ActionView::Template::Error (undefined method `each' for #<ValidationSource id: nil, name: nil, url_query: nil, created_at: nil, updated_at: nil>):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:51:16 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (1.0ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (1.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 10.2ms | Allocations: 3315)
+  Rendered layout layouts/application.html.erb (Duration: 12.2ms | Allocations: 3390)
+Completed 500 Internal Server Error in 52ms (ActiveRecord: 15.1ms | Allocations: 9091)
+
+
+  
+ActionView::Template::Error (undefined method `each' for #<ValidationSource id: nil, name: nil, url_query: nil, created_at: nil, updated_at: nil>):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:51:34 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.0ms | Allocations: 3315)
+  Rendered layout layouts/application.html.erb (Duration: 5.1ms | Allocations: 3390)
+Completed 500 Internal Server Error in 12ms (ActiveRecord: 0.7ms | Allocations: 5801)
+
+
+  
+ActionView::Template::Error (undefined method `each' for #<ValidationSource id: nil, name: nil, url_query: nil, created_at: nil, updated_at: nil>):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:52:00 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.9ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.9ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 16)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 12.6ms | Allocations: 3450)
+  Rendered layout layouts/application.html.erb (Duration: 15.0ms | Allocations: 3531)
+Completed 500 Internal Server Error in 283ms (ActiveRecord: 25.6ms | Allocations: 22368)
+
+
+  
+ActionView::Template::Error (undefined method `each' for #<ValidationSource id: nil, name: nil, url_query: nil, created_at: nil, updated_at: nil>):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:52:18 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 6.6ms | Allocations: 1880)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | Allocations: 1961)
+Completed 500 Internal Server Error in 63ms (ActiveRecord: 4.1ms | Allocations: 18642)
+
+
+  
+ActionView::Template::Error (undefined method `each' for nil:NilClass):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:52:22 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 2.2ms | Allocations: 1797)
+  Rendered layout layouts/application.html.erb (Duration: 3.1ms | Allocations: 1872)
+Completed 500 Internal Server Error in 9ms (ActiveRecord: 0.6ms | Allocations: 4529)
+
+
+  
+ActionView::Template::Error (undefined method `each' for nil:NilClass):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/" for 192.168.16.1 at 2024-10-04 15:52:27 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by HomeController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering home/index.html.erb within layouts/application
+  Rendered home/index.html.erb within layouts/application (Duration: 8.0ms | Allocations: 218)
+  Rendered application/_header.html.erb (Duration: 0.8ms | Allocations: 677)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 11.5ms | Allocations: 1595)
+Completed 200 OK in 29ms (Views: 18.0ms | ActiveRecord: 0.3ms | Allocations: 4137)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:52:31 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 2.1ms | Allocations: 1843)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | Allocations: 1918)
+Completed 500 Internal Server Error in 10ms (ActiveRecord: 0.7ms | Allocations: 4596)
+
+
+  
+ActionView::Template::Error (undefined method `each' for nil:NilClass):
+    50:     </tr>
+    51:     </thead>
+    52:     <tbody>
+    53:     <% @validation_sources.each do |source| %>
+    54:       <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    55:         <td class="text-gray-900 whitespace-nowrap dark:text-white">
+    56:           <div class="ps-3">
+  
+app/views/validation_sources/index.html.erb:53
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:53:06 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 14.4ms | Allocations: 6578)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 17.5ms | Allocations: 7811)
+Completed 200 OK in 82ms (Views: 16.9ms | ActiveRecord: 6.3ms | Allocations: 25079)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:54:35 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 6.6ms | Allocations: 3613)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 604)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 9.9ms | Allocations: 4848)
+Completed 200 OK in 89ms (Views: 11.4ms | ActiveRecord: 6.5ms | Allocations: 23615)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 15:54:53 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "validation_source"=>{"name"=>"Bodka", "url_query"=>"Baracoa.com"}, "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"9HD1hY4qcad35Ed5h-sqyS2ULl9bOgCgSIHuGdmjXV4YKqYlPMvdWPwwhwbkpB8jpyhL9MKnboUj_wIGccXYFw", "validation_source"=>{"name"=>"Bodka", "url_query"=>"Baracoa.com"}, "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Objeto ValidationSource: #<ValidationSource id: nil, name: "Bodka", url_query: "Baracoa.com", created_at: nil, updated_at: nil>
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+  [1m[36mValidationSource Create (0.6ms)[0m  [1m[32mINSERT INTO "validation_sources" ("name", "url_query", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "Bodka"], ["url_query", "Baracoa.com"], ["created_at", "2024-10-04 19:54:53.563985"], ["updated_at", "2024-10-04 19:54:53.563985"]]
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+  [1m[36mTRANSACTION (7.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 19ms (ActiveRecord: 8.4ms | Allocations: 3854)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 15:54:53 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.4ms | Allocations: 2574)
+  Rendered application/_header.html.erb (Duration: 0.5ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 25)
+  Rendered layout layouts/application.html.erb (Duration: 8.7ms | Allocations: 3672)
+Completed 200 OK in 16ms (Views: 9.7ms | ActiveRecord: 1.0ms | Allocations: 6278)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 16:07:00 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]"}
+  [1m[36mUser Load (0.5ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"Q76SuSZo3vpakcqPb_7Mbo2gv76Cx4pb1EehJZHFV3Gv5MEZlIlyBdFFCvAMsfmEBxzaFRta5H6_OU06OaPSOA", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Completed 400 Bad Request in 27ms (ActiveRecord: 6.3ms | Allocations: 5015)
+
+
+  
+ActionController::ParameterMissing (param is missing or the value is empty: validation_source):
+  
+app/controllers/validation_sources_controller.rb:34:in `validation_source_params'
+app/controllers/validation_sources_controller.rb:18:in `create'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:07:01 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.7ms | Allocations: 2528)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 8.9ms | Allocations: 3622)
+Completed 200 OK in 15ms (Views: 9.6ms | ActiveRecord: 1.3ms | Allocations: 6072)
+
+
+Started GET "/channels" for 192.168.16.1 at 2024-10-04 16:07:12 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ChannelsController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/channels_controller.rb:9:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering channels/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 16)
+  [1m[36mChannel Load (0.3ms)[0m  [1m[34mSELECT "channels".* FROM "channels" WHERE "channels"."user_id" = $1 ORDER BY "channels"."created_at" DESC LIMIT $2 OFFSET $3[0m  [["user_id", 1], ["LIMIT", 25], ["OFFSET", 0]]
+  ↳ app/views/channels/index.html.erb:56
+  Rendered channels/index.html.erb within layouts/application (Duration: 17.1ms | Allocations: 3659)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 593)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 20.3ms | Allocations: 4869)
+Completed 200 OK in 50ms (Views: 26.7ms | ActiveRecord: 3.6ms | Allocations: 10376)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:07:25 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mChannel Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "channels" WHERE "channels"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.6ms | Allocations: 2529)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 8.6ms | Allocations: 3623)
+Completed 200 OK in 17ms (Views: 9.4ms | ActiveRecord: 1.1ms | Allocations: 6237)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:20:47 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 16)
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 2.1ms | Allocations: 1127)
+  Rendered layout layouts/application.html.erb (Duration: 3.1ms | Allocations: 1208)
+Completed 500 Internal Server Error in 61ms (ActiveRecord: 7.4ms | Allocations: 13231)
+
+
+  
+ActionView::Template::Error (No Ransack::Search object was provided to search_form_for!):
+     6:     </div>
+     7:     <div class="flex items-center justify-end flex-column flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
+     8:       <div class="mr-4 mt-2">
+     9:         <%= search_form_for @q, data: { turbo_frame: "search" } do |f| %>
+    10:           <label for="simple-search" class="sr-only">Search</label>
+    11:           <div class="relative w-full">
+    12:             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+  
+app/views/validation_sources/index.html.erb:9
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:21:38 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 6.4ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:35
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 26.0ms | Allocations: 5265)
+  Rendered layout layouts/application.html.erb (Duration: 26.8ms | Allocations: 5346)
+Completed 500 Internal Server Error in 52ms (ActiveRecord: 0.8ms | Allocations: 8281)
+
+
+  
+ActionView::Template::Error (undefined method `from' for nil:NilClass):
+    54: 
+    55:   <nav class="flex p-2 pl-6 px-4 items-center flex-column flex-wrap md:flex-row justify-between" aria-label="Table navigation">
+    56:     <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+    57:       Showing <span class="font-semibold text-gray-900 dark:text-white"><%= @pagy.from %>-<%= @pagy.to %></span> of <span class="font-semibold text-gray-900 dark:text-white"><%= @pagy.count %></span>
+    58:     </span>
+    59:     <ul class="pt-2 inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 list-none">
+    60:       <li>
+  
+app/views/validation_sources/index.html.erb:57
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:23:03 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 6.5ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 27.8ms | Allocations: 5293)
+  Rendered application/_header.html.erb (Duration: 8.7ms | Allocations: 1070)
+  Rendered application/_flash_messages.html.erb (Duration: 7.4ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 71.2ms | Allocations: 7814)
+Completed 200 OK in 141ms (Views: 85.7ms | ActiveRecord: 7.5ms | Allocations: 19274)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:24:38 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.9ms | Allocations: 2538)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 8.0ms | Allocations: 3632)
+Completed 200 OK in 16ms (Views: 9.0ms | ActiveRecord: 1.1ms | Allocations: 6117)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:25:56 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 18.6ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.7ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 66.3ms | Allocations: 4335)
+  Rendered application/_header.html.erb (Duration: 20.1ms | Allocations: 1069)
+  Rendered application/_flash_messages.html.erb (Duration: 17.8ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 161.6ms | Allocations: 6841)
+Completed 200 OK in 219ms (Views: 191.1ms | ActiveRecord: 2.0ms | Allocations: 10218)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:29:19 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 7.2ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 26.1ms | Allocations: 4618)
+  Rendered application/_header.html.erb (Duration: 8.3ms | Allocations: 1067)
+  Rendered application/_flash_messages.html.erb (Duration: 7.3ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 67.8ms | Allocations: 7122)
+Completed 200 OK in 94ms (Views: 80.3ms | ActiveRecord: 0.9ms | Allocations: 10674)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:30:49 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 7.7ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 30.8ms | Allocations: 4601)
+  Rendered application/_header.html.erb (Duration: 7.4ms | Allocations: 1067)
+  Rendered application/_flash_messages.html.erb (Duration: 7.3ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 69.2ms | Allocations: 7106)
+Completed 200 OK in 98ms (Views: 83.7ms | ActiveRecord: 1.0ms | Allocations: 10649)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:31:40 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 8.1ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 30.6ms | Allocations: 4601)
+  Rendered application/_header.html.erb (Duration: 9.1ms | Allocations: 1067)
+  Rendered application/_flash_messages.html.erb (Duration: 8.3ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 75.5ms | Allocations: 7105)
+Completed 200 OK in 103ms (Views: 89.8ms | ActiveRecord: 1.0ms | Allocations: 10681)
+
+
+Started DELETE "/validation_sources/4" for 192.168.16.1 at 2024-10-04 16:33:37 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  
+AbstractController::ActionNotFound (The action 'destroy' could not be found for ValidationSourcesController):
+  
+actionpack (7.0.8) lib/abstract_controller/base.rb:146:in `process'
+actionview (7.0.8) lib/action_view/rendering.rb:39:in `process'
+actionpack (7.0.8) lib/action_controller/metal.rb:188:in `dispatch'
+actionpack (7.0.8) lib/action_controller/metal.rb:251:in `dispatch'
+actionpack (7.0.8) lib/action_dispatch/routing/route_set.rb:49:in `dispatch'
+actionpack (7.0.8) lib/action_dispatch/routing/route_set.rb:32:in `serve'
+actionpack (7.0.8) lib/action_dispatch/journey/router.rb:50:in `block in serve'
+actionpack (7.0.8) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (7.0.8) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (7.0.8) lib/action_dispatch/routing/route_set.rb:852:in `call'
+omniauth (2.1.1) lib/omniauth/strategy.rb:202:in `call!'
+omniauth (2.1.1) lib/omniauth/strategy.rb:169:in `call'
+omniauth (2.1.1) lib/omniauth/strategy.rb:202:in `call!'
+omniauth (2.1.1) lib/omniauth/strategy.rb:169:in `call'
+omniauth (2.1.1) lib/omniauth/strategy.rb:202:in `call!'
+omniauth (2.1.1) lib/omniauth/strategy.rb:169:in `call'
+warden (1.2.9) lib/warden/manager.rb:36:in `block in call'
+warden (1.2.9) lib/warden/manager.rb:34:in `catch'
+warden (1.2.9) lib/warden/manager.rb:34:in `call'
+rack (2.2.8) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.8) lib/rack/etag.rb:27:in `call'
+rack (2.2.8) lib/rack/conditional_get.rb:40:in `call'
+rack (2.2.8) lib/rack/head.rb:12:in `call'
+actionpack (7.0.8) lib/action_dispatch/http/permissions_policy.rb:38:in `call'
+actionpack (7.0.8) lib/action_dispatch/http/content_security_policy.rb:36:in `call'
+rack (2.2.8) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.8) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/cookies.rb:704:in `call'
+activerecord (7.0.8) lib/active_record/migration.rb:638:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (7.0.8) lib/active_support/callbacks.rb:99:in `run_callbacks'
+actionpack (7.0.8) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/debug_exceptions.rb:28:in `call'
+web-console (4.2.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.2.1) lib/web_console/middleware.rb:19:in `block in call'
+web-console (4.2.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.2.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/show_exceptions.rb:29:in `call'
+railties (7.0.8) lib/rails/rack/logger.rb:40:in `call_app'
+railties (7.0.8) lib/rails/rack/logger.rb:25:in `block in call'
+activesupport (7.0.8) lib/active_support/tagged_logging.rb:99:in `block in tagged'
+activesupport (7.0.8) lib/active_support/tagged_logging.rb:37:in `tagged'
+activesupport (7.0.8) lib/active_support/tagged_logging.rb:99:in `tagged'
+railties (7.0.8) lib/rails/rack/logger.rb:25:in `call'
+sprockets-rails (3.4.2) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/remote_ip.rb:93:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/request_id.rb:26:in `call'
+rack (2.2.8) lib/rack/method_override.rb:24:in `call'
+rack (2.2.8) lib/rack/runtime.rb:22:in `call'
+activesupport (7.0.8) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (7.0.8) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (7.0.8) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/static.rb:23:in `call'
+rack (2.2.8) lib/rack/sendfile.rb:110:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/host_authorization.rb:138:in `call'
+railties (7.0.8) lib/rails/engine.rb:530:in `call'
+puma (6.4.0) lib/puma/configuration.rb:272:in `call'
+puma (6.4.0) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.0) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.0) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.0) lib/puma/server.rb:443:in `process_client'
+puma (6.4.0) lib/puma/server.rb:241:in `block in run'
+puma (6.4.0) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:33:38 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.6ms | Allocations: 2763)
+  Rendered application/_header.html.erb (Duration: 0.5ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.0ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 8.4ms | Allocations: 3857)
+Completed 200 OK in 15ms (Views: 9.2ms | ActiveRecord: 0.8ms | Allocations: 6314)
+
+
+Started GET "/validation_sources/2/edit" for 192.168.16.1 at 2024-10-04 16:33:45 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  
+AbstractController::ActionNotFound (The action 'edit' could not be found for ValidationSourcesController):
+  
+actionpack (7.0.8) lib/abstract_controller/base.rb:146:in `process'
+actionview (7.0.8) lib/action_view/rendering.rb:39:in `process'
+actionpack (7.0.8) lib/action_controller/metal.rb:188:in `dispatch'
+actionpack (7.0.8) lib/action_controller/metal.rb:251:in `dispatch'
+actionpack (7.0.8) lib/action_dispatch/routing/route_set.rb:49:in `dispatch'
+actionpack (7.0.8) lib/action_dispatch/routing/route_set.rb:32:in `serve'
+actionpack (7.0.8) lib/action_dispatch/journey/router.rb:50:in `block in serve'
+actionpack (7.0.8) lib/action_dispatch/journey/router.rb:32:in `each'
+actionpack (7.0.8) lib/action_dispatch/journey/router.rb:32:in `serve'
+actionpack (7.0.8) lib/action_dispatch/routing/route_set.rb:852:in `call'
+omniauth (2.1.1) lib/omniauth/strategy.rb:202:in `call!'
+omniauth (2.1.1) lib/omniauth/strategy.rb:169:in `call'
+omniauth (2.1.1) lib/omniauth/strategy.rb:202:in `call!'
+omniauth (2.1.1) lib/omniauth/strategy.rb:169:in `call'
+omniauth (2.1.1) lib/omniauth/strategy.rb:202:in `call!'
+omniauth (2.1.1) lib/omniauth/strategy.rb:169:in `call'
+warden (1.2.9) lib/warden/manager.rb:36:in `block in call'
+warden (1.2.9) lib/warden/manager.rb:34:in `catch'
+warden (1.2.9) lib/warden/manager.rb:34:in `call'
+rack (2.2.8) lib/rack/tempfile_reaper.rb:15:in `call'
+rack (2.2.8) lib/rack/etag.rb:27:in `call'
+rack (2.2.8) lib/rack/conditional_get.rb:27:in `call'
+rack (2.2.8) lib/rack/head.rb:12:in `call'
+actionpack (7.0.8) lib/action_dispatch/http/permissions_policy.rb:38:in `call'
+actionpack (7.0.8) lib/action_dispatch/http/content_security_policy.rb:36:in `call'
+rack (2.2.8) lib/rack/session/abstract/id.rb:266:in `context'
+rack (2.2.8) lib/rack/session/abstract/id.rb:260:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/cookies.rb:704:in `call'
+activerecord (7.0.8) lib/active_record/migration.rb:638:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (7.0.8) lib/active_support/callbacks.rb:99:in `run_callbacks'
+actionpack (7.0.8) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/debug_exceptions.rb:28:in `call'
+web-console (4.2.1) lib/web_console/middleware.rb:132:in `call_app'
+web-console (4.2.1) lib/web_console/middleware.rb:19:in `block in call'
+web-console (4.2.1) lib/web_console/middleware.rb:17:in `catch'
+web-console (4.2.1) lib/web_console/middleware.rb:17:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/show_exceptions.rb:29:in `call'
+railties (7.0.8) lib/rails/rack/logger.rb:40:in `call_app'
+railties (7.0.8) lib/rails/rack/logger.rb:25:in `block in call'
+activesupport (7.0.8) lib/active_support/tagged_logging.rb:99:in `block in tagged'
+activesupport (7.0.8) lib/active_support/tagged_logging.rb:37:in `tagged'
+activesupport (7.0.8) lib/active_support/tagged_logging.rb:99:in `tagged'
+railties (7.0.8) lib/rails/rack/logger.rb:25:in `call'
+sprockets-rails (3.4.2) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/remote_ip.rb:93:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/request_id.rb:26:in `call'
+rack (2.2.8) lib/rack/method_override.rb:24:in `call'
+rack (2.2.8) lib/rack/runtime.rb:22:in `call'
+activesupport (7.0.8) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (7.0.8) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (7.0.8) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/static.rb:23:in `call'
+rack (2.2.8) lib/rack/sendfile.rb:110:in `call'
+actionpack (7.0.8) lib/action_dispatch/middleware/host_authorization.rb:138:in `call'
+railties (7.0.8) lib/rails/engine.rb:530:in `call'
+puma (6.4.0) lib/puma/configuration.rb:272:in `call'
+puma (6.4.0) lib/puma/request.rb:100:in `block in handle_request'
+puma (6.4.0) lib/puma/thread_pool.rb:378:in `with_force_shutdown'
+puma (6.4.0) lib/puma/request.rb:99:in `handle_request'
+puma (6.4.0) lib/puma/server.rb:443:in `process_client'
+puma (6.4.0) lib/puma/server.rb:241:in `block in run'
+puma (6.4.0) lib/puma/thread_pool.rb:155:in `block in spawn_thread'
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:35:50 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 16)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 8.9ms | Allocations: 3171)
+  Rendered application/_header.html.erb (Duration: 1.0ms | Allocations: 603)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 30)
+  Rendered layout layouts/application.html.erb (Duration: 13.2ms | Allocations: 4405)
+Completed 200 OK in 67ms (Views: 14.9ms | ActiveRecord: 6.3ms | Allocations: 15148)
+
+
+Started DELETE "/validation_sources/2" for 192.168.16.1 at 2024-10-04 16:35:55 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"2"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources" WHERE "validation_sources"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:32:in `destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mValidationSource Destroy (0.4ms)[0m  [1m[31mDELETE FROM "validation_sources" WHERE "validation_sources"."id" = $1[0m  [["id", 2]]
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mTRANSACTION (7.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 22ms (ActiveRecord: 9.2ms | Allocations: 4509)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:35:55 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.2ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 6.0ms | Allocations: 2514)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 25)
+  Rendered layout layouts/application.html.erb (Duration: 9.5ms | Allocations: 3612)
+Completed 200 OK in 16ms (Views: 10.4ms | ActiveRecord: 1.1ms | Allocations: 6055)
+
+
+Started DELETE "/validation_sources/3" for 192.168.16.1 at 2024-10-04 16:36:07 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"3"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources" WHERE "validation_sources"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:32:in `destroy'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mValidationSource Destroy (0.4ms)[0m  [1m[31mDELETE FROM "validation_sources" WHERE "validation_sources"."id" = $1[0m  [["id", 3]]
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mTRANSACTION (7.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 19ms (ActiveRecord: 8.6ms | Allocations: 3551)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:36:07 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.8ms | Allocations: 2172)
+  Rendered application/_header.html.erb (Duration: 0.5ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 24)
+  Rendered layout layouts/application.html.erb (Duration: 7.5ms | Allocations: 3269)
+Completed 200 OK in 15ms (Views: 8.6ms | ActiveRecord: 1.0ms | Allocations: 5573)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:36:12 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.6ms | Allocations: 2169)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 21)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | Allocations: 3263)
+Completed 200 OK in 14ms (Views: 8.4ms | ActiveRecord: 0.9ms | Allocations: 5548)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 16:36:52 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "validation_source"=>{"name"=>"la bilbia", "url_query"=>"Baracoa.com"}, "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"nsaqlkjekQKVx24kfypZHCEvdxZXCXAB-o9iBafFHLxynPk2-j89_R4TrlscZWz2q5MSvc6UHiSR8Y4aD6OZ9Q", "validation_source"=>{"name"=>"la bilbia", "url_query"=>"Baracoa.com"}, "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Objeto ValidationSource: #<ValidationSource id: nil, name: "la bilbia", url_query: "Baracoa.com", created_at: nil, updated_at: nil>
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+  [1m[36mValidationSource Create (0.6ms)[0m  [1m[32mINSERT INTO "validation_sources" ("name", "url_query", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "la bilbia"], ["url_query", "Baracoa.com"], ["created_at", "2024-10-04 20:36:52.881493"], ["updated_at", "2024-10-04 20:36:52.881493"]]
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+  [1m[36mTRANSACTION (7.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 21ms (ActiveRecord: 8.5ms | Allocations: 3644)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:36:53 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 5.2ms | Allocations: 2468)
+  Rendered application/_header.html.erb (Duration: 0.7ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 24)
+  Rendered layout layouts/application.html.erb (Duration: 8.4ms | Allocations: 3565)
+Completed 200 OK in 15ms (Views: 9.3ms | ActiveRecord: 1.0ms | Allocations: 5884)
+
+
+Started DELETE "/validation_sources/4" for 192.168.16.1 at 2024-10-04 16:36:59 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"4"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources" WHERE "validation_sources"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:32:in `destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mValidationSource Destroy (0.3ms)[0m  [1m[31mDELETE FROM "validation_sources" WHERE "validation_sources"."id" = $1[0m  [["id", 4]]
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mTRANSACTION (7.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 18ms (ActiveRecord: 8.8ms | Allocations: 3537)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:37:00 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 7.2ms | Allocations: 2172)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 24)
+  Rendered layout layouts/application.html.erb (Duration: 10.4ms | Allocations: 3269)
+Completed 200 OK in 17ms (Views: 11.2ms | ActiveRecord: 1.0ms | Allocations: 5576)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:39:44 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 6.1ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 24.6ms | Allocations: 4010)
+  Rendered application/_header.html.erb (Duration: 8.8ms | Allocations: 1067)
+  Rendered application/_flash_messages.html.erb (Duration: 7.8ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 64.9ms | Allocations: 6514)
+Completed 200 OK in 88ms (Views: 74.4ms | ActiveRecord: 0.9ms | Allocations: 9908)
+
+
+Started DELETE "/validation_sources/5" for 192.168.16.1 at 2024-10-04 16:39:47 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#destroy as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"5"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources" WHERE "validation_sources"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:32:in `destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mValidationSource Destroy (0.3ms)[0m  [1m[31mDELETE FROM "validation_sources" WHERE "validation_sources"."id" = $1[0m  [["id", 5]]
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mTRANSACTION (8.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 26ms (ActiveRecord: 10.1ms | Allocations: 3696)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:39:47 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 17.6ms | Allocations: 1917)
+  Rendered application/_header.html.erb (Duration: 1.1ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 1.3ms | Allocations: 25)
+  Rendered layout layouts/application.html.erb (Duration: 25.8ms | Allocations: 3015)
+Completed 200 OK in 32ms (Views: 27.1ms | ActiveRecord: 0.9ms | Allocations: 5447)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:45:47 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 6.7ms | Allocations: 342)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 29.2ms | Allocations: 3689)
+  Rendered application/_header.html.erb (Duration: 8.9ms | Allocations: 1073)
+  Rendered application/_flash_messages.html.erb (Duration: 9.6ms | Allocations: 395)
+  Rendered layout layouts/application.html.erb (Duration: 72.5ms | Allocations: 6200)
+Completed 200 OK in 113ms (Views: 85.9ms | ActiveRecord: 7.2ms | Allocations: 12610)
+
+
+Started POST "/validation_sources" for 192.168.16.1 at 2024-10-04 16:45:52 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "validation_source"=>{"name"=>"Bodka", "url_query"=>"Baracoa.com"}, "commit"=>"Save"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+Parametros recibidos: #<ActionController::Parameters {"authenticity_token"=>"l6NNdEjXwQGwRT4rnBrqIoHLpQNOfurCAltqQwQraC97-R7U-jZt_juR_lT_Vd_IC3fAqNfjhOdpJYZcrE3tZg", "validation_source"=>{"name"=>"Bodka", "url_query"=>"Baracoa.com"}, "commit"=>"Save", "controller"=>"validation_sources", "action"=>"create"} permitted: false>
+Objeto ValidationSource: #<ValidationSource id: nil, name: "Bodka", url_query: "Baracoa.com", created_at: nil, updated_at: nil>
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+  [1m[36mValidationSource Create (0.4ms)[0m  [1m[32mINSERT INTO "validation_sources" ("name", "url_query", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "Bodka"], ["url_query", "Baracoa.com"], ["created_at", "2024-10-04 20:45:52.240599"], ["updated_at", "2024-10-04 20:45:52.240599"]]
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+  [1m[36mTRANSACTION (8.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:23:in `create'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 18ms (ActiveRecord: 9.1ms | Allocations: 3748)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:45:52 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as TURBO_STREAM
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.1ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.4ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 7.9ms | Allocations: 2252)
+  Rendered application/_header.html.erb (Duration: 1.2ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 25)
+  Rendered layout layouts/application.html.erb (Duration: 12.5ms | Allocations: 3350)
+Completed 200 OK in 20ms (Views: 13.4ms | ActiveRecord: 1.3ms | Allocations: 5788)
+
+
+Started DELETE "/validation_sources/6" for 192.168.16.1 at 2024-10-04 16:45:54 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#destroy as HTML
+  Parameters: {"authenticity_token"=>"[FILTERED]", "id"=>"6"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources" WHERE "validation_sources"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/validation_sources_controller.rb:32:in `destroy'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mValidationSource Destroy (0.3ms)[0m  [1m[31mDELETE FROM "validation_sources" WHERE "validation_sources"."id" = $1[0m  [["id", 6]]
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+  [1m[36mTRANSACTION (8.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/validation_sources_controller.rb:33:in `destroy'
+Redirected to http://192.168.27.28:3000/validation_sources
+Completed 302 Found in 19ms (ActiveRecord: 9.6ms | Allocations: 3570)
+
+
+Started GET "/validation_sources" for 192.168.16.1 at 2024-10-04 16:45:55 -0400
+Cannot render console from 192.168.16.1! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by ValidationSourcesController#index as HTML
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 ORDER BY "users"."id" ASC LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mValidationSource Count (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM "validation_sources"[0m
+  ↳ app/controllers/validation_sources_controller.rb:6:in `index'
+  Rendering layout layouts/application.html.erb
+  Rendering validation_sources/index.html.erb within layouts/application
+  Rendered layouts/_breadcrumbs.html.erb (Duration: 0.0ms | Allocations: 11)
+  [1m[36mValidationSource Load (0.3ms)[0m  [1m[34mSELECT "validation_sources".* FROM "validation_sources"[0m
+  ↳ app/views/validation_sources/index.html.erb:53
+  Rendered validation_sources/index.html.erb within layouts/application (Duration: 4.2ms | Allocations: 1868)
+  Rendered application/_header.html.erb (Duration: 0.6ms | Allocations: 578)
+  Rendered application/_flash_messages.html.erb (Duration: 0.1ms | Allocations: 24)
+  Rendered layout layouts/application.html.erb (Duration: 7.0ms | Allocations: 2965)
+Completed 200 OK in 14ms (Views: 7.8ms | ActiveRecord: 1.1ms | Allocations: 5291)
+
+
