@@ -9,22 +9,30 @@ module Services
     end
 
     def channel_info(channel_name)
-      response = run_actor(channel_name, true)
-      data = read_info(response[:data][:defaultDatasetId])
-
-      return nil if data[:error]
+      response = run_actor(body_for_info(channel_name), true)
+      data = read_dataset(response[:data][:defaultDatasetId])
+      return nil if data[0][:error]
 
       {
         name: channel_name,
         external_source: "tiktok",
-        external_source_id: data[:authorMeta][:id],
-        avatar: data[:authorMeta][:avatar]
+        external_source_id: data[0][:authorMeta][:id],
+        avatar: data[0][:authorMeta][:avatar]
       }
     end
 
+    def read_dataset(dataset_id)
+      items = JSON(HTTParty.get("#{BASE_URL}/datasets/#{dataset_id}/items?token=#{API_TOKEN}", {
+        headers: headers
+      }).body)
+      items.map(&:deep_symbolize_keys!)
+      items
+    end
+
     def download_videos(channel)
-      response = run_actor(channel.name)
-      binding.pry
+      response = run_actor(body_for_download(channel.name))
+      run = channel.apify_runs.build({ apify_run_id: response[:data][:id], apify_dataset_id: response[:data][:defaultDatasetId]})
+      run.save && channel.update(state: 1)
     end
 
     private
@@ -36,27 +44,14 @@ module Services
       }
     end
 
-    def run_info(channel_name)
-      JSON(HTTParty.post("#{BASE_URL}/acts/#{ACTOR_ID}/runs?token=#{API_TOKEN}&waitForFinish=60", {
-        body: body_for_info(channel_name),
-        headers: headers
-      }).body).deep_symbolize_keys!
-    end
-
-    def run_actor(channel_name, wait = false)
+    def run_actor(body, wait = false)
       url = "#{BASE_URL}/acts/#{ACTOR_ID}/runs?token=#{API_TOKEN}"
       url += "&waitForFinish=60" if wait
 
       JSON(HTTParty.post(url, {
-        body: body_for_info(channel_name),
+        body: body,
         headers: headers
       }).body).deep_symbolize_keys!
-    end
-
-    def read_info(dataset_id)
-      JSON(HTTParty.get("#{BASE_URL}/datasets/#{dataset_id}/items?token=#{API_TOKEN}", {
-        headers: headers
-      }).body)[0].deep_symbolize_keys!
     end
 
     def body_for_info(channel_name)
@@ -65,7 +60,7 @@ module Services
         "resultsPerPage": 1,
         "excludePinnedPosts": false,
         "searchSection": "",
-        "maxProfilesPerQuery": 3,
+        "maxProfilesPerQuery": 1,
         "shouldDownloadVideos": false,
         "shouldDownloadCovers": false,
         "shouldDownloadSubtitles": false,
@@ -82,7 +77,6 @@ module Services
       {
         "profiles": [channel_name],
         "resultsPerPage": 1,
-        # "oldestPostDate": from_date,
         "excludePinnedPosts": false,
         "searchSection": "",
         "maxProfilesPerQuery": 1,
