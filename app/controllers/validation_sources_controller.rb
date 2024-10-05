@@ -17,9 +17,6 @@ class ValidationSourcesController < ApplicationController
 
     @validation_source = ValidationSource.new(validation_source_params)
 
-    # Verifica si el objeto se ha inicializado correctamente
-    Rails.logger.debug "Objeto ValidationSource: #{@validation_source.inspect}"
-
     if @validation_source.save
       redirect_to validation_sources_path, notice: "Validation Source create successful!."
     else
@@ -31,7 +28,17 @@ class ValidationSourcesController < ApplicationController
   def destroy
     @validation_source = ValidationSource.find(params[:id])
     @validation_source.destroy
-    redirect_to validation_sources_path, notice: 'Validation Source deleted successfully.'
+    redirect_to validation_sources_path, alert: 'Validation Source deleted successfully.'
+  end
+
+  def new
+    @validation_source = ValidationSource.new
+    render partial: 'form', locals: { validation_source: @validation_source }, layout: false
+  end
+
+  def edit
+    @validation_source = ValidationSource.find(params[:id])
+    render partial: 'form', locals: { validation_source: @validation_source }, layout: false
   end
 
   private
