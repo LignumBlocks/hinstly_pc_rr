@@ -6,7 +6,13 @@ module Services
     include Capybara::DSL
 
     def initialize(sources, queries)
-      Capybara.current_driver = :selenium_chrome
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('--headless') # Ejecutar en modo cabeza
+      options.add_argument('--disable-gpu') # Opcional, para desactivar el uso de GPU
+      options.add_argument('--no-sandbox') # Opcional, recomendado para entornos de servidor
+
+      @driver = Selenium::WebDriver.for :chrome, options: options
+      # Capybara.current_driver = :selenium_chrome
       @sources = sources
       @queries = queries
       @results = []
@@ -17,10 +23,10 @@ module Services
       @sources.each do |source|
         @queries.each do |query|
           url = source.build_search_url(query)
-          visit(url)
+          @driver.navigate.to(url)
 
           response = client.chat(parameters: { model: 'gpt-4o',
-                                               messages: [{ role: 'user', content: prompt_for_links(query, page.html) }],
+                                               messages: [{ role: 'user', content: prompt_for_links(query, @driver.page_source) }],
                                                temperature: 0.7 })
           content = response.dig('choices', 0, 'message', 'content')
           content = content.gsub('json', '').gsub('```', '')
@@ -29,15 +35,16 @@ module Services
             already_scraped_content = results_content_by_link(link)
             add_result(query.id, source.id, link, already_scraped_content) and next if already_scraped_content
 
-            visit(link)
+            @driver.navigate.to(link)
             puts link
-            add_result(query.id, source.id, link, page.html)
+            add_result(query.id, source.id, link, @driver.page_source)
 
           rescue StandardError => e
             puts "fails link #{e.message}"
             next
           end
         end
+        @driver.quit
       end
       @results.each do |result|
         ScrapedResult.create(query_id: result[:query_id],

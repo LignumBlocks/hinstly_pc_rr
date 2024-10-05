@@ -1,5 +1,5 @@
 class Video < ApplicationRecord
-  enum state: { not_processed: 0, transcribing: 1, generating_hacks: 2, generating_queries: 3, scraping: 4,
+  enum state: { created: 0, transcribing: 1, hacks: 2, queries: 3, scraping: 4,
                 processed: 5, unprocessable: 6 }
 
   belongs_to :channel
