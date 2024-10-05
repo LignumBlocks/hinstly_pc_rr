@@ -3,7 +3,7 @@ class ValidationSourcesController < ApplicationController
     @validation_sources = ValidationSource.all
     @validation_source = ValidationSource.new
     @q = @validation_sources.ransack(params[:q])
-    @pagy, @validation_sources = pagy(@q.result.order(created_at: :desc), items: 25)
+    @pagy, @channels = pagy(@q.result.order(created_at: :desc), items: 25)
   end
 
   def show
@@ -12,26 +12,16 @@ class ValidationSourcesController < ApplicationController
   end
 
   def create
-    @validation_source = ValidationSource.new(validation_source_params)
-    if @validation_source.save
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to validation_sources_path, notice: 'Validation Source was successfully created.' }
-      end
-    else
-      render partial: 'form', locals: { validation_source: @validation_source }, status: :unprocessable_entity, layout: false
-    end
-  end
+    # Imprime los parámetros recibidos para asegurarte de que son los correctos
+    Rails.logger.debug "Parametros recibidos: #{params.inspect}"
 
-  def update
-    @validation_source = ValidationSource.find(params[:id])
-    if @validation_source.update(validation_source_params)
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to validation_sources_path, notice: 'Validation Source was successfully updated.' }
-      end
+    @validation_source = ValidationSource.new(validation_source_params)
+
+    if @validation_source.save
+      redirect_to validation_sources_path, notice: "Validation Source create successful!."
     else
-      render partial: 'form', locals: { validation_source: @validation_source }, status: :unprocessable_entity, layout: false
+      # Si hay errores, renderiza de nuevo la vista index con los errores
+      render :index, status: :unprocessable_entity
     end
   end
 
