@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_04_183711) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,6 +42,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "apify_runs", force: :cascade do |t|
+    t.integer "channel_id"
+    t.string "apify_run_id"
+    t.string "apify_dataset_id"
+    t.integer "state", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "channels", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
@@ -49,6 +58,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
     t.string "external_source_id"
     t.datetime "checked_at"
     t.integer "state", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hacks", force: :cascade do |t|
+    t.integer "video_id"
+    t.string "title"
+    t.string "summary"
+    t.text "justification"
+    t.boolean "is_hack"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "queries", force: :cascade do |t|
+    t.integer "hack_id"
+    t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -62,6 +88,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
   create_table "roles_users", id: false, force: :cascade do |t|
     t.bigint "role_id", null: false
     t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "scraped_results", force: :cascade do |t|
+    t.integer "query_id"
+    t.integer "validation_source_id"
+    t.string "link"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transcriptions", force: :cascade do |t|
+    t.integer "video_id"
+    t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -87,8 +129,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_192452) do
   end
 
   create_table "videos", force: :cascade do |t|
-    t.string "state"
+    t.integer "channel_id"
+    t.integer "state", default: 0
     t.datetime "processed_at"
+    t.datetime "external_created_at"
+    t.string "external_source", default: "tiktok"
+    t.string "external_source_id"
+    t.integer "duration"
+    t.string "source_download_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
