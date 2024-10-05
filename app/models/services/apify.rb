@@ -74,7 +74,7 @@ module Services
     end
 
     def body_for_download(channel, all_videos = false)
-      oldest_post_date = ch
+      # oldest_post_date = ch
       {
         "profiles": [channel.name],
         "resultsPerPage": 3,
