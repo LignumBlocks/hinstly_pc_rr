@@ -40,7 +40,7 @@ class ChannelsController < ApplicationController
       items = Services::Apify.new.read_dataset(run.apify_dataset_id)
       items.each do |item|
         video = create_video!(channel, item)
-        ProcessVideoJob.perform_later(video.id) if video.state == :not_processed
+        ProcessVideoJob.perform_later(video.id) if video.state.to_sym == :not_processed
       end
       run.update(state: 1)
     end
