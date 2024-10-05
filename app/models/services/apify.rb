@@ -30,7 +30,7 @@ module Services
     end
 
     def download_videos(channel)
-      response = run_actor(body_for_download(channel.name))
+      response = run_actor(body_for_download(channel))
       run = channel.apify_runs.build({ apify_run_id: response[:data][:id], apify_dataset_id: response[:data][:defaultDatasetId]})
       run.save && channel.update(state: 1)
     end
@@ -73,10 +73,11 @@ module Services
       }.to_json
     end
 
-    def body_for_download(channel_name)
+    def body_for_download(channel, all_videos = false)
+      oldest_post_date = ch
       {
-        "profiles": [channel_name],
-        "resultsPerPage": 1,
+        "profiles": [channel.name],
+        "resultsPerPage": 3,
         "excludePinnedPosts": false,
         "searchSection": "",
         "maxProfilesPerQuery": 1,
@@ -84,10 +85,10 @@ module Services
         "shouldDownloadCovers": true,
         "shouldDownloadSubtitles": false,
         "shouldDownloadSlideshowImages": false,
-        "maxItems": 1,
+        "maxItems": 3,
         "options": {
           "timeoutSecs": 10000,
-          "maxItems": 1
+          "maxItems": 3
         }
       }.to_json
     end

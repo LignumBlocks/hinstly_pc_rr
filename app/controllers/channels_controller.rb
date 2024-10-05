@@ -40,8 +40,7 @@ class ChannelsController < ApplicationController
       items = Services::Apify.new.read_dataset(run.apify_dataset_id)
       items.each do |item|
         video = create_video!(channel, item)
-        ProcessVideoJob.perform_later(video.id)
-        video.update(state: 1)
+        ProcessVideoJob.perform_later(video.id) if video.state == :not_processed
       end
       run.update(state: 1)
     end
@@ -58,6 +57,7 @@ class ChannelsController < ApplicationController
     return nil unless video.save
 
     video.cover.attach(io: URI.open(dataset_item[:videoMeta][:coverUrl]), filename: File.basename(dataset_item[:videoMeta][:coverUrl]))
+    video.update_attribute(:state, :unprocessable) unless video.source_download_link
     video
   end
 
