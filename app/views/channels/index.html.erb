@@ -64,7 +64,7 @@
         </td>
 
         <td class="px-4 py-4 text-center">
-          <span class="<%= class_for_state(channel) %> inline-block"><%= channel.state.capitalize %></span>
+          <span class="<%= class_for_channel_state(channel) %> inline-block"><%= channel.state.capitalize %></span>
         </td>
 
         <td class="px-4 py-4 text-center ">
@@ -81,6 +81,7 @@
               <span class="sr-only">Process videos for this channel</span>
             <% end %>
           <% end %>
+          <%= link_to t("helpers.link.edit"), channel_path(channel), class: "block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white text-left" %>
         </td>
       </tr>
     <% end %>

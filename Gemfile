@@ -25,6 +25,7 @@ gem 'rest-client'
 gem 'httparty'
 gem 'streamio-ffmpeg'
 gem "ruby-openai"
+gem 'langchainrb', '~> 0.10.0'
 
 # Front-end
 gem "sprockets-rails", "~> 3.4"
@@ -36,6 +37,7 @@ gem "heroicon", "~> 1.0"
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-byebug'
+  gem 'rubocop'
 end
 
 group :development do

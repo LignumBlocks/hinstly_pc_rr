@@ -22,6 +22,10 @@ class ChannelsController < ApplicationController
     redirect_to channels_path, alert: "Channel cannot be created"
   end
 
+  def show
+    @channel = current_user.channels.find(params[:id])
+  end
+
   def process_videos
     result = Services::Apify.new.download_videos(@channel)
     if result
@@ -52,6 +56,10 @@ class ChannelsController < ApplicationController
     video = channel.videos.new
     video.external_source_id = dataset_item[:id]
     video.external_created_at = Time.at(dataset_item[:createTime]).to_datetime
+    video.digg_count = dataset_item[:diggCount]
+    video.comment_count = dataset_item[:commentCount]
+    video.share_count = dataset_item[:shareCount]
+    video.play_count = dataset_item[:playCount]
     video.duration = dataset_item[:videoMeta][:duration]
     video.source_download_link = dataset_item[:videoMeta][:downloadAddr]
     return nil unless video.save

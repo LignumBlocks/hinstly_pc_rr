@@ -1,0 +1,55 @@
+<div class="relative overflow-x-auto mb-8 bg-white">
+  <div class="flex items-center justify-between flex-column pl-6 flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
+    <div class="py-5">
+      <% breadcrumbs = [["Channels", channels_path], [@channel.name, ""]]%>
+      <%= render partial: "layouts/breadcrumbs", locals: { breadcrumbs: breadcrumbs } %>
+    </div>
+    <div class="mr-2">
+      <a data-modal-target="modal" data-modal-toggle="modal"
+         class="btn btn-primary" >
+        Process channel
+      </a>
+    </div>
+  </div>
+
+  <div>
+    <ul class="flex flex-wrap -mb-px font-medium text-center list-none  px-2"
+        id="default-tab"
+        data-tabs-toggle="#channel-tab-content"
+        role="tablist">
+      <li class="me-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab"
+                data-tabs-target="#videos-tab-content" type="button" role="tab" aria-controls="videos-tab"
+                aria-selected="0"
+                >
+          Videos
+        </button>
+      </li>
+      <li class="me-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                id="hacks-tab" data-tabs-target="#hacks-tab-content" type="button" role="tab"
+                aria-controls="hacks" >
+          <%= t("hacks") %></button>
+      </li>
+      <li class="me-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                id="queries-tab" data-tabs-target="#queries-tab-content" type="button" role="tab"
+                aria-controls="queries" >
+          <%= t("helpers.tab.queries") %></button>
+      </li>
+    </ul>
+  </div>
+
+  <div id='channel-tab-content'>
+    <div id="videos-tab-content" role="tabpanel" aria-labelledby="videos-tab" class="hidden">
+      <%= render partial: "videos_section", locals: {videos: @channel.videos} %>
+    </div>
+
+    <div id="hacks-tab-content" class="hidden">
+      <%= render partial: 'hacks_section' %>
+    </div>
+    <div id="queries-tab-content" class="hidden">
+      wgwrgwrg
+    </div>
+  </div>
+</div>
