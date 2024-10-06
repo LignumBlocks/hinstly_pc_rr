@@ -33,4 +33,13 @@ module ApplicationHelper
       return "bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
     end
   end
+
+  def format_number(number)
+    case number
+    when 1_000..999_999 then "#{(number / 1_000.0).round(1)}k"
+    when 1_000_000..999_999_999 then "#{(number / 1_000_000.0).round(1)}M"
+    else number.to_s
+    end
+  end
+
 end

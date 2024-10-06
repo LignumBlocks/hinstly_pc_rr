@@ -17,7 +17,7 @@ class ProcessVideoJob < ApplicationJob
     puts 'has queries'
 
     video.update_attribute(:state, :scraping)
-    Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
+    Services::Scrapper.new(ValidationSource.all, video.queries_from_valid_hacks).scrap!
     video.process_video_log.update(has_scraped_pages: true)
 
     video.update(state: :processed, processed_at: DateTime.now)
@@ -56,7 +56,7 @@ class ProcessVideoJob < ApplicationJob
 
   def find_queries(video, client)
     video.update_attribute(:state, :queries)
-    video.hacks.each do |hack|
+    video.hacks.valid_hacks.each do |hack|
       queries_response = client.chat(parameters: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt_for_queries(hack.title, hack.summary) }], temperature: 0.7 })
       content = queries_response.dig('choices', 0, 'message', 'content')
       content = content.gsub('json', '').gsub('```', '')

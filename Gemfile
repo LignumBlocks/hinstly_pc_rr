@@ -36,6 +36,7 @@ gem "heroicon", "~> 1.0"
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-byebug'
+  gem 'rubocop'
 end
 
 group :development do

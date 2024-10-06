@@ -146,6 +146,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_05_082225) do
     t.string "external_source", default: "tiktok"
     t.string "external_source_id"
     t.integer "duration"
+    t.integer "digg_count"
+    t.integer "comment_count"
+    t.integer "share_count"
+    t.integer "play_count"
     t.string "source_download_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
