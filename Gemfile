@@ -25,6 +25,7 @@ gem 'rest-client'
 gem 'httparty'
 gem 'streamio-ffmpeg'
 gem "ruby-openai"
+gem 'langchainrb', '~> 0.10.0'
 
 # Front-end
 gem "sprockets-rails", "~> 3.4"
