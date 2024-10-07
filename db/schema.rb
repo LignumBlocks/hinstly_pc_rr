@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_05_082225) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -82,6 +82,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_05_082225) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "prompts", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.text "prompt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "system_prompt"
+  end
+
   create_table "queries", force: :cascade do |t|
     t.integer "hack_id"
     t.string "content"
@@ -146,10 +155,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_05_082225) do
     t.string "external_source", default: "tiktok"
     t.string "external_source_id"
     t.integer "duration"
-    t.integer "digg_count"
-    t.integer "comment_count"
-    t.integer "share_count"
-    t.integer "play_count"
     t.string "source_download_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
