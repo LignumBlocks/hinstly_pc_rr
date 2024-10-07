@@ -1,2 +1,2 @@
-<%= turbo_stream.append 'validation_sources', partial: 'validation_source', locals: { source: @validation_source } %>
+<%= turbo_stream.append 'prompts', partial: 'prompt', locals: { prompt: @prompt } %>
 <%= turbo_stream.replace 'modal', '' %>

@@ -1,6 +1,10 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get 'prompts/index'
+  get 'prompts/show'
+  get 'prompts/new'
+  get 'prompts/edit'
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks',
   }
@@ -9,6 +13,10 @@ Rails.application.routes.draw do
   root "home#index"
 
   resource :user, only: %i[edit update destroy]
+
+  resources :validation_sources
+  resources :prompts
+
   resources :channels, only: [:index, :create, :update, :show, :edit] do
     collection do
       post :apify_webhook

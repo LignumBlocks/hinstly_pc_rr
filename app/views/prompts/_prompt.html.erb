@@ -1,14 +1,14 @@
-<tr id="<%= dom_id(source) %>" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+<tr id="<%= dom_id(prompt) %>" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
   <td class="text-gray-900 whitespace-nowrap dark:text-white">
     <div class="ps-3">
-      <div class="text-base font-semibold"><%= source.name %></div>
+      <div class="text-base font-semibold"><%= prompt.name %></div>
     </div>
   </td>
   <td class="px-4 py-4 text-center">
-    <%= source.url_query %>
+    <%= prompt.code %>
   </td>
   <td class="px-4 py-4 text-center space-x-2">
-    <%= link_to 'Edit', edit_validation_source_path(source), data: { turbo_frame: "modal-content", turbo_method: :get, modal_toggle: "modal" }, class: "inline-block" %>
-    <%= button_to 'Delete', validation_source_path(source), method: :delete, data: { controller: 'confirmation', confirmation_message_value: 'Are you sure?', action: 'click->confirmation#confirm' }, class: "" %>
+    <%= link_to 'Edit/View', edit_prompt_path(prompt), data: { turbo_frame: "modal-content", turbo_method: :get, modal_toggle: "modal" }, class: "inline-block" %>
+    <%= button_to 'Delete', prompt_path(prompt), method: :delete, data: { controller: 'confirmation', confirmation_message_value: 'Are you sure?', action: 'click->confirmation#confirm' }, class: "" %>
   </td>
 </tr>
