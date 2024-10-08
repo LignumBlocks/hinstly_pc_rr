@@ -3,7 +3,7 @@ class ValidationSourcesController < ApplicationController
     @validation_sources = ValidationSource.all
     @validation_source = ValidationSource.new
     @q = @validation_sources.ransack(params[:q])
-    @pagy, @channels = pagy(@q.result.order(created_at: :desc), items: 25)
+    @pagy, @validation_sources = pagy(@q.result.order(created_at: :desc), items: 25)
   end
 
   def show
@@ -12,26 +12,43 @@ class ValidationSourcesController < ApplicationController
   end
 
   def create
-    # Imprime los parámetros recibidos para asegurarte de que son los correctos
-    Rails.logger.debug "Parametros recibidos: #{params.inspect}"
-
     @validation_source = ValidationSource.new(validation_source_params)
-
-    # Verifica si el objeto se ha inicializado correctamente
-    Rails.logger.debug "Objeto ValidationSource: #{@validation_source.inspect}"
-
     if @validation_source.save
-      redirect_to validation_sources_path, notice: "Validation Source create successful!."
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to validation_sources_path, notice: 'Validation Source was successfully created.' }
+      end
     else
-      # Si hay errores, renderiza de nuevo la vista index con los errores
-      render :index, status: :unprocessable_entity
+      render partial: 'form', locals: { validation_source: @validation_source }, status: :unprocessable_entity, layout: false
+    end
+  end
+
+  def update
+    @validation_source = ValidationSource.find(params[:id])
+    if @validation_source.update(validation_source_params)
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to validation_sources_path, notice: 'Validation Source was successfully updated.' }
+      end
+    else
+      render partial: 'form', locals: { validation_source: @validation_source }, status: :unprocessable_entity, layout: false
     end
   end
 
   def destroy
     @validation_source = ValidationSource.find(params[:id])
     @validation_source.destroy
-    redirect_to validation_sources_path, notice: 'Validation Source deleted successfully.'
+    redirect_to validation_sources_path, alert: 'Validation Source deleted successfully.'
+  end
+
+  def new
+    @validation_source = ValidationSource.new
+    render partial: 'form', locals: { validation_source: @validation_source }, layout: false
+  end
+
+  def edit
+    @validation_source = ValidationSource.find(params[:id])
+    render partial: 'form', locals: { validation_source: @validation_source }, layout: false
   end
 
   private

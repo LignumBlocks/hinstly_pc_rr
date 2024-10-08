@@ -1,13 +1,27 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
+  get 'prompts/index'
+  get 'prompts/show'
+  get 'prompts/new'
+  get 'prompts/edit'
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks',
   }
+  mount Sidekiq::Web => '/sidekiq'
+
   root "home#index"
 
   resource :user, only: %i[edit update destroy]
-  resources :channels, only: [:index, :create, :update, :show, :edit]
-  resources :validation_sources
 
+  resources :validation_sources
+  resources :prompts
+
+  resources :channels, only: [:index, :create, :update, :show, :edit] do
+    collection do
+      post :apify_webhook
+    end
+  end
   resource :channel do
     member do
       post :process_videos
