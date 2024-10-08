@@ -11,7 +11,7 @@
       Created at
     </th>
     <th scope="col" class="px-6 text-center">
-      hacks
+      valid hack
     </th>
     <th scope="col" class="px-6 text-center">
       Queries
@@ -68,7 +68,7 @@
       </td>
 
       <td class="px-4 text-center">
-        <%= video&.hacks&.count %>
+        <span class="<%= class_for_boolean(video&.hack&.is_hack?) %> inline-block"><%= text_for_boolean(video&.hack&.is_hack?) %></span>
       </td>
 
       <td class="px-4 text-center">
