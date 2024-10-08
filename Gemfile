@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.0.3"
+ruby "3.3.5"
 
 gem "rails", "~> 7.0.4", ">= 7.0.4.3"
 gem "pg", "~> 1.4"
@@ -25,7 +25,7 @@ gem 'rest-client'
 gem 'httparty'
 gem 'streamio-ffmpeg'
 gem "ruby-openai"
-gem 'langchainrb', '~> 0.10.0'
+gem 'langchainrb'
 
 # Front-end
 gem "sprockets-rails", "~> 3.4"

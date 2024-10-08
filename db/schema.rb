@@ -160,6 +160,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
     t.integer "share_count"
     t.integer "play_count"
     t.string "source_download_link"
+    t.string "source_link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -10,14 +10,14 @@ class ProcessVideoJob < ApplicationJob
     transcript_video(video, client) unless video.process_video_log.transcribed?
     puts 'Transcribed downloaded_video'
 
-    find_hacks(video, client) unless video.process_video_log.has_hacks?
-    puts 'Hacks gotten'
+    find_hack(video) unless video.process_video_log.has_hacks?
+    puts 'Hack gotten'
 
     find_queries(video, client) unless video.process_video_log.has_queries?
     puts 'has queries'
 
     video.update_attribute(:state, :scraping)
-    Services::Scrapper.new(ValidationSource.all, video.queries_from_valid_hacks).scrap!
+    Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
     video.process_video_log.update(has_scraped_pages: true)
 
     video.update(state: :processed, processed_at: DateTime.now)
@@ -41,28 +41,20 @@ class ProcessVideoJob < ApplicationJob
     video.transcription.reload
   end
 
-  def find_hacks(video, client)
+  def find_hack(video)
     video.update_attribute(:state, :hacks)
-    response_hacks = client.chat(parameters: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt_for_hacks(video.transcription.content) }], temperature: 0.7 })
-    content = response_hacks.dig('choices', 0, 'message', 'content')
-    content = content.gsub('json', '').gsub('```', '')
-    hacks = JSON.parse(content)['hacks']
-    hacks.each do |hack|
-      video.hacks.create(title: hack['possible hack title'], summary: hack['brief summary'], justification: hack['justification'],
-                         is_hack: hack['is_a_hack'])
-    end
+    Ai::Video.new(video).find_hack!
     video.process_video_log.update(has_hacks: true)
   end
 
   def find_queries(video, client)
     video.update_attribute(:state, :queries)
-    video.hacks.valid_hacks.each do |hack|
-      queries_response = client.chat(parameters: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt_for_queries(hack.title, hack.summary) }], temperature: 0.7 })
-      content = queries_response.dig('choices', 0, 'message', 'content')
-      content = content.gsub('json', '').gsub('```', '')
-      queries_for_hack = JSON.parse(content)['queries']
-      queries_for_hack.each { |query| hack.queries.create(content: query) }
-    end
+    hack = video.hack
+    queries_response = client.chat(parameters: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt_for_queries(hack.title, hack.summary) }], temperature: 0.7 })
+    content = queries_response.dig('choices', 0, 'message', 'content')
+    content = content.gsub('json', '').gsub('```', '')
+    queries_for_hack = JSON.parse(content)['queries']
+    queries_for_hack.each { |query| hack.queries.create(content: query) }
     video.process_video_log.update(has_queries: true)
   end
 
