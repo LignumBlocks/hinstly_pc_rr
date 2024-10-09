@@ -13,12 +13,15 @@ class ProcessVideoJob < ApplicationJob
     find_hack(video) unless video.process_video_log.has_hacks?
     puts 'Hack gotten'
 
-    find_queries(video, client) unless video.process_video_log.has_queries?
+
+    find_queries(video, client) if video.hack.is_hack? && !video.process_video_log.has_queries?
     puts 'has queries'
 
-    video.update_attribute(:state, :scraping)
-    Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
-    video.process_video_log.update(has_scraped_pages: true)
+    if video.hack.is_hack? && !video.process_video_log.has_scraped_pages?
+      video.update_attribute(:state, :scraping)
+      Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
+      video.process_video_log.update(has_scraped_pages: true)
+    end
 
     video.update(state: :processed, processed_at: DateTime.now)
   end

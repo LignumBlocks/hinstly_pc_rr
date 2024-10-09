@@ -1,0 +1,107 @@
+<div class="relative h-screen overflow-x-auto mb-8 bg-white">
+  <div class="flex items-center justify-between flex-column pl-6 flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
+    <div class="py-5">
+      <% breadcrumbs = [["Hacks", hacks_path], [@hack.title, ""]]%>
+      <%= render partial: "layouts/breadcrumbs", locals: { breadcrumbs: breadcrumbs } %>
+    </div>
+    <div class="mr-2">
+
+    </div>
+  </div>
+
+  <div class="p-6 pt-0">
+
+    <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">
+      <h4 id="accordion-flush-heading-1">
+        <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right  text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-1" aria-expanded="true" aria-controls="accordion-flush-body-1">
+          <span><%= @hack.title %>
+            <span class="<%= class_for_boolean(@hack.is_hack?) %> inline-block ml-2"><%= text_for_boolean(@hack.is_hack?) %></span>
+          </span>
+
+          <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+          </svg>
+        </button>
+      </h4>
+      <div id="accordion-flush-body-1" class="hidden" aria-labelledby="accordion-flush-heading-1">
+        <div class="py-4 border-b border-gray-200 dark:border-gray-700">
+          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.summary %></p>
+        </div>
+      </div>
+
+      <h4 id="accordion-flush-heading-2">
+        <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-2" aria-expanded="false" aria-controls="accordion-flush-body-2">
+          <span>Justification</span>
+          <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+          </svg>
+        </button>
+      </h4>
+      <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
+        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+          <p class="mb-2 text-gray-500 dark:text-gray-400"><%=@hack.justification %></p>
+        </div>
+      </div>
+
+      <h4 id="accordion-flush-heading-3">
+        <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-3" aria-expanded="false" aria-controls="accordion-flush-body-3">
+          <span>Video Transcription</span>
+          <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+          </svg>
+        </button>
+      </h4>
+      <div id="accordion-flush-body-3" class="hidden" aria-labelledby="accordion-flush-heading-3">
+        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.video.transcription.content %></p>
+          <a href="<%= @hack.video.source_link %>" target="_blank" class="text-blue-600 dark:text-blue-500 hover:underline">Ver video</a>
+        </div>
+      </div>
+
+      <% if @hack.is_hack? %>
+        <h4 id="accordion-flush-heading-4">
+          <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-4" aria-expanded="false" aria-controls="accordion-flush-body-4">
+            <span>Queries</span>
+            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+            </svg>
+          </button>
+        </h4>
+        <div id="accordion-flush-body-4" class="hidden" aria-labelledby="accordion-flush-heading-4">
+          <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+            <div class="mb-2 text-gray-500 dark:text-gray-400">
+              <ul class="pl-4">
+                <% @hack.queries.each do |query| %>
+                  <li><%= query.content.capitalize %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h4 id="accordion-flush-heading-5">
+          <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-5" aria-expanded="false" aria-controls="accordion-flush-body-5">
+            <span>Sources</span>
+            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+            </svg>
+          </button>
+        </h4>
+        <div id="accordion-flush-body-5" class="hidden" aria-labelledby="accordion-flush-heading-5">
+          <div class="py-5 border-b border-gray-200 dark:border-gray-700">
+            <div class="mb-2 text-gray-500 dark:text-gray-400">
+              <ul class="pl-4">
+                <% @hack.scraped_results.each do |scraped_result| %>
+                  <li>
+                    <a href="<%= scraped_result.link %>" target="_blank" class=" dark:text-blue-500 hover:underline"><%= scraped_result.link %></a>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>
