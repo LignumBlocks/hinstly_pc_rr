@@ -24,8 +24,10 @@ gem 'sidekiq-status'
 gem 'rest-client'
 gem 'httparty'
 gem 'streamio-ffmpeg'
-gem "ruby-openai"
 gem 'langchainrb'
+gem "ruby-openai", "~> 6.3.0"
+gem "pinecone"
+
 
 # Front-end
 gem "sprockets-rails", "~> 3.4"
