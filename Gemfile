@@ -17,7 +17,7 @@ gem "pagy", "~> 5.10"
 gem "image_processing", "~> 1.2"
 gem "faker", "~> 2"
 gem 'capybara'
-gem 'selenium-webdriver'
+gem 'selenium-webdriver', '>= 4.11'
 gem 'webdrivers'
 gem 'sidekiq'
 gem 'sidekiq-status'

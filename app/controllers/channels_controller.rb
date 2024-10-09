@@ -16,7 +16,7 @@ class ChannelsController < ApplicationController
     if result
       avatar = result.delete(:avatar)
       channel = current_user.channels.build(result)
-      channel.avatar.attach(io:  URI.open(avatar), filename: File.basename(avatar))
+      #channel.avatar.attach(io:  URI.open(avatar), filename: File.basename(avatar))
       redirect_to channels_path, notice: "Channel created correctly" and return if channel.save
     end
     redirect_to channels_path, alert: "Channel cannot be created"

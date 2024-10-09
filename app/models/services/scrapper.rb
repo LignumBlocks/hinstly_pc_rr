@@ -23,6 +23,7 @@ module Services
       @sources.each do |source|
         @queries.each do |query|
           url = source.build_search_url(query)
+          puts "consultando aaaaaaa --------------------------#{url}"
           @driver.navigate.to(url)
 
           response = client.chat(parameters: { model: 'gpt-4o',
