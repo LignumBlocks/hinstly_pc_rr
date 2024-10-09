@@ -94,7 +94,7 @@ module Ai
       #  - "title": The title of the validation source article. (optional)
       #  - "description": A brief description of the validation source. (optional)
       
-      rag = RAG_LlmHandler.new("gpt-4o-mini", chroma_path: File.join(DATA_DIR, 'chroma_db'))
+      rag = Ai::RagLlmHandler.new("gpt-4o-mini", chroma_path: File.join(DATA_DIR, 'chroma_db'))
       rag.store_from_queries(validation_sources_hashes_list, hack_id)
     end
     def validation_retrieval_generation(hack_id, hack_title, hack_summary)
@@ -128,8 +128,6 @@ module Ai
         return nil, prompt, metadata
       end
     end
-
-    
 
   end
 end
@@ -260,7 +258,7 @@ hack_validation = "Here is an extract of relevant context from different web pag
 \#{chunks}
 ---
 
-Given the provided search context, please validate or refute the following financial hack acoording to this factors:
+Given the provided search context, please validate or refute the following financial hack according to this factors:
 A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
 - Legality and Risks: Must comply with legal standards, highlighting legal implications, tax loopholes, and ethical issues.
 - Temporal Relevance: Must be suitable for the current economic context.

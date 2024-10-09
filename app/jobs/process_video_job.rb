@@ -13,7 +13,7 @@ class ProcessVideoJob < ApplicationJob
     find_hack(video) unless video.process_video_log.has_hacks?
     puts 'Hack gotten'
 
-    find_queries(video, client) unless video.process_video_log.has_queries?
+    find_queries(video) unless video.process_video_log.has_queries?
     puts 'has queries'
 
     video.update_attribute(:state, :scraping)
@@ -47,14 +47,9 @@ class ProcessVideoJob < ApplicationJob
     video.process_video_log.update(has_hacks: true)
   end
 
-  def find_queries(video, client)
+  def find_queries(video)
     video.update_attribute(:state, :queries)
-    hack = video.hack
-    queries_response = client.chat(parameters: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt_for_queries(hack.title, hack.summary) }], temperature: 0.7 })
-    content = queries_response.dig('choices', 0, 'message', 'content')
-    content = content.gsub('json', '').gsub('```', '')
-    queries_for_hack = JSON.parse(content)['queries']
-    queries_for_hack.each { |query| hack.queries.create(content: query) }
+    Ai::HackProcessor.new(video.hack).find_queries!
     video.process_video_log.update(has_queries: true)
   end
 

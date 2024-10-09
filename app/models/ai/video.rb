@@ -18,7 +18,7 @@ module Ai
       system_prompt_text = prompt.system_prompt
       model = Ai::LlmHandler.new("gpt-4o-mini")
       result = model.run(prompt_text, system_prompt_text)
-      result = result.gsub('json', '').gsub('```', '')
+      result = result.gsub('json', '').gsub('```', '').strip
       JSON.parse(result)
     end
   end
