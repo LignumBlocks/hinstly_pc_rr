@@ -1,0 +1,49 @@
+<div class="relative overflow-x-auto mb-8 bg-white">
+  <div class="flex items-center justify-between flex-column pl-6 flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
+    <div class="py-5">
+      <% breadcrumbs = [["Channels", channels_path]] %>
+      <%= render partial: "layouts/breadcrumbs", locals: { breadcrumbs: breadcrumbs } %>
+    </div>
+  </div>
+
+  <div>
+    <ul class="flex flex-wrap -mb-px font-medium text-center list-none px-2" id="default-tab"
+        data-tabs-toggle="#channel-tab-content" role="tablist">
+      <li class="me-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="hack-tab"
+                data-tabs-target="#hack-content" type="button" role="tab" aria-controls="hack-content"
+                aria-selected="0">
+          Hack
+        </button>
+      </li>
+      <li class="me-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                id="transcription-tab" data-tabs-target="#transcription-content" type="button" role="tab"
+                aria-controls="transcription-content">
+          Transcription
+        </button>
+      </li>
+      <li class="me-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                id="sources-tab" data-tabs-target="#sources-content" type="button" role="tab"
+                aria-controls="sources-content">
+          Sources
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div id='channel-tab-content'>
+    <div id="hack-content" role="tabpanel" aria-labelledby="hack-tab" class="hidden">
+      <%= render partial: "hack_section", locals: {hack: @hack} %>
+    </div>
+
+    <div id="transcription-content" role="tabpanel" aria-labelledby="transcription-tab" class="hidden">
+      <%= render partial: 'transcription_section', locals: {hack: @hack}  %>
+    </div>
+
+    <div id="sources-content" role="tabpanel" aria-labelledby="sources-tab" class="hidden">
+      <%= render partial: 'hacks/sources_section', locals: {hack: @hack}  %>
+    </div>
+  </div>
+</div>

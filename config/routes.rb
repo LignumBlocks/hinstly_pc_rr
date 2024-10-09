@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   resources :validation_sources
   resources :prompts
+  resources :hacks
 
   resources :channels, only: [:index, :create, :update, :show, :edit] do
     collection do
@@ -27,6 +28,7 @@ Rails.application.routes.draw do
       post :process_videos
     end
   end
+
 
   get "/pages/:page" => "pages#show", as: :page
 

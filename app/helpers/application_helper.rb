@@ -57,4 +57,9 @@ module ApplicationHelper
       "No"
     end
   end
+
+  def capitalize_first_letter(sentence)
+    sentence[0] = sentence[0].capitalize if sentence.present?
+    sentence
+  end
 end

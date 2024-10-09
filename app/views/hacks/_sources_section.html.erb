@@ -1,0 +1,19 @@
+<div class="relative overflow-x-auto mb-8 bg-white p-6">
+<% hack.queries.each do |query| %>
+  <h4>Query: <%= query.content %></h4>
+  <% if query.scraped_results.any? %>
+    <ul class="pl-6">
+      <% query.scraped_results.each do |scraped_result| %>
+        <li>
+          <a target="_blank" href="<%= scraped_result.link %>"><%= scraped_result.link %></a>
+        </li>
+        <p>
+          <%= scraped_result.content %>
+        </p>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No scraped results available for this query.</p>
+  <% end %>
+<% end %>
+</div>

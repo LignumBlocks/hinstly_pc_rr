@@ -1,0 +1,21 @@
+<div class="max-w-sm p-6 bg-white">
+  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><%= hack.title %></h5>
+  <p>
+    <strong>Is Hack:</strong>
+    <%= hack.is_hack %>
+  </p>
+  <h5 class="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white">
+    Summary:
+  </h5>
+  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"><%= hack.summary %></p>
+  <h5 class="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white">
+    Justification:
+  </h5>
+  <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"><%= hack.justification %></p>
+  <h5 class="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white">Queries:</h5>
+  <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 pl-6">
+    <% hack.queries.each do |query| %>
+      <li><%= capitalize_first_letter(query.content) %></li>
+    <% end %>
+  </ul>
+</div>
