@@ -4,17 +4,17 @@
     <th scope="col" class="px-6 ">
       Name
     </th>
-    <th scope="col" class="px-6 ">
-      Action
-    </th>
-    <th scope="col" class="px-6 text-center">
+    <th class="text-center">
       State
     </th>
-    <th scope="col" class="px-6 text-center">
+    <th scope="col" class="text-center">
       Created at
     </th>
-    <th scope="col" class="px-6 text-center">
+    <th scope="col" class="text-center">
       valid hack
+    </th>
+    <th scope="col" class="text-center">
+      Action
     </th>
   </tr>
   </thead>
@@ -51,14 +51,9 @@
               <span class="ml-1text-gray-700"><%= format_number(video.play_count) %></span>
             </div>
           </div>
-
-          <!--          <div class="font-normal text-gray-500 truncate overflow-hidden"><%#= video&.transcription&.content ? video.transcription.content : "No transcription"%></div>-->
         </div>
       </td>
 
-      <td class="px-4 text-center">
-        <%= link_to 'View Hack', hack_path(id: video.hack) %>
-      </td>
       <td class="px-4 text-center">
         <span class="<%= class_for_state(video) %> inline-block"><%= video.state.capitalize %></span>
       </td>
@@ -69,6 +64,10 @@
 
       <td class="px-4 text-center">
         <span class="<%= class_for_boolean(video&.hack&.is_hack?) %> inline-block"><%= text_for_boolean(video&.hack&.is_hack?) %></span>
+      </td>
+
+      <td class="px-4 text-center">
+        <%= link_to 'View Hack', hack_path(id: video.hack) %>
       </td>
 
     </tr>
