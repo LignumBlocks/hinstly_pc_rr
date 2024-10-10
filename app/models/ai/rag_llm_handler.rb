@@ -2,18 +2,24 @@ module Ai
   # A class for managing a Retrieval-Augmented Generation (RAG) model using LLMs and a Chroma vector store.
   # This class allows the addition and retrieval of documents from a vector store for better context-aware conversations.
   class RagLlmHandler < BaseHandler
+    attr_reader :model_name, :llm
+
+    PINECONE_API_KEY = ENV['PINECONE_API_KEY']
     def initialize(model_name = 'gpt-4o-mini', temperature = 0.4, collection_name = 'validation')
       super(model_name, temperature)
       @collection_name = collection_name
       create_or_load_vs
     end
 
-
     def create_or_load_vs
+      index = if @model_name.include?('gpt')
+                ENV['PINECONE_ENVIRONMENT_OPENAI']
+              else
+                ENV['PINECONE_ENVIRONMENT_OPEN_SOURCE']
+              end
       @vectorstore = Langchain::Vectorsearch::Pinecone.new(
-        environment: ENV['PINECONE_ENVIRONMENT'],
-        api_key: ENV['PINECONE_API_KEY'],
-        index_name: @collection_name,
+        api_key: PINECONE_API_KEY,
+        index_name: index,
         llm: @llm
       )
       @vectorstore.create_default_schema
@@ -21,7 +27,7 @@ module Ai
 
     # Adds a new document to the Chroma vector store if it doesn't already exist.
     def add_document(hack_id, document_id, documents, metadata)
-      @vectorstore.add_texts(texts: documents, metadata: metadata)
+      @vectorstore.add_texts(texts: documents, metadata:)
 
       # existing_documents = @vectorstore.get()
 
@@ -53,13 +59,11 @@ module Ai
         documents = []
         metadatas = []
         content_chunks = Langchain::Chunker::RecursiveText.new(query_dict['content'], chunk_size: 5000,
-                                                               chunk_overlap: 500).chunks
-
+                                                                                      chunk_overlap: 500).chunks
         content_chunks.each do |chunk|
           documents << chunk
           metadatas << query_dict.merge({ 'hack_id' => hack_id })
         end
-
         add_document(hack_id, query_dict['source_id'], documents, metadatas)
       end
     end
