@@ -132,16 +132,62 @@ module Ai
       end
     end
 
+    def get_validated_hack_descriptions(hack_id, hack_title, hack_summary, original_text)
+      descriptions = get_hack_description(hack_title, hack_summary, original_text)
+      # Improve the descriptions using validation sources
+      improved_descriptions = grow_descriptions(hack_id, descriptions['free_description'],
+                                                descriptions['premium_description'])
+      structured_free, structured_premium = structure_hack_descriptions(improved_descriptions['free_description'],
+                                                                        improved_descriptions['premium_description'])
+      {
+        hack_title: structured_free['Hack Title'],
+        description: structured_free['Description'],
+        main_goal: structured_free['Main Goal'],
+        steps_summary: structured_free['steps(Summary)'],
+        resources_needed: structured_free['Resources Needed'],
+        expected_benefits: structured_free['Expected Benefits'],
+        extended_title: structured_premium['Extended Title'],
+        detailed_steps: structured_premium['Detailed steps'],
+        additional_tools_resources: structured_premium['Additional Tools and Resources'],
+        case_study: structured_premium['Case Study']
+      }
+    end
+
+    def grow_descriptions(hack_id, free_description, premium_description, times = 6, k = 5)
+      # Initialize RAG LLM model and retrieve documents similar to the hack
+      rag = RAG_LlmHandler.new('gpt-4o-mini')
+      documents = rag.retrieve_similar_for_hack(hack_id, "#{free_description}\\n#{premium_description}", k: k * times)
+      documents.shuffle! # Randomize the order of elements in the list
+
+      latest_free = free_description
+      latest_premium = premium_description
+
+      # Extend the descriptions using document chunks
+      (0...times).each do |i|
+        chunks = documents[i * k, k].map do |document|
+          "Relevant context section:\n\"\"\"#{document.page_content}\n\"\"\""
+        end.join("\n")
+        puts "Extending descriptions: iter = #{i + 1}"
+
+        improved_descriptions = improve_hack_descriptions(latest_free, latest_premium, chunks)
+        latest_free = improved_descriptions['free_description']
+        latest_premium = improved_descriptions['premium_description']
+      end
+      {
+        free_description: latest_free,
+        premium_description: latest_premium
+      }
+    end
+
     def get_hack_description(hack_title, hack_summary, original_text)
       # Performs a deep analysis of a financial hack by generating both free and premium-level analysis.
 
-      prompt_free = Prompt.find_by_code('hack_description_free')
-      prompt_premium = Prompt.find_by_code('hack_description_premium')
+      prompt_free = Prompt.find_by_code('free_description')
+      prompt_premium = Prompt.find_by_code('premium_description')
 
       format_hash_free = { hack_title:, hack_summary:, original_text: }
       prompt_text_free = prompt_free.build_prompt_text(format_hash_free)
       system_prompt = prompt_free.system_prompt
-      system_prompt = 'You are a financial analyst specializing in creating financial hacks for users in the USA.'
 
       begin
         model = Ai::LlmHandler.new('gpt-4o-mini')
@@ -170,8 +216,8 @@ module Ai
     def improve_hack_descriptions(free_description, premium_description, chunks)
       # Performs an enriched analysis by further refining both free and premium analyses of a financial hack.
 
-      prompt_free = Prompt.find_by_code('enriched_description_free')
-      prompt_premium = Prompt.find_by_code('enriched_description_premium')
+      prompt_free = Prompt.find_by_code('enriched_free_description')
+      prompt_premium = Prompt.find_by_code('enriched_premium_description')
 
       format_hash_free = { chunks:, previous_analysis: free_description }
       prompt_text_free = prompt_free.build_prompt_text(format_hash_free)
@@ -201,8 +247,8 @@ module Ai
 
     def structure_hack_descriptions(free_description, premium_description)
       # Extracts the structured information from the free hack description and the premium hack description.
-      prompt_free = Prompt.find_by_code('structure_description_free')
-      prompt_premium = Prompt.find_by_code('structure_description_premium')
+      prompt_free = Prompt.find_by_code('structured_free_description')
+      prompt_premium = Prompt.find_by_code('structured_premium_description')
       format_hash_free = { free_analysis: free_description }
       prompt_text_free = prompt_free.build_prompt_text(format_hash_free)
       system_prompt = prompt_free.system_prompt
@@ -239,8 +285,8 @@ module Ai
     def get_hack_classifications(free_description)
       # Classifies a financial hack based on several parameters using the provided free description.
 
-      prompt_complexity = load_prompt(PROMPTS_TEMPLATES['complexity_classification'])
-      prompt_financial_categories = load_prompt(PROMPTS_TEMPLATES['financial_categories_classification'])
+      prompt_complexity = Prompt.find_by_code('complexity_classification')
+      prompt_financial_categories = Prompt.find_by_code('financial_categories_classification')
 
       format_hash = { hack_description: free_description }
       prompt_text_complexity = prompt_complexity.build_prompt_text(format_hash)
@@ -273,161 +319,5 @@ module Ai
     end
   end
 end
-
-hack_discrimination0 = "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
-
-When scanning content, prioritize hacks that meet the following criteria:
-
-- Clear Financial Value: Must demonstrate measurable financial benefits such as savings, income increases, or tax optimization with impact ranging from minor to significant.
-- Originality: Exclude common hacks or widely known financial advice. The hack must offer something unique or little-known.
-- Applicability: Must be implementable by users, specifying who can use it and under what conditions (e.g., income level, country).
-- Legality and Risks: Must comply with legal standards, highlighting legal implications, tax loopholes, and ethical issues. Key terms: legal complexities, tax exemptions, offshore jurisdictions.
-- Clear Explanation: Prioritize hacks offering detailed explanations, preferably in tutorial or step-by-step format.
-- Temporal Relevance: Must be suitable for the current economic context. Look for mentions of temporality or economic conditions in which the hack works. Key phrases: \"relevant now\", \"applicable in [current year]\", \"long-term/short-term strategy\".
-- Impact Verification: Look for indications of measurable financial impact: specific figures or expected results.
-
-Analize the following content for financial hacks:
----
-\#{source_text}
----
-
-The output must be a json with the following structure:
-```json
-{
-    \"possible hack title\": \"<A title of the possible hack in the content. Must be a descriptive name that showcases the particularities of the hack. Try to make it unique.>\",
-    \"brief summary\": \"<A short description of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",
-    \"justification\": \"<Explanation about whether the content includes a valid financial hack>\",
-    \"is_a_hack\": \"<Boolean true or false, about whether the content includes a valid financial hack>\"
-}
-```
-
-Scan the content for financial advice or strategies. Evaluate if any hack can be extracted from it.
-"
-hack_discrimination1 = "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
-
-When scanning content, prioritize hacks that meet the following criteria:
-
-- Clear Financial Value: Must demonstrate measurable financial benefits such as savings, income increases, or tax optimization with impact ranging from minor to significant.
-- Clear Explanation: Prioritize hacks offering detailed explanations.
-- Impact Verification: Look for indications of measurable financial impact: specific figures or expected results.
-
-Analize the following content for financial hacks:
----
-\#{source_text}
----
-
-The output must be a json with the following structure:
-```json
-{
-  \"possible hack title\": \"<A title of the possible hack in the content. Must be a descriptive name that showcases the particularities of the hack. Try to make it unique.>\",
-  \"brief summary\": \"<A short description of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",
-  \"justification\": \"<Explanation about whether the content includes a valid financial hack>\",
-  \"is_a_hack\": \"<Boolean true or false, about whether the content includes a valid financial hack>\"
-}
-```
-
-Scan the content for financial advice or strategies. Evaluate if any hack can be extracted from it.
-"
-hack_discrimination2 = "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
-
-Analize the following content for financial hacks:
----
-\#{source_text}
----
-
-The output must be a json with the following structure:
-```json
-{
-  \"possible hack title\": \"<A title of the possible hack in the content. Must be a descriptive name that showcases the particularities of the hack. Try to make it unique.>\",
-  \"brief summary\": \"<A short description of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",
-  \"justification\": \"<Explanation about whether the content includes a valid financial hack>\",
-  \"is_a_hack\": \"<Boolean true or false, about whether the content includes a valid financial hack>\"
-}
-```
-
-Scan the content for financial advice or strategies. Evaluate if any hack can be extracted from it.
-"
-hack_verif_0 = Prompt.new(
-  name: 'Hack Verification Extended',
-  code: 'hack_verification_0',
-  prompt: hack_discrimination0,
-  system_prompt: 'You are an AI financial analyst tasked with classifying content related to financial strategies.'
-)
-hack_verif_0.save
-hack_verif_1 = Prompt.new(
-  name: 'Hack Verification Medium',
-  code: 'hack_verification_1',
-  prompt: hack_discrimination1,
-  system_prompt: 'You are an AI financial analyst tasked with classifying content related to financial strategies.'
-)
-hack_verif_1.save
-hack_verif_2 = Prompt.new(
-  name: 'Hack Verification Reduced',
-  code: 'hack_verification_2',
-  prompt: hack_discrimination2,
-  system_prompt: 'You are an AI financial analyst tasked with classifying content related to financial strategies.'
-)
-hack_verif_2.save
-
-generate_queries = "Given the following financial 'hack', generate a set of {num_queries} relevant queries that allow verifying the validity of the hack. The queries will be used on official financial websites to search for information that can validate or refute the techniques or suggestions of the hack. Make sure to:
-
-- Use key terms from the hack title and summary when possible.
-- Keep the queries concise and direct, without unnecessary filler words.
-- Formulate the queries in a way that they seek specific information related to the validity of the hack.
-
-The validation should check about legality, risks and temporal relevance.
-
-Financial hack title:
-\#{hack_title}
----
-Financial hack summary:
-\#{hack_summary}
-
-Provide your response only as a JSON object containing a list of the relevant queries, in the following format:
-
-{
-    \"queries\": [ ... ]
-}
-"
-gen_queries = Prompt.new(
-  name: 'Generate queries for validation',
-  code: 'generate_queries',
-  prompt: generate_queries,
-  system_prompt: 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.'
-)
-gen_queries.save
-
-hack_validation = "Here is an extract of relevant context from different web pages:
-
----
-\#{chunks}
----
-
-Given the provided search context, please validate or refute the following financial hack according to this factors:
-A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
-- Legality and Risks: Must comply with legal standards, highlighting legal implications, tax loopholes, and ethical issues.
-- Temporal Relevance: Must be suitable for the current economic context.
-
-Financial hack title:
-\#{hack_title}
----
-Financial hack summary:
-\#{hack_summary}
-
-If the information is not enough to emit an opinion about the validity or you are unsure answer Unknown.
-Provide your response only as a JSON object containing the analysis, in the following format:
-
-{
-    \"validation analysis\": \"<Deep analysis about the validity of the hack, according to the factors above, it can be in markdown format>\",
-    \"validation status\": \"<Valid, Invalid>\"
-}
-"
-val_hack = Prompt.new(
-  name: 'RAG for hack validation',
-  code: 'hack_validation',
-  prompt: hack_validation,
-  system_prompt: 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.'
-)
-val_hack.save
 
 Ai::HackProcessor.verify_hacks_from_text("This is how I became debt-free and saved my first $10,000. You can do it too, but I want to preface this by saying this is what worked for me. I didn't have TikTok at the time to teach me. I had to learn the hard way, and if I can even help one person learn how to better their life through their finances, it'll be a win to me. As always, do what works for you and your situation. This is just what I did. So first of all, I know you don't want to hear this, but you have to work on your mindset. You're not going to get anywhere with the victim mentality of I can never be debt-free, I can never make more money, etc. Work on a mindset of gratitude. Be grateful for what you already have and say thank you when you pay your bills, even though that's kind of hard to do. The second thing I did was to make a plan for how I was going to do this, and it took me a while to come up with this, but it ended up working for me. So I had my main account, and this is the account that I already had. I decided this was going to be my spending account for any fund money that I had for myself, and it's just a regular checking account. I decided to set up a bill account. It was going to also be a checking account. It can be with the same bank, and this is where I was going to transfer all the money to the bills. So one of my goals was to auto pay all my bills from this account eventually. Then I was going to set an emergency fund up for myself using a high-yield savings account. Doesn't matter what bank or credit union you use. And then I was going to set up sinking funds. I decided to do cash envelopes because so I could hold myself more accountable and see the cash in my hand and understand how it was moving. That's how I started off. Now I do it digital, but I started off with cash envelopes, and it really worked for me. Then I had to create a budget for myself, and something very important to note is that you need to be realistic with your budget. If you know you're probably going to eat fast food or go out to eat budget for that, or else you're going to blow your budget. It is very important to just build the things in that you know you're going to spend and hold yourself accountable for the amounts that you set. If you don't set money for things you want, you're way more likely to blow your budget, and then you're going to be frustrated with yourself. The next step is to put together a plan for my emergency fund. I wanted to save a thousand dollars, so I did a one thousand dollar challenge. I'll put a picture here of the exact challenge I created and used for myself. I hung it on the wall, and every time I contributed something to my emergency fund, I colored in a square, and it really kept me motivated and allowed me to celebrate my wins. Next step is I created a debt plan. How was I going to pay off my debt? I used the snowball method, where you pay things off from the smallest balance to the largest, and then you apply the minimum payments to the next debt once you pay one off. It makes it really easy to pay off your debt over time. Then I started doing side hustles to bring in more money to apply to my emergency fund first, and then my debt. Once that was paid off, I saved up my first 10k. I hope this helps. You can do this too. Stay grateful and stay focused.")

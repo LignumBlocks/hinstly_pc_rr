@@ -1,6 +1,5 @@
 module Ai
   class LlmHandler < BaseHandler
-
     attr_reader :model_name, :llm
 
     def initialize(model_name = 'gpt-4o-mini', temperature = 0.7)
