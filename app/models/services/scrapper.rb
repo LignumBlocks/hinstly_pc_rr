@@ -23,7 +23,6 @@ module Services
       @sources.each do |source|
         @queries.each do |query|
           url = source.build_search_url(query)
-          puts "consultando aaaaaaa --------------------------#{url}"
           @driver.navigate.to(url)
 
           response = client.chat(parameters: { model: 'gpt-4o',
@@ -37,7 +36,13 @@ module Services
             add_result(query.id, source.id, link, already_scraped_content) and next if already_scraped_content
 
             @driver.navigate.to(link)
-            puts link
+            #Esperar a que el elemento <body> esté presente
+            wait = Selenium::WebDriver::Wait.new(timeout: 10)
+            wait.until { @driver.find_element(:tag_name, "body").displayed? }
+            # Simular scrolling hasta el final de la página para cargar todo el contenido
+            @driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            sleep(1)
+
             add_result(query.id, source.id, link, @driver.page_source)
 
           rescue StandardError => e

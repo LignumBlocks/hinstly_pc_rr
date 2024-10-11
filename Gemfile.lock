@@ -405,6 +405,8 @@ DEPENDENCIES
   image_processing (~> 1.2)
   jsbundling-rails (~> 1.0)
   langchainrb
+  loofah
+  nokogiri
   omniauth-facebook (~> 9.0)
   omniauth-github (~> 2.0)
   omniauth-google-oauth2 (~> 1.1)
