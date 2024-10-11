@@ -59,14 +59,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_11_103957) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "channel_video_processes", force: :cascade do |t|
-    t.integer "channel_id"
-    t.integer "count_videos_processing"
-    t.boolean "finished"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "channels", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
