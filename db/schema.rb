@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_11_091412) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_11_103957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_11_091412) do
     t.string "apify_run_id"
     t.string "apify_dataset_id"
     t.integer "state", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "channel_processes", force: :cascade do |t|
+    t.integer "channel_id"
+    t.integer "count_videos"
+    t.boolean "finished", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "channel_video_processes", force: :cascade do |t|
+    t.integer "channel_id"
+    t.integer "count_videos_processing"
+    t.boolean "finished"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

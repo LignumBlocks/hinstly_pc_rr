@@ -16,7 +16,7 @@ class ChannelsController < ApplicationController
     if result
       avatar = result.delete(:avatar)
       channel = current_user.channels.build(result)
-      #channel.avatar.attach(io:  URI.open(avatar), filename: File.basename(avatar))
+      channel.avatar.attach(io:  URI.open(avatar), filename: File.basename(avatar)) if avatar
       redirect_to channels_path, notice: "Channel created correctly" and return if channel.save
     end
     redirect_to channels_path, alert: "Channel cannot be created"
@@ -41,10 +41,20 @@ class ChannelsController < ApplicationController
 
     if params[:eventType] == "ACTOR.RUN.SUCCEEDED"
       channel = run.channel
+      count_videos = 0
       items = Services::Apify.new.read_dataset(run.apify_dataset_id)
       items.each do |item|
         video = create_video!(channel, item)
-        ProcessVideoJob.perform_later(video.id) if video.state.to_sym == :created
+        if video.state.to_sym == :created
+          ProcessVideoJob.perform_later(video.id)
+          count_videos += 1
+        end
+      end
+      if count_videos > 0
+        channel.channel_processes.create(count_videos: count_videos)
+        channel.update(state: 2)
+      else
+        channel.update(state: 3, checked_at: DateTime.now)
       end
       run.update(state: 1)
     end

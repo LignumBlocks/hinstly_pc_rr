@@ -31,9 +31,23 @@ class ProcessVideoJob < ApplicationJob
     end
 
     video.update(state: :processed, processed_at: DateTime.now)
+
+    update_channel_state!(video)
   end
 
   private
+
+  def update_channel_state!(video)
+    channel = video.channel
+    channel_process = channel.channel_processes.where(finished: false).last
+    remaining_videos_count = channel_process.count_videos - 1
+    if remaining_videos_count <= 0
+      channel_process.update(finished: true, count_videos: remaining_videos_count)
+      channel.update(state: 3, checked_at: DateTime.now)
+    else
+      channel_process.update(finished: false, count_videos: remaining_videos_count)
+    end
+  end
 
   def transcript_video(video, client)
     video.update_attribute(:state, :transcribing)
@@ -61,45 +75,5 @@ class ProcessVideoJob < ApplicationJob
     video.update_attribute(:state, :queries)
     Ai::HackProcessor.new(video.hack).find_queries!
     video.process_video_log.update(has_queries: true)
-  end
-
-  def prompt_for_hacks(source)
-    "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
-
-      Analize the following content for financial hacks.
-
-      Analize the following content for financial hacks:
-      ---
-      #{source}
-      ---
-
-      The output must be a json with the following structure:
-      {\"hacks\": [{
-          \"possible hack title\": \"<A consise title of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",
-          \"brief summary\": \"<A short description of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",
-          \"justification\": \"<Explanation about whether the content includes a valid financial hack>\",
-          \"is_a_hack\": \"<Boolean true or false, about whether the content includes a valid financial hack>\"
-      }]}
-    "
-  end
-
-  def prompt_for_queries(hack_title, hack_summary, count = 4)
-    "Given the following financial 'hack', generate a set of #{count} relevant queries that allow verifying the validity of the hack. The queries will be used on official financial websites to search for information that can validate or refute the techniques or suggestions of the hack. Make sure to:
-
-    - Use key terms from the hack title and summary when possible.
-    - Keep the queries concise and direct, without unnecessary filler words.
-    - Formulate the queries in a way that they seek specific information related to the validity of the hack.
-
-    Financial hack title:
-    #{hack_title}
-    ---
-    Financial hack summary:
-    #{hack_summary}
-
-    Provide your response only as a JSON object containing a list of the relevant queries, in the following format:
-
-    {
-        \"queries\": [ ... ]
-    }"
   end
 end
