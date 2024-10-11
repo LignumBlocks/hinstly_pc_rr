@@ -1,3 +1,8 @@
+# frozen_string_literal: true
+
+# This class should be removed
+
+
 hack_discrimination0 = "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.
 
   When scanning content, prioritize hacks that meet the following criteria:

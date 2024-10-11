@@ -11,38 +11,33 @@ module Ai
       create_or_load_vs
     end
 
+    def validation_for_hack(hack)
+      store_from_queries(validation_sources_hashes_list(hack), hack.id)
+      validation_retrieval_generation(hack.id, hack.title, hack.summary)
+    end
+
     def create_or_load_vs
       index = if @model_name.include?('gpt')
                 ENV['PINECONE_ENVIRONMENT_OPENAI']
               else
                 ENV['PINECONE_ENVIRONMENT_OPEN_SOURCE']
               end
-      @vectorstore = Langchain::Vectorsearch::Pinecone.new(
+      @vector_store = Langchain::Vectorsearch::Pinecone.new(
         api_key: PINECONE_API_KEY,
         index_name: index,
         llm: @llm
       )
-      @vectorstore.create_default_schema
+      @vector_store.create_default_schema
     end
 
     # Adds a new document to the Chroma vector store if it doesn't already exist.
-    def add_document(hack_id, document_id, documents, metadata)
-      @vectorstore.add_texts(texts: documents, metadata:)
-
-      # existing_documents = @vectorstore.get()
-
-      # filtered_documents = existing_documents['metadatas'].select do |doc|
-      #   doc["hack_id"] == hack_id && doc["document_id"] == document_id
-      # end
-
-      # if filtered_documents.empty?
-      #  @vectorstore.add_texts(documents, metadatas: metadata)
-      # end
+    def add_document(documents, metadata)
+      @vector_store.add_texts(texts: documents, metadata:)
     end
 
     # Retrieves the top-k most similar documents to the given text for a specific hack ID.
     def retrieve_similar_for_hack(hack_id, text_to_compare, k = 4)
-      similar_documents = @vectorstore.similarity_search(
+      similar_documents = @vector_store.similarity_search(
         query: text_to_compare,
         k:,
         filter: { 'hack_id' => hack_id }
@@ -54,18 +49,62 @@ module Ai
     # Stores documents from a list of query results into the Chroma vector store, splitting them into chunks.
     def store_from_queries(queries_dict, hack_id)
       queries_dict.each do |query_dict|
-        next if query_dict['content'].empty? || query_dict['content'] == 'Error al cargar el contenido'
+        next unless query_dict['content']
 
         documents = []
-        metadatas = []
+        metadata = []
         content_chunks = Langchain::Chunker::RecursiveText.new(query_dict['content'], chunk_size: 5000,
                                                                                       chunk_overlap: 500).chunks
         content_chunks.each do |chunk|
           documents << chunk
-          metadatas << query_dict.merge({ 'hack_id' => hack_id })
+          metadata << query_dict.merge({ 'hack_id' => hack_id })
         end
-        add_document(hack_id, query_dict['source_id'], documents, metadatas)
+        add_document(documents, metadata)
       end
+    end
+
+    def validation_retrieval_generation(hack_id, hack_title, hack_summary)
+      model = Ai::LlmHandler.new('gpt-4o-mini')
+      chunks = ''
+      metadata = []
+      # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
+      similar_chunks = retrieve_similar_for_hack(hack_id, "#{hack_title}:\n#{hack_summary}")
+      similar_chunks.each do |result|
+        metadata << [result.metadata['link'], result.metadata['source']]
+        chunks += "#{result.page_content}\n"
+      end
+      prompt = Prompt.find_by_code('HACK_VALIDATION')
+      prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title:, hack_summary: })
+      system_prompt_text = prompt.system_prompt
+      result = model.run(prompt_text, system_prompt_text)
+      result = result.gsub("```json\n", '').gsub('```', '').strip
+
+      {
+        validation_analysis: result['validation analysis'],
+        validation_status: result['validation status'],
+        links: get_clean_links(metadata)
+      }
+    end
+
+    def get_clean_links(metadata)
+      links = metadata.map { |item| item[0] }
+      unique_links = links.uniq
+      unique_links.join(' ')
+    end
+
+    def validation_sources_hashes_list(hack)
+      hashes = []
+      hack.queries.each do |query|
+        query.scraped_results.each do |scraped_result|
+          hashes << {
+            query: query.content,
+            source_id: scraped_result.validation_source_id,
+            link: scraped_result.link,
+            content: scraped_result.content
+          }
+        end
+      end
+      hashes
     end
   end
 end

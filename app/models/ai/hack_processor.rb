@@ -9,13 +9,18 @@ module Ai
       queries.each { |query| @hack.queries.create(content: query) }
     end
 
+    def validate_financial_hack!
+      hack_validation = Ai::RagLlmHandler.new('gpt-4o-mini').validation_for_hack(@hack)
+
+    end
+
     private
 
     def queries_for_hack(num_queries = 4)
-      prompt = Prompt.find_by_code("GENERATE_QUERIES")
-      prompt_text = prompt.build_prompt_text({num_queries: num_queries, hack_title: @hack.title, hack_summary: @hack.summary})
+      prompt = Prompt.find_by_code('GENERATE_QUERIES')
+      prompt_text = prompt.build_prompt_text({ num_queries:, hack_title: @hack.title, hack_summary: @hack.summary })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new("gpt-4o-mini")
+      model = Ai::LlmHandler.new('gpt-4o-mini')
       result = model.run(prompt_text, system_prompt_text)
       result = result.gsub('json', '').gsub('```', '').strip
       JSON.parse(result)['queries']

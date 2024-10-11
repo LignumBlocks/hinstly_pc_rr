@@ -1,4 +1,9 @@
+# frozen_string_literal: true
+
+# This class should be removed
+
 require 'json'
+
 
 module Ai
   class HackProcessor
@@ -92,45 +97,45 @@ module Ai
       rag.store_from_queries(validation_sources_hashes_list, hack_id)
     end
 
-    def validation_retrieval_generation(hack_id, hack_title, hack_summary)
-      model = LlmHandler.new('gpt-4o-mini')
-      rag = RAG_LlmHandler.new('gpt-4o-mini')
-
-      chunks = ''
-      metadata = []
-      # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
-      similar_chunks = rag.retrieve_similar_for_hack(hack_id, "#{hack_title}:\n#{hack_summary}")
-      similar_chunks.each do |result|
-        # puts result.metadata
-        metadata << [result.metadata['link'], result.metadata['source']]
-        chunks += "#{result.page_content}\n"
-      end
-
-      prompt_template = load_prompt('hack_validation')
-      format_hash = { chunks: chunks.strip, hack_title:, hack_summary: }
-      prompt = prompt_template % format_hash
-      system_prompt = 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.'
-
-      result = model.run(prompt, system_prompt)
-
-      begin
-        cleaned_string = result.gsub("```json\n", '').gsub('```', '').strip
-        json_result = JSON.parse(cleaned_string)
-
-        {
-          validation_analysis: json_result['validation analysis'],
-          validation_status: json_result['validation status'],
-          links: get_clean_links(metadata)
-        }
-      rescue JSON::ParserError => e
-        puts "Error parsing JSON result: #{e.message}"
-        {
-          validation_analysis: nil,
-          validation_status: nil,
-          links: nil
-        }
-      end
-    end
+    # def validation_retrieval_generation(hack_id, hack_title, hack_summary)
+    #   model = LlmHandler.new('gpt-4o-mini')
+    #   rag = RAG_LlmHandler.new('gpt-4o-mini')
+    #
+    #   chunks = ''
+    #   metadata = []
+    #   # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
+    #   similar_chunks = rag.retrieve_similar_for_hack(hack_id, "#{hack_title}:\n#{hack_summary}")
+    #   similar_chunks.each do |result|
+    #     # puts result.metadata
+    #     metadata << [result.metadata['link'], result.metadata['source']]
+    #     chunks += "#{result.page_content}\n"
+    #   end
+    #
+    #   prompt_template = load_prompt('hack_validation')
+    #   format_hash = { chunks: chunks.strip, hack_title:, hack_summary: }
+    #   prompt = prompt_template % format_hash
+    #   system_prompt = 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.'
+    #
+    #   result = model.run(prompt, system_prompt)
+    #
+    #   begin
+    #     cleaned_string = result.gsub("```json\n", '').gsub('```', '').strip
+    #     json_result = JSON.parse(cleaned_string)
+    #
+    #     {
+    #       validation_analysis: json_result['validation analysis'],
+    #       validation_status: json_result['validation status'],
+    #       links: get_clean_links(metadata)
+    #     }
+    #   rescue JSON::ParserError => e
+    #     puts "Error parsing JSON result: #{e.message}"
+    #     {
+    #       validation_analysis: nil,
+    #       validation_status: nil,
+    #       links: nil
+    #     }
+    #   end
+    # end
 
     def get_validated_hack_descriptions(hack_id, hack_title, hack_summary, original_text)
       descriptions = get_hack_description(hack_title, hack_summary, original_text)
