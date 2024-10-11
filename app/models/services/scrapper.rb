@@ -7,12 +7,11 @@ module Services
 
     def initialize(sources, queries)
       options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument('--headless') # Ejecutar en modo cabeza
-      options.add_argument('--disable-gpu') # Opcional, para desactivar el uso de GPU
-      options.add_argument('--no-sandbox') # Opcional, recomendado para entornos de servidor
+      options.add_argument('--headless')
+      options.add_argument('--disable-gpu')
+      options.add_argument('--no-sandbox')
 
       @driver = Selenium::WebDriver.for :chrome, options: options
-      # Capybara.current_driver = :selenium_chrome
       @sources = sources
       @queries = queries
       @results = []
@@ -36,10 +35,8 @@ module Services
             add_result(query.id, source.id, link, already_scraped_content) and next if already_scraped_content
 
             @driver.navigate.to(link)
-            #Esperar a que el elemento <body> esté presente
             wait = Selenium::WebDriver::Wait.new(timeout: 10)
             wait.until { @driver.find_element(:tag_name, "body").displayed? }
-            # Simular scrolling hasta el final de la página para cargar todo el contenido
             @driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             sleep(1)
             # Limpiar el contenido HTML utilizando la función clean_html_content

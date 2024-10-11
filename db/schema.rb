@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_11_103957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "channel_processes", force: :cascade do |t|
+    t.integer "channel_id"
+    t.integer "count_videos"
+    t.boolean "finished", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "channel_video_processes", force: :cascade do |t|
+    t.integer "channel_id"
+    t.integer "count_videos_processing"
+    t.boolean "finished"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "channels", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
@@ -58,6 +74,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
     t.string "external_source_id"
     t.datetime "checked_at"
     t.integer "state", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hack_validations", force: :cascade do |t|
+    t.integer "hack_id"
+    t.text "analysis"
+    t.boolean "status"
+    t.string "links"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -80,6 +105,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
     t.boolean "has_scraped_pages", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "analysed", default: false
   end
 
   create_table "prompts", force: :cascade do |t|
