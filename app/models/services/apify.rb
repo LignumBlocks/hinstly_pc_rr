@@ -47,7 +47,6 @@ module Services
     def run_actor(body, wait = false)
       url = "#{BASE_URL}/acts/#{ACTOR_ID}/runs?token=#{API_TOKEN}"
       url += "&waitForFinish=60" if wait
-
       JSON(HTTParty.post(url, {
         body: body,
         headers: headers

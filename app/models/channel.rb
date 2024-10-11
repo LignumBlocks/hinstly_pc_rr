@@ -3,6 +3,7 @@ class Channel < ApplicationRecord
 
   belongs_to :user
   has_many :videos
+  has_many :hacks, through: :videos
   has_many :apify_runs
   has_one_attached :avatar
 end
