@@ -80,8 +80,8 @@ module Ai
       result = result.gsub("```json\n", '').gsub('```', '').strip
 
       {
-        validation_analysis: result['validation analysis'],
-        validation_status: result['validation status'],
+        analysis: result['validation analysis'],
+        status: result['validation status'],
         links: get_clean_links(metadata)
       }
     end

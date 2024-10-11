@@ -10,8 +10,8 @@ module Ai
     end
 
     def validate_financial_hack!
-      hack_validation = Ai::RagLlmHandler.new('gpt-4o-mini').validation_for_hack(@hack)
-
+      validation = Ai::RagLlmHandler.new('gpt-4o-mini').validation_for_hack(@hack)
+      @hack.create_hack_validation!(analysis: validation[:analysis], status: validation[:status], links: validation[:links])
     end
 
     private

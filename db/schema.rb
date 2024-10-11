@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_11_091412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -62,6 +62,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "hack_validations", force: :cascade do |t|
+    t.integer "hack_id"
+    t.text "analysis"
+    t.boolean "status"
+    t.string "links"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "hacks", force: :cascade do |t|
     t.integer "video_id"
     t.string "title"
@@ -80,6 +89,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_07_072338) do
     t.boolean "has_scraped_pages", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "analysed", default: false
   end
 
   create_table "prompts", force: :cascade do |t|
