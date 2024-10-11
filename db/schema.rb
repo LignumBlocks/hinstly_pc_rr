@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_11_103957) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_11_184543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -68,6 +68,23 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_11_103957) do
     t.integer "state", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "hack_structured_infos", force: :cascade do |t|
+    t.bigint "hack_id", null: false
+    t.string "hack_title"
+    t.text "description"
+    t.string "main_goal"
+    t.text "steps_summary"
+    t.text "resources_needed"
+    t.text "expected_benefits"
+    t.string "extended_title"
+    t.text "detailed_steps"
+    t.text "additional_tools_resources"
+    t.text "case_study"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hack_id"], name: "index_hack_structured_infos_on_hack_id"
   end
 
   create_table "hack_validations", force: :cascade do |t|
@@ -185,4 +202,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_11_103957) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "hack_structured_infos", "hacks"
 end
