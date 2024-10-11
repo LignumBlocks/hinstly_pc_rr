@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hack: one
+  hack_title: MyString
+  description: MyText
+  main_goal: MyString
+  steps_summary: MyText
+  resources_needed: MyText
+  expected_benefits: MyText
+  extended_title: MyString
+  detailed_steps: MyText
+  additional_tools_resources: MyText
+  case_study: MyText
+
+two:
+  hack: two
+  hack_title: MyString
+  description: MyText
+  main_goal: MyString
+  steps_summary: MyText
+  resources_needed: MyText
+  expected_benefits: MyText
+  extended_title: MyString
+  detailed_steps: MyText
+  additional_tools_resources: MyText
+  case_study: MyText

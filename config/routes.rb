@@ -31,6 +31,9 @@ Rails.application.routes.draw do
   resources :hacks, only: [:index]
   resource :hack, only: [:show]
 
+
+  resources :hack_structured_infos
+
   get "/pages/:page" => "pages#show", as: :page
 
   match '/404', to: 'errors#not_found', via: :all
