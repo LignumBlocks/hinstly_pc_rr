@@ -40,6 +40,8 @@ module Ai
         query: text_to_compare,
         # k:,
         # filter: { 'hack_id' => hack_id }
+        k:,
+        filter: { 'hack_id' => hack_id }
       )
       puts similar_documents
       similar_documents
@@ -48,15 +50,15 @@ module Ai
     # Stores documents from a list of query results into the Chroma vector store, splitting them into chunks.
     def store_from_queries(queries_dict, hack_id)
       queries_dict.each do |query_dict|
-        next unless query_dict['content']
+        next unless query_dict[:content]
 
         documents = []
         metadata = []
-        content_chunks = Langchain::Chunker::RecursiveText.new(query_dict['content'], chunk_size: 5000,
-                                                                                      chunk_overlap: 500).chunks
+        content_chunks = Langchain::Chunker::RecursiveText.new(query_dict[:content], chunk_size: 5000,
+                                                               chunk_overlap: 500).chunks
         content_chunks.each do |chunk|
-          documents << chunk
-          metadata << query_dict.merge({ 'hack_id' => hack_id })
+          documents << chunk.text
+          metadata << query_dict.merge({ hack_id: hack_id })
         end
         add_document(documents, metadata)
       end
