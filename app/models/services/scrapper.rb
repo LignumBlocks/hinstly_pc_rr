@@ -42,8 +42,10 @@ module Services
             # Simular scrolling hasta el final de la página para cargar todo el contenido
             @driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             sleep(1)
+            # Limpiar el contenido HTML utilizando la función clean_html_content
+            cleaned_content = clean_html_content(@driver.page_source)
 
-            add_result(query.id, source.id, link, @driver.page_source)
+            add_result(query.id, source.id, link, cleaned_content)
 
           rescue StandardError => e
             puts "fails link #{e.message}"
@@ -80,6 +82,20 @@ module Services
       Only extract links that could contain relevant ideas or information about the given topic and return them in a JSON format as follows: { \"links\": [ ... ] }.
 
       Please do not include links or any unrelated text that does not convey a specific idea.The topic is: #{query.content} and here is the text: #{html}"
+    end
+
+    def clean_html_content(page_source)
+      # Utilizar Nokogiri para parsear el contenido HTML
+      doc = Nokogiri::HTML(page_source)
+
+      # Remover etiquetas irrelevantes como <script>, <style>, <footer>, <nav>
+      doc.css('script, style, footer, nav, comment, .ads, .sidebar').remove
+
+      # Usar Loofah para limpiar el HTML y convertirlo en texto sin formato
+      clean_content = Loofah.fragment(doc.to_html).scrub!(:prune).to_text
+
+      # Reemplazar o eliminar los caracteres especiales como &#13;
+      clean_content.gsub("&#13;", "").gsub(/\n{2,}/, "\n\n").strip
     end
   end
 end
