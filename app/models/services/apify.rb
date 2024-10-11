@@ -73,10 +73,12 @@ module Services
     end
 
     def body_for_download(channel, all_videos = false)
-      # oldest_post_date = ch
+      oldest_post_date = all_videos || channel.videos.last.external_created_at.blank? ? "2000-01-01" : channel.videos.last.external_created_at&.strftime("%Y-%m-%d")
+      max_items = Env.fetch("APIFY_MAX_ITEMS", 3)
       {
         "profiles": [channel.name],
-        "resultsPerPage": 3,
+        "resultsPerPage": max_items,
+        "oldestPostDate": oldest_post_date,
         "excludePinnedPosts": false,
         "searchSection": "",
         "maxProfilesPerQuery": 1,
@@ -84,10 +86,10 @@ module Services
         "shouldDownloadCovers": true,
         "shouldDownloadSubtitles": false,
         "shouldDownloadSlideshowImages": false,
-        "maxItems": 3,
+        "maxItems": max_items,
         "options": {
           "timeoutSecs": 10000,
-          "maxItems": 3
+          "maxItems": max_items
         }
       }.to_json
     end
