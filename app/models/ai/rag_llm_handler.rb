@@ -3,8 +3,6 @@ module Ai
   # This class allows the addition and retrieval of documents from a vector store for better context-aware conversations.
   class RagLlmHandler < BaseHandler
     attr_reader :model_name, :llm
-
-    PINECONE_API_KEY = ENV['PINECONE_API_KEY']
     def initialize(model_name = 'gpt-4o-mini', temperature = 0.4, collection_name = 'validation')
       super(model_name, temperature)
       @collection_name = collection_name
@@ -17,14 +15,15 @@ module Ai
     end
 
     def create_or_load_vs
-      index = if @model_name.include?('gpt')
-                ENV['PINECONE_ENVIRONMENT_OPENAI']
+      environment = if @model_name.include?('gpt')
+                ENV.fetch('PINECONE_ENVIRONMENT_OPENAI')
               else
-                ENV['PINECONE_ENVIRONMENT_OPEN_SOURCE']
+                ENV.fetch('PINECONE_ENVIRONMENT_OPEN_SOURCE')
               end
       @vector_store = Langchain::Vectorsearch::Pinecone.new(
-        api_key: PINECONE_API_KEY,
-        index_name: index,
+        environment: environment,
+        api_key: ENV.fetch('PINECONE_API_KEY'),
+        index_name: 'hintsly-rag-openai',
         llm: @llm
       )
       @vector_store.create_default_schema
@@ -39,8 +38,8 @@ module Ai
     def retrieve_similar_for_hack(hack_id, text_to_compare, k = 4)
       similar_documents = @vector_store.similarity_search(
         query: text_to_compare,
-        k:,
-        filter: { 'hack_id' => hack_id }
+        # k:,
+        # filter: { 'hack_id' => hack_id }
       )
       puts similar_documents
       similar_documents
@@ -77,11 +76,10 @@ module Ai
       prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title:, hack_summary: })
       system_prompt_text = prompt.system_prompt
       result = model.run(prompt_text, system_prompt_text)
-      result = result.gsub("```json\n", '').gsub('```', '').strip
-
+      result = JSON.parse(result.gsub("```json\n", '').gsub('```', '').strip)
       {
         analysis: result['validation analysis'],
-        status: result['validation status'],
+        status: result['validation status'] == 'Valid',
         links: get_clean_links(metadata)
       }
     end
