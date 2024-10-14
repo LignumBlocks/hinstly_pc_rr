@@ -91,5 +91,41 @@ module Ai
         premium_description: latest_premium
       }
     end
+
+    # def get_hack_classifications(free_description)
+    #   # Classifies a financial hack based on several parameters using the provided free description.
+    #
+    #   prompt_complexity = Prompt.find_by_code('complexity_classification')
+    #   prompt_financial_categories = Prompt.find_by_code('financial_categories_classification')
+    #
+    #   format_hash = { hack_description: free_description }
+    #   prompt_text_complexity = prompt_complexity.build_prompt_text(format_hash)
+    #   prompt_text_financial_categories = prompt_financial_categories.build_prompt_text(format_hash)
+    #   system_prompt = 'You are a financial analyst specializing in creating financial hacks for users in the USA.'
+    #
+    #   begin
+    #     model = Ai::LlmHandler.new('gpt-4o-mini')
+    #
+    #     # Get classification for complexity and categories
+    #     result_complexity = model.run(prompt_text_complexity, system_prompt)
+    #     result_categories = model.run(prompt_text_financial_categories, system_prompt)
+    #
+    #     # Clean the resulting strings from the model outputs
+    #     result_complexity = result_complexity.gsub("```json\n", '').gsub('```', '').strip
+    #     result_categories = result_categories.gsub("```json\n", '').gsub('```', '').strip
+    #
+    #     # Parse the cleaned JSON strings
+    #     {
+    #       complexity: JSON.parse(result_complexity),
+    #       financial_categories: JSON.parse(result_categories)
+    #     }
+    #   rescue StandardError => e
+    #     puts "Error in hack classification: #{e.message}"
+    #     {
+    #       complexity: nil,
+    #       categories: nil
+    #     }
+    #   end
+    # end
   end
 end
