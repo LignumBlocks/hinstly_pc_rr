@@ -214,7 +214,7 @@ Source Text of the Hack:
 \#{original_text}
 ---
 Simplified analysis
-\#{free_analysis}
+\#{analysis}
 ---
 
 Your task is to provide a comprehensive analysis of the financial hack described above, adhering to the following guidelines. The result will be read directly by a user, keep that in mind.

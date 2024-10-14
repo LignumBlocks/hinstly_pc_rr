@@ -41,7 +41,6 @@ module Ai
         k:,
         namespace:
       )
-      
     end
 
     # Stores documents from a list of query results into the Chroma vector store, splitting them into chunks.
@@ -66,7 +65,7 @@ module Ai
       chunks = ''
       metadata = []
       # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
-      similar_chunks = retrieve_similar_for_hack(hack_id.to_s, "#{hack_title}:\n#{hack_summary}", hack_id)
+      similar_chunks = retrieve_similar_for_hack(hack_id.to_s, "#{hack_title}:\n#{hack_summary}")
       similar_chunks.each do |result|
         metadata << [result['id'], result['metadata']['content']]
         chunks += "#{result['metadata']['content']}\n"
