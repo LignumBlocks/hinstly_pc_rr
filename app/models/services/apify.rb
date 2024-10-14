@@ -74,11 +74,11 @@ module Services
 
     def body_for_download(channel, all_videos = false)
       oldest_post_date = all_videos || channel.videos.last&.external_created_at&.blank? ? '2000-01-01' : channel.videos.last&.external_created_at&.strftime('%Y-%m-%d')
-      max_items = Env.fetch('APIFY_MAX_ITEMS', 3)
+      max_items = ENV.fetch('APIFY_MAX_ITEMS', 3).to_i
       {
         "profiles": [channel.name],
         "resultsPerPage": max_items,
-        "oldestPostDate": oldest_post_date,
+        "oldestPostDate": oldest_post_date.to_s,
         "excludePinnedPosts": false,
         "searchSection": '',
         "maxProfilesPerQuery": 1,
