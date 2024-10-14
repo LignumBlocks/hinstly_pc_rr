@@ -13,5 +13,6 @@ test:
 
 production:
   <<: *default
-  username: Hintsly
-  database: <%= ENV.fetch("DATABASE_NAME", "hintsly_production")  %>
+  database: hintsly_production
+  username: hintsly
+  password: <%= ENV["HINTSLY_DATABASE_PASSWORD"] %>
