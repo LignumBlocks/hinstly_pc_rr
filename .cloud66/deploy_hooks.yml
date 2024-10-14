@@ -4,3 +4,10 @@ production: # Environment
       target: any # Hook fields
       apply_during: all
       execute: true
+
+production: # Environment
+  first_thing: # Hook point
+    - command: sudo apt-get install chromedriver # Hook type
+      target: any # Hook fields
+      apply_during: all
+      execute: true
