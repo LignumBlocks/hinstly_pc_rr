@@ -7,7 +7,7 @@ production: # Environment
 
 production: # Environment
   first_thing: # Hook point
-    - command: sudo apt-get install python3 python3-pip && pip3 install selenium      # Hook type
+    - command: sudo apt install chromium-chromedriver      # Hook type
       target: any # Hook fields
       apply_during: all
       execute: true
