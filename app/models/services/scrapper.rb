@@ -2,16 +2,24 @@ require 'capybara'
 require 'capybara/dsl'
 
 module Services
+  DRIVER_PATH = ENV.fetch('CHROMEDRIVER_BIN', nil)
+  BROWSER_PATH = ENV.fetch('CHROME_BIN', nil)
   class Scrapper
     include Capybara::DSL
 
     def initialize(sources, queries)
-      options = Selenium::WebDriver::Chrome::Options.new
-      options.add_argument('--headless')
-      options.add_argument('--disable-gpu')
-      options.add_argument('--no-sandbox')
+      # options = Selenium::WebDriver::Chrome::Options.new
+      # options.add_argument('--headless')
+      # options.add_argument('--disable-gpu')
+      # options.add_argument('--no-sandbox')
+      options = Selenium::WebDriver::Options.chrome(binary: BROWSER_PATH)
+      service = Selenium::WebDriver::Service.chrome
 
-      @driver = Selenium::WebDriver.for :chrome, options: options
+      service.executable_path = DRIVER_PATH
+
+      @driver = Selenium::WebDriver.for :chrome, service: service, options: options
+
+      # @driver = Selenium::WebDriver.for :chrome, options: options
       @sources = sources
       @queries = queries
       @results = []
@@ -93,6 +101,13 @@ module Services
 
       # Reemplazar o eliminar los caracteres especiales como &#13;
       clean_content.gsub("&#13;", "").gsub(/\n{2,}/, "\n\n").strip
+    end
+
+    def driver_finder
+      options = Selenium::WebDriver::Options.chrome(browser_version: 'stable')
+      service = Selenium::WebDriver::Service.chrome
+      finder = Selenium::WebDriver::DriverFinder.new(options, service)
+      { driver: finder.driver_path, browser: finder.browser_path }
     end
   end
 end
