@@ -12,10 +12,13 @@ module Services
       # options.add_argument('--headless')
       # options.add_argument('--disable-gpu')
       # options.add_argument('--no-sandbox')
-      options = Selenium::WebDriver::Options.chrome(binary: BROWSER_PATH)
+
+      paths = driver_finder
+      options = Selenium::WebDriver::Options.chrome(binary: paths[:browser])
       service = Selenium::WebDriver::Service.chrome
 
-      service.executable_path = DRIVER_PATH
+
+      service.executable_path = paths[:driver]
 
       @driver = Selenium::WebDriver.for :chrome, service: service, options: options
 
