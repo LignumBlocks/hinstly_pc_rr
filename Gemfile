@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '3.3.5'
+ruby '3.3.0'
 
 gem 'bootsnap', '~> 1.13', require: false
 gem 'cancancan', '~> 3.4'
@@ -26,8 +26,9 @@ gem 'selenium-webdriver'
 gem 'sidekiq'
 gem 'sidekiq-status'
 gem 'streamio-ffmpeg'
-gem 'webdrivers'
+gem 'webdrivers', "= 5.3.0"
 gem 'aws-sdk-s3'
+gem 'mutex_m'
 
 
 # Front-end
