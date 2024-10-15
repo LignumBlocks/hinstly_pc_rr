@@ -492,7 +492,7 @@ DEPENDENCIES
   rest-client
   rubocop
   ruby-openai (~> 6.3.0)
-  selenium-webdriver (>= 4.11)
+  selenium-webdriver
   sidekiq
   sidekiq-status
   sprockets-rails (~> 3.4)
