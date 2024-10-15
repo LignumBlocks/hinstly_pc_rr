@@ -2,10 +2,11 @@ require 'capybara'
 require 'capybara/dsl'
 require 'selenium-webdriver'
 
+Capybara.default_driver = :selenium_chrome
+
 module Services
   class Scrapper
     include Capybara::DSL
-    Selenium::WebDriver::Chrome::Service.driver_path = '/usr/bin/chromedriver'
 
     def initialize(sources, queries)
       options = Selenium::WebDriver::Chrome::Options.new

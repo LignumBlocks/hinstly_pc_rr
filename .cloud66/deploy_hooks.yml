@@ -7,7 +7,7 @@ production: # Environment
 
 production: # Environment
   first_thing: # Hook point
-    - command: sudo apt install chromium-chromedriver      # Hook type
+    - command: sudo apt install chromium-chromedriver # Hook type
       target: any # Hook fields
       apply_during: all
       execute: true
