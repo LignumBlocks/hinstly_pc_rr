@@ -11,7 +11,8 @@ module Ai
 
     def validate_financial_hack!
       validation = Ai::RagLlmHandler.new('gpt-4o-mini').validation_for_hack(@hack)
-      @hack.create_hack_validation!(analysis: validation[:analysis], status: validation[:status], links: validation[:links])
+      @hack.create_hack_validation!(analysis: validation[:analysis], status: validation[:status],
+                                    links: validation[:links])
     end
 
     def extend_hack!
@@ -30,6 +31,30 @@ module Ai
                                          detailed_steps: premium_structured['Detailed steps'],
                                          additional_tools_resources: premium_structured['Additional Tools and Resources'],
                                          case_study: premium_structured['Case Study'])
+    end
+
+    def classify_hack!
+      structured = @hack.hack_structured_info
+      classification_results = classification_from_free_description(structured)
+      result_complexity = classification_results[:complexity]
+      result_categories = classification_results[:financial_categories]
+      complexity_class = result_complexity['classification']
+      complexity_details = result_complexity['explanation']
+      financial_categories = result_categories.map { |item| [item['category'], item['breve explanation']] }
+      # Retrieve the complexity classification ID from the value
+      complexity_record = @hack.complexity.find_by(value: complexity_class)
+      complexity_id = complexity_record&.id
+      @hack.create_hack_complexity!(complexity_id:, complexity_details:) if complexity_id
+      # Insert each financial category into the 'hack_financial_category' table
+      financial_categories.each do |category, details|
+        financial_category_record = @hack.financial_category.find_by(value: category)
+        next unless financial_category_record
+
+        @hack.create_hack_financial_category!(
+          financial_category_id: financial_category_record.id,
+          financial_category_details: details
+        )
+      end
     end
 
     private
@@ -72,7 +97,8 @@ module Ai
 
     def grow_descriptions(free_description, premium_description, times, k = 5)
       rag = Ai::RagLlmHandler.new('gpt-4o-mini')
-      documents = rag.retrieve_similar_for_hack(@hack.id.to_s, "#{free_description}\\n#{premium_description}", k * times)
+      documents = rag.retrieve_similar_for_hack(@hack.id.to_s, "#{free_description}\\n#{premium_description}",
+                                                k * times)
       documents.shuffle!
 
       latest_free = free_description
@@ -92,40 +118,95 @@ module Ai
       }
     end
 
-    # def get_hack_classifications(free_description)
-    #   # Classifies a financial hack based on several parameters using the provided free description.
-    #
-    #   prompt_complexity = Prompt.find_by_code('complexity_classification')
-    #   prompt_financial_categories = Prompt.find_by_code('financial_categories_classification')
-    #
-    #   format_hash = { hack_description: free_description }
-    #   prompt_text_complexity = prompt_complexity.build_prompt_text(format_hash)
-    #   prompt_text_financial_categories = prompt_financial_categories.build_prompt_text(format_hash)
-    #   system_prompt = 'You are a financial analyst specializing in creating financial hacks for users in the USA.'
-    #
-    #   begin
-    #     model = Ai::LlmHandler.new('gpt-4o-mini')
-    #
-    #     # Get classification for complexity and categories
-    #     result_complexity = model.run(prompt_text_complexity, system_prompt)
-    #     result_categories = model.run(prompt_text_financial_categories, system_prompt)
-    #
-    #     # Clean the resulting strings from the model outputs
-    #     result_complexity = result_complexity.gsub("```json\n", '').gsub('```', '').strip
-    #     result_categories = result_categories.gsub("```json\n", '').gsub('```', '').strip
-    #
-    #     # Parse the cleaned JSON strings
-    #     {
-    #       complexity: JSON.parse(result_complexity),
-    #       financial_categories: JSON.parse(result_categories)
-    #     }
-    #   rescue StandardError => e
-    #     puts "Error in hack classification: #{e.message}"
-    #     {
-    #       complexity: nil,
-    #       categories: nil
-    #     }
-    #   end
-    # end
+    def classification_from_free_description(structured)
+      hack_title = structured[:hack_title]
+      description = structured[:description]
+      main_goal = structured[:main_goal]
+
+      # Convert JSON strings to hashes or arrays
+      steps_summary = begin
+        JSON.parse(structured[:steps_summary])
+      rescue StandardError
+        structured[:steps_summary]
+      end
+      resources_needed = begin
+        JSON.parse(structured[:resources_needed])
+      rescue StandardError
+        structured[:resources_needed]
+      end
+      expected_benefits = begin
+        JSON.parse(structured[:expected_benefits])
+      rescue StandardError
+        structured[:expected_benefits]
+      end
+      free_description = ''
+      free_description << "Hack Title\n"
+      free_description << "#{hack_title}\n\n"
+      free_description << "Description\n"
+      free_description << "#{description}\n\n"
+      free_description << "Main Goal\n"
+      free_description << "#{main_goal}\n\n"
+      free_description << "Steps to implement\n"
+      if steps_summary.is_a?(Array)
+        steps_summary.each do |step|
+          free_description << "- #{step}\n"
+        end
+      else
+        free_description << "#{steps_summary}\n\n"
+      end
+      free_description << "Resources Needed\n"
+      if resources_needed.is_a?(Array)
+        resources_needed.each do |resource|
+          free_description << "- #{resource}\n"
+        end
+      else
+        free_description << "#{resources_needed}\n\n"
+      end
+      free_description << "Expected Benefits\n"
+      if expected_benefits.is_a?(Array)
+        expected_benefits.each do |benefit|
+          free_description << "- #{benefit}\n"
+        end
+      else
+        free_description << "#{expected_benefits}\n\n"
+      end
+      get_hack_classifications(free_description)
+    end
+
+    def get_hack_classifications(free_description)
+      # Classifies a financial hack based on several parameters using the provided free description.
+
+      prompt_complexity = Prompt.find_by_code('complexity_classification')
+      prompt_financial_categories = Prompt.find_by_code('financial_categories_classification')
+
+      format_hash = { hack_description: free_description }
+      prompt_text_complexity = prompt_complexity.build_prompt_text(format_hash)
+      prompt_text_financial_categories = prompt_financial_categories.build_prompt_text(format_hash)
+      system_prompt = 'You are a financial analyst specializing in creating financial hacks for users in the USA.'
+
+      begin
+        model = Ai::LlmHandler.new('gpt-4o-mini')
+
+        # Get classification for complexity and categories
+        result_complexity = model.run(prompt_text_complexity, system_prompt)
+        result_categories = model.run(prompt_text_financial_categories, system_prompt)
+
+        # Clean the resulting strings from the model outputs
+        result_complexity = result_complexity.gsub("```json\n", '').gsub('```', '').strip
+        result_categories = result_categories.gsub("```json\n", '').gsub('```', '').strip
+
+        # Parse the cleaned JSON strings
+        {
+          complexity: JSON.parse(result_complexity),
+          financial_categories: JSON.parse(result_categories)
+        }
+      rescue StandardError => e
+        puts "Error in hack classification: #{e.message}"
+        {
+          complexity: nil,
+          categories: nil
+        }
+      end
+    end
   end
 end
