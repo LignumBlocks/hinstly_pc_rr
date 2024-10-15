@@ -1,8 +1,5 @@
 require 'capybara'
 require 'capybara/dsl'
-require 'selenium-webdriver'
-
-Capybara.default_driver = :selenium_chrome
 
 module Services
   class Scrapper
