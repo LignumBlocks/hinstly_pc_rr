@@ -15,7 +15,7 @@ module Services
 
       {
         name: channel_name,
-        external_source: "tiktok",
+        external_source: 'tiktok',
         external_source_id: data[0][:authorMeta][:id],
         avatar: data[0][:authorMeta][:avatar]
       }
@@ -46,7 +46,7 @@ module Services
 
     def run_actor(body, wait = false)
       url = "#{BASE_URL}/acts/#{ACTOR_ID}/runs?token=#{API_TOKEN}"
-      url += "&waitForFinish=60" if wait
+      url += '&waitForFinish=60' if wait
       JSON(HTTParty.post(url, {
         body: body,
         headers: headers
@@ -58,7 +58,7 @@ module Services
         "profiles": [channel_name],
         "resultsPerPage": 1,
         "excludePinnedPosts": false,
-        "searchSection": "",
+        "searchSection": '',
         "maxProfilesPerQuery": 1,
         "shouldDownloadVideos": false,
         "shouldDownloadCovers": false,
@@ -73,14 +73,15 @@ module Services
     end
 
     def body_for_download(channel, all_videos = false)
-      oldest_post_date = all_videos || channel.videos.last.external_created_at.blank? ? "2000-01-01" : channel.videos.last.external_created_at&.strftime("%Y-%m-%d")
-      max_items = Env.fetch("APIFY_MAX_ITEMS", 3)
+      oldest_post_date = all_videos || channel.videos.last.blank? ? '2000-01-01' : channel.videos.last&.external_created_at&.strftime('%Y-%m-%d')
+
+      max_items = ENV.fetch('APIFY_MAX_ITEMS', 3).to_i
       {
         "profiles": [channel.name],
         "resultsPerPage": max_items,
-        "oldestPostDate": oldest_post_date,
+        "oldestPostDate": oldest_post_date.to_s,
         "excludePinnedPosts": false,
-        "searchSection": "",
+        "searchSection": '',
         "maxProfilesPerQuery": 1,
         "shouldDownloadVideos": true,
         "shouldDownloadCovers": true,

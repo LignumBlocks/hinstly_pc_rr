@@ -1,0 +1,6 @@
+production: # Environment
+  first_thing: # Hook point
+    - command: apt-get install -y ffmpeg # Hook type
+      target: any # Hook fields
+      apply_during: all
+      execute: true

@@ -25,7 +25,9 @@ class ProcessVideoJob < ApplicationJob
 
       unless video.process_video_log.analysed?
         video.update_attribute(:state, :analysing)
-        Ai::HackProcessor.new(video.hack).validate_financial_hack!
+        hack_processor = Ai::HackProcessor.new(video.hack)
+        hack_processor.validate_financial_hack!
+        hack_processor.extend_hack!
         video.process_video_log.update(analysed: true)
       end
     end

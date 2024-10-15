@@ -15,5 +15,6 @@ module RailsRalixTailwind
     config.exceptions_app = self.routes
 
     config.hosts << ENV.fetch("NGROK_HOST", "acac-2001-41d0-800-3e3b-00.ngrok-free.app")
+    config.hosts << ENV.fetch("DEFAULT_HOST", "dashboard.hintsly.com")
   end
 end

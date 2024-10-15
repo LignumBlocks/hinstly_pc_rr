@@ -21,7 +21,7 @@ module Ai
                 ENV.fetch('PINECONE_ENVIRONMENT_OPEN_SOURCE')
               end
       @vector_store = Langchain::Vectorsearch::Pinecone.new(
-        environment: environment,
+        environment:,
         api_key: ENV.fetch('PINECONE_API_KEY'),
         index_name: 'hintsly-rag-openai',
         llm: @llm
@@ -30,35 +30,33 @@ module Ai
     end
 
     # Adds a new document to the Chroma vector store if it doesn't already exist.
-    def add_document(documents, metadata)
-      @vector_store.add_texts(texts: documents, metadata:)
+    def add_document(texts, namespace, ids)
+      @vector_store.add_texts(texts:, namespace:, ids:)
     end
 
     # Retrieves the top-k most similar documents to the given text for a specific hack ID.
-    def retrieve_similar_for_hack(hack_id, text_to_compare, k = 4)
-      similar_documents = @vector_store.similarity_search(
+    def retrieve_similar_for_hack(namespace, text_to_compare, k = 4)
+      @vector_store.similarity_search(
         query: text_to_compare,
-        # k:,
-        # filter: { 'hack_id' => hack_id }
+        k:,
+        namespace:
       )
-      puts similar_documents
-      similar_documents
     end
 
     # Stores documents from a list of query results into the Chroma vector store, splitting them into chunks.
     def store_from_queries(queries_dict, hack_id)
       queries_dict.each do |query_dict|
-        next unless query_dict['content']
+        next unless query_dict[:content]
 
         documents = []
-        metadata = []
-        content_chunks = Langchain::Chunker::RecursiveText.new(query_dict['content'], chunk_size: 5000,
-                                                                                      chunk_overlap: 500).chunks
+        ids = []
+        content_chunks = Langchain::Chunker::RecursiveText.new(query_dict[:content], chunk_size: 5000,
+                                                               chunk_overlap: 500).chunks
         content_chunks.each do |chunk|
-          documents << chunk
-          metadata << query_dict.merge({ 'hack_id' => hack_id })
+          documents << chunk.text
+          ids << query_dict[:link]
         end
-        add_document(documents, metadata)
+        add_document(documents, hack_id.to_s, ids)
       end
     end
 
@@ -67,10 +65,10 @@ module Ai
       chunks = ''
       metadata = []
       # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
-      similar_chunks = retrieve_similar_for_hack(hack_id, "#{hack_title}:\n#{hack_summary}")
+      similar_chunks = retrieve_similar_for_hack(hack_id.to_s, "#{hack_title}:\n#{hack_summary}")
       similar_chunks.each do |result|
-        metadata << [result.metadata['link'], result.metadata['source']]
-        chunks += "#{result.page_content}\n"
+        metadata << [result['id'], result['metadata']['content']]
+        chunks += "#{result['metadata']['content']}\n"
       end
       prompt = Prompt.find_by_code('HACK_VALIDATION')
       prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title:, hack_summary: })
@@ -80,7 +78,7 @@ module Ai
       {
         analysis: result['validation analysis'],
         status: result['validation status'] == 'Valid',
-        links: get_clean_links(metadata)
+        links: metadata.map { |item| item[0] }.uniq
       }
     end
 
