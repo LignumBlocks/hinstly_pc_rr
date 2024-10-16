@@ -65,6 +65,9 @@ class ProcessVideoJob < ApplicationJob
     Transcription.create(video_id: video.id, content: response['text'])
     video.process_video_log.update(transcribed: true)
     video.transcription.reload
+  rescue
+    update_channel_state!(video)
+    video.update_attribute(:state, :unprocessable)
   end
 
   def find_hack(video)
