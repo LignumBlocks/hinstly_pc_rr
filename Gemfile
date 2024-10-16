@@ -26,7 +26,7 @@ gem 'selenium-webdriver'
 gem 'sidekiq'
 gem 'sidekiq-status'
 gem 'streamio-ffmpeg'
-gem 'webdrivers', "= 5.3.0"
+gem 'webdrivers'
 gem 'aws-sdk-s3'
 gem 'mutex_m'
 
