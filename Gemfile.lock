@@ -304,6 +304,7 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
+    ostruct (0.6.0)
     pagy (5.10.1)
       activesupport
     parallel (1.26.3)
@@ -500,6 +501,7 @@ DEPENDENCIES
   omniauth-github (~> 2.0)
   omniauth-google-oauth2 (~> 1.1)
   omniauth-rails_csrf_protection (~> 1.0)
+  ostruct
   pagy (~> 5.10)
   pg (~> 1.4)
   pinecone
