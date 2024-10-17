@@ -16,7 +16,7 @@ module Services
       @queries = queries
       @results = []
     end
-    
+
     def scrap!
       client = OpenAI::Client.new
       @sources.each do |source|
