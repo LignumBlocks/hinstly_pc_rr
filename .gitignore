@@ -54,3 +54,5 @@ sanitaizer.rb
 pagina.html
 log/development.log
 log/development.log
+selenium.rb
+log/development.log

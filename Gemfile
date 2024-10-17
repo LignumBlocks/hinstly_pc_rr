@@ -29,6 +29,7 @@ gem 'streamio-ffmpeg'
 gem 'webdrivers'
 gem 'aws-sdk-s3'
 gem 'mutex_m'
+gem 'ostruct'
 
 
 # Front-end
