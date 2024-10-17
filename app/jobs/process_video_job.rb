@@ -10,29 +10,31 @@ class ProcessVideoJob < ApplicationJob
     transcript_video(video, client) unless video.process_video_log.transcribed?
     puts 'Transcribed downloaded_video'
 
-    find_hack(video) unless video.process_video_log.has_hacks?
-    puts 'Hack gotten'
+    if video.state.to_sym != :unprocessable
+      find_hack(video) unless video.process_video_log.has_hacks?
+      puts 'Hack gotten'
 
-    if video.hack.is_hack?
-      find_queries(video) unless video.process_video_log.has_queries?
-      puts 'has queries'
+      if video.hack.is_hack?
+        find_queries(video) unless video.process_video_log.has_queries?
+        puts 'has queries'
 
-      unless video.process_video_log.has_scraped_pages?
-        video.update_attribute(:state, :scraping)
-        Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
-        video.process_video_log.update(has_scraped_pages: true)
+        unless video.process_video_log.has_scraped_pages?
+          video.update_attribute(:state, :scraping)
+          Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
+          video.process_video_log.update(has_scraped_pages: true)
+        end
+
+        unless video.process_video_log.analysed?
+          video.update_attribute(:state, :analysing)
+          hack_processor = Ai::HackProcessor.new(video.hack)
+          hack_processor.validate_financial_hack! unless video.hack&.hack_validation
+          hack_processor.extend_hack! unless video.hack&.hack_structured_info
+          video.process_video_log.update(analysed: true)
+        end
       end
 
-      unless video.process_video_log.analysed?
-        video.update_attribute(:state, :analysing)
-        hack_processor = Ai::HackProcessor.new(video.hack)
-        hack_processor.validate_financial_hack!
-        hack_processor.extend_hack!
-        video.process_video_log.update(analysed: true)
-      end
+      video.update(state: :processed, processed_at: DateTime.now)
     end
-
-    video.update(state: :processed, processed_at: DateTime.now)
 
     update_channel_state!(video)
   end
@@ -65,6 +67,8 @@ class ProcessVideoJob < ApplicationJob
     Transcription.create(video_id: video.id, content: response['text'])
     video.process_video_log.update(transcribed: true)
     video.transcription.reload
+  rescue
+    video.update_attribute(:state, :unprocessable)
   end
 
   def find_hack(video)

@@ -35,10 +35,12 @@ module Services
             add_result(query.id, source.id, link, already_scraped_content) and next if already_scraped_content
 
             @driver.navigate.to(link)
+
             wait = Selenium::WebDriver::Wait.new(timeout: 10)
             wait.until { @driver.find_element(:tag_name, "body").displayed? }
             @driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            sleep(1)
+
+
             # Limpiar el contenido HTML utilizando la función clean_html_content
             cleaned_content = clean_html_content(@driver.page_source)
 
@@ -49,8 +51,8 @@ module Services
             next
           end
         end
-        @driver.quit
       end
+      @driver.quit
       @results.each do |result|
         ScrapedResult.create(query_id: result[:query_id],
                              validation_source_id: result[:validation_source_id],
