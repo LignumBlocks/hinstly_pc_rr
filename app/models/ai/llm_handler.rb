@@ -2,7 +2,7 @@ module Ai
   class LlmHandler < BaseHandler
     attr_reader :model_name, :llm
 
-    def initialize(model_name = 'gpt-4o-mini', temperature = 0.7)
+    def initialize(model_name = 'gemini-1.5-flash-8b', temperature = 0.7)
       super(model_name, temperature)
     end
 
