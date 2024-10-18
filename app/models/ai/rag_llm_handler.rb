@@ -3,7 +3,7 @@ module Ai
   # This class allows the addition and retrieval of documents from a vector store for better context-aware conversations.
   class RagLlmHandler < BaseHandler
     attr_reader :model_name, :llm
-    def initialize(model_name = 'gpt-4o-mini', temperature = 0.4, collection_name = 'validation')
+    def initialize(model_name = 'gemini-1.5-flash-8b', temperature = 0.4, collection_name = 'validation')
       super(model_name, temperature)
       @collection_name = collection_name
       create_or_load_vs
@@ -18,12 +18,12 @@ module Ai
       environment = if @model_name.include?('gpt')
                 ENV.fetch('PINECONE_ENVIRONMENT_OPENAI')
               else
-                ENV.fetch('PINECONE_ENVIRONMENT_OPEN_SOURCE')
+                ENV.fetch('PINECONE_ENVIRONMENT_GEMINI')
               end
       @vector_store = Langchain::Vectorsearch::Pinecone.new(
         environment:,
         api_key: ENV.fetch('PINECONE_API_KEY'),
-        index_name: 'hintsly-rag-openai',
+        index_name: 'hintsly-rag-gemini',
         llm: @llm
       )
       @vector_store.create_default_schema
@@ -50,8 +50,8 @@ module Ai
 
         documents = []
         ids = []
-        content_chunks = Langchain::Chunker::RecursiveText.new(query_dict[:content], chunk_size: 5000,
-                                                               chunk_overlap: 500).chunks
+        content_chunks = Langchain::Chunker::RecursiveText.new(query_dict[:content], chunk_size: 2000,
+                                                               chunk_overlap: 300).chunks
         content_chunks.each do |chunk|
           documents << chunk.text
           ids << query_dict[:link]
@@ -61,7 +61,7 @@ module Ai
     end
 
     def validation_retrieval_generation(hack_id, hack_title, hack_summary)
-      model = Ai::LlmHandler.new('gpt-4o-mini')
+      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       chunks = ''
       metadata = []
       # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
