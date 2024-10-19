@@ -10,7 +10,7 @@ module Ai
     end
 
     def validate_financial_hack!
-      validation = Ai::RagLlmHandler.new('gemini-1.5-flash-8b').validation_for_hack(@hack)
+      validation = Ai::RagLlmHandler.new('gpt-4o-mini').validation_for_hack(@hack)
       @hack.create_hack_validation!(analysis: validation[:analysis], status: validation[:status],
                                     links: validation[:links])
     end
@@ -63,7 +63,7 @@ module Ai
       prompt = Prompt.find_by_code('GENERATE_QUERIES')
       prompt_text = prompt.build_prompt_text({ num_queries:, hack_title: @hack.title, hack_summary: @hack.summary })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
+      model = Ai::LlmHandler.new('gpt-4o-mini')
       result = model.run(prompt_text, system_prompt_text)
       result = result.gsub('json', '').gsub('```', '').strip
       JSON.parse(result)['queries']
@@ -73,7 +73,7 @@ module Ai
       prompt = Prompt.find_by_code(prompt_code)
       prompt_text = prompt.build_prompt_text({ analysis: description })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
+      model = Ai::LlmHandler.new('gpt-4o-mini')
       result = model.run(prompt_text, system_prompt_text)
       JSON.parse(result.gsub("```json\n", '').gsub('```', '').strip)
     end
@@ -82,7 +82,7 @@ module Ai
       prompt = Prompt.find_by_code(prompt_code)
       prompt_text = prompt.build_prompt_text({ chunks:, previous_analysis: description })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
+      model = Ai::LlmHandler.new('gpt-4o-mini')
       model.run(prompt_text, system_prompt_text)
     end
 
@@ -91,12 +91,12 @@ module Ai
       prompt_text = prompt.build_prompt_text({ hack_title: @hack.title, hack_summary: @hack.summary,
                                                original_text: @hack.video.transcription.content, analysis: })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
+      model = Ai::LlmHandler.new('gpt-4o-mini')
       model.run(prompt_text, system_prompt_text)
     end
 
-    def grow_descriptions(free_description, premium_description, times, k = 6)
-      rag = Ai::RagLlmHandler.new('gemini-1.5-flash-8b')
+    def grow_descriptions(free_description, premium_description, times, k = 5)
+      rag = Ai::RagLlmHandler.new('gpt-4o-mini')
       documents = rag.retrieve_similar_for_hack(@hack.id.to_s, "#{free_description}\\n#{premium_description}",
                                                 k * times)
       documents.shuffle!
@@ -185,7 +185,7 @@ module Ai
       system_prompt = 'You are a financial analyst specializing in creating financial hacks for users in the USA.'
 
       begin
-        model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
+        model = Ai::LlmHandler.new('gpt-4o-mini')
 
         # Get classification for complexity and categories
         result_complexity = model.run(prompt_text_complexity, system_prompt)
