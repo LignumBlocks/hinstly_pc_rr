@@ -27,7 +27,7 @@ module Ai
 
     def load_gemini
       Langchain::LLM::GoogleGemini.new(
-        api_key: OPENAI_API_KEY,
+        api_key: GOOGLE_API_KEY,
         default_options: { temperature: @temperature,
                            chat_completion_model_name: @model_name,
                            embeddings_model_name: 'text-embedding-004' }

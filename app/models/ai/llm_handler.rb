@@ -9,8 +9,7 @@ module Ai
     # Executes a conversation with the LLM based on the provided input and optional system prompt.
     def run(input, system_prompt = DEFAULT_SYSTEM_PROMPT)
       messages = [
-        { role: 'system', content: system_prompt },
-        { role: 'user', content: input }
+        { role: 'user', parts: [{ text: system_prompt }, { text: input }] }
       ]
       response = @llm.chat(messages:)
       response.chat_completion
