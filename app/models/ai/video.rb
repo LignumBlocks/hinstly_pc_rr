@@ -16,7 +16,7 @@ module Ai
       prompt = Prompt.find_by_code('HACK_DISCRIMINATION_REDUCED')
       prompt_text = prompt.build_prompt_text({ source_text: @video.transcription&.content })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gpt-4o-mini')
+      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       result = model.run(prompt_text, system_prompt_text)
       result = result.gsub('json', '').gsub('```', '').strip
       JSON.parse(result)

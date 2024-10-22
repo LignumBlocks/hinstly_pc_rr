@@ -30,7 +30,7 @@ module Services
           content = response.dig('choices', 0, 'message', 'content')
           content = content.gsub('json', '').gsub('```', '')
           links = JSON.parse(content)['links']
-          links.each do |link|
+          links&.each do |link|
             already_scraped_content = results_content_by_link(link)
             add_result(query.id, source.id, link, already_scraped_content) and next if already_scraped_content
 
