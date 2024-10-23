@@ -5,39 +5,18 @@
       <%= render partial: "layouts/breadcrumbs", locals: { breadcrumbs: breadcrumbs } %>
     </div>
     <div class="mr-2">
-      <a data-modal-target="modal" data-modal-toggle="modal"
-         class="btn btn-primary" >
-        Process channel
-      </a>
+      <%= search_form_for @q, url: channel_path, method: :get, class: "inline-form" do |f| %>
+        <div class="flex items-center space-x-4">
+          <div class="flex-1">
+            <%= f.select :state_eq, Video.states { |state| [state.key, ""] }, { include_blank: "All states"}, class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
+          </div>
+          <div>
+            <%= f.submit :search, class: "btn btn-primary mt-2" %>
+          </div>
+        </div>
+      <% end %>
     </div>
   </div>
 
-  <div>
-    <ul class="flex flex-wrap -mb-px font-medium text-center list-none  px-2"
-        id="default-tab"
-        data-tabs-toggle="#channel-tab-content"
-        role="tablist">
-      <li class="me-2" role="presentation">
-        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab"
-                data-tabs-target="#videos-tab-content" type="button" role="tab" aria-controls="videos-tab"
-                aria-selected="0"
-                >
-          Videos
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <div id='channel-tab-content'>
-    <div id="videos-tab-content" role="tabpanel" aria-labelledby="videos-tab" class="hidden">
-      <%= render partial: "videos_section", locals: {videos: @channel.videos} %>
-    </div>
-
-    <div id="hacks-tab-content" class="hidden">
-      <%= render partial: 'hacks_section' %>
-    </div>
-    <div id="queries-tab-content" class="hidden">
-      wgwrgwrg
-    </div>
-  </div>
+  <%= render partial: "videos_section", locals: {videos: @videos, pagy: @pagy} %>
 </div>

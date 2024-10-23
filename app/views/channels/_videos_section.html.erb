@@ -1,3 +1,21 @@
+<nav class="flex p-2 pl-6 px-4 mb-4 items-center flex-column flex-wrap md:flex-row justify-between" aria-label="Table navigation">
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+              <%= t("helpers.page.showing") %> <span class="font-semibold text-gray-900 dark:text-white"><%= "#{pagy.from}-#{pagy.to}" %></span> <%= "of" %> <span class="font-semibold text-gray-900 dark:text-white"><%= pagy.count %></span></span>
+  <ul class="pt-2 inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 list-none">
+    <li>
+      <%= link_to t("helpers.page.previous"), channel_path(page: pagy.prev), { disabled: pagy.prev.blank?, class: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
+    </li>
+    <% pagy.pages.times do |page| %>
+      <li>
+        <%= link_to "#{page + 1}", channel_path(page: page + 1), { class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"} %>
+      </li>
+    <% end %>
+    <li>
+      <%= link_to t("helpers.page.next"), channel_path(page: pagy.next), { disabled: pagy.next.blank?, class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
+    </li>
+  </ul>
+</nav>
+
 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
   <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
   <tr>
@@ -73,4 +91,22 @@
   <% end %>
   </tbody>
 </table>
+
+<nav class="flex p-2 pl-6 px-4 mb-4 items-center flex-column flex-wrap md:flex-row justify-between" aria-label="Table navigation">
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+              <%= t("helpers.page.showing") %> <span class="font-semibold text-gray-900 dark:text-white"><%= "#{pagy.from}-#{pagy.to}" %></span> <%= t("helpers.page.of") %> <span class="font-semibold text-gray-900 dark:text-white"><%= pagy.count %></span></span>
+  <ul class="pt-2 inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 list-none">
+    <li>
+      <%= link_to t("helpers.page.previous"), channel_path(page: pagy.prev), { disabled: pagy.prev.blank?, class: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
+    </li>
+    <% pagy.pages.times do |page| %>
+      <li>
+        <%= link_to "#{page + 1}", channel_path(page: page + 1), { class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"} %>
+      </li>
+    <% end %>
+    <li>
+      <%= link_to t("helpers.page.next"), channel_path(page: pagy.next), { disabled: pagy.next.blank?, class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
+    </li>
+  </ul>
+</nav>
 
