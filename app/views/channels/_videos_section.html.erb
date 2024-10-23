@@ -85,7 +85,7 @@
       </td>
 
       <td class="px-4 text-center">
-        <p><%= link_to 'View Hack', hack_path(id: video.hack) %></p>
+        <p><%= link_to 'View Hack', hack_path(id: video.hack) unless video.state.to_sym == :unprocessable %></p>
       </td>
     </tr>
   <% end %>
