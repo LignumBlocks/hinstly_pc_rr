@@ -3,6 +3,12 @@ require 'open-uri'
 class ProcessVideoJob < ApplicationJob
   queue_as :default
 
+  rescue_from(StandardError) do |exception|
+    video.update_attribute(:state, :failed)
+    broadcast_video_state(video)
+    raise exception
+  end
+
   def perform(video_id)
     video = Video.find(video_id)
     client = OpenAI::Client.new
