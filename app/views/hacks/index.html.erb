@@ -47,10 +47,7 @@
       border: 1px solid #c3c4c7;
       box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
     }
-    .table-container {
-      /*padding: 20px;*/
-    }
-
+    
     .container.wrap{
       padding: 0 20px;
       background-color: #f0f0f1;
@@ -67,24 +64,29 @@
   <div class="container wrap" style="max-width: 100%;">
       <ul class="subsubsub">
         <li class="">          
-            <a href="<%= hacks_path %>">All <span class="count">(999)</span></a> |
+            <%= link_to "All (#{@total.count})", hacks_path(filter: 'all'), class: "text-blue-500" %> |
         </li>
         <li>
-          <a href="<%= hacks_path %>" class="current" aria-current="page">Valid <span class="count">(99)</span></a> |
+           <%= link_to "Valid (#{@total.joins(:hack_validation).where('hack_validations.status = true').count})", hacks_path(filter: 'valid'), class: "text-blue-500" %> |
         </li>
         <li>
-          <a href="<%= hacks_path %>" class="">Not-valid<span class="count">(199)</span></a> |
+          <%= link_to "Not-valid (#{current_user.hacks.left_joins(:hack_structured_info, :hack_validation).where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL').count})", hacks_path(filter: 'not_valid'), class: "text-blue-500" %> |
         </li>
         <li>
-          <a href="<%= channels_path %>" class="">Channels<span class="count">(5)</span></a>
+          <%= link_to "Channels (#{@channels.count})", channels_path, class: "text-blue-500" %>
+
         </li>        
       </ul>    
-      
+
+      <div>  
+  
+</div>
     <div class="tablenav top">
       <%= search_form_for @q, url: hacks_path, method: :get, local: true do |f| %>
       <div class="alignright filters flex items-center gap-4">
+         <%= hidden_field_tag :filter, params[:filter] %>
         <!-- Campo para filtrar por canal -->
-        <div>
+        <div class="pt-2 pb-4">
           <%= f.select :video_channel_id_eq, 
             options_for_select([["Select Channel", ""]] + @channels.map { |channel| [channel.name, channel.id] }, params.dig(:q, :video_channel_id_eq)), 
             {}, 
@@ -149,7 +151,7 @@
           Channel
         </th>
         <th scope="col" class="px-6 py-3 text-center">
-          Date
+          Created at
         </th>
         <th scope="col" class="px-6 py-3 text-center">
           Actions
@@ -175,7 +177,7 @@
             </div>
           </td>
           <td>
-            Created at<br><%= hack.created_at&.strftime("%d/%m/%Y") %>
+            <%= hack.created_at&.strftime("%d/%m/%Y") %>
           </td>
           <td class="px-4 py-4 text-right w-32">
             <div class="inline-flex gap-2">

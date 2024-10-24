@@ -3,6 +3,9 @@ require 'open-uri'
 class HacksController < ApplicationController
   def index
     @channels = Channel.all
+    @total = Hack.all
+
+    @q = current_user.hacks.ransack(params[:q])
 
     # Si el canal no está seleccionado, eliminar el parámetro del filtro
     params[:q].delete(:video_channel_id_eq) if params[:q] && params[:q][:video_channel_id_eq].blank?
@@ -19,7 +22,26 @@ class HacksController < ApplicationController
       end
     end
 
-    @q = current_user.hacks.ransack(params[:q])
+    hack_filter = params[:filter] || 'valid'
+
+    case hack_filter
+    when 'valid'
+      @q = current_user.hacks.joins(:hack_structured_info,
+                                    :hack_validation).where('hack_validations.status = true').ransack(params[:q])
+    when 'not_valid'
+      # Mostrar hacks no válidos (sin `hack_structured_info` o con `hack_validations.status = false o NULL`)
+      @q = current_user.hacks
+                       .left_joins(:hack_structured_info, :hack_validation)
+                       .where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL')
+                       .ransack(params[:q])
+    else
+      # Si no hay filtro, mostrar todos los hacks
+      @q = current_user.hacks.ransack(params[:q])
+    end
+    puts '---------------------------PARAMM-------------------------------'
+    puts params
+
+    # @q = current_user.hacks.ransack(params[:q])
     @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 100)
   end
 
