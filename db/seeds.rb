@@ -1,10 +1,12 @@
-User.all.destroy_all
-Role.all.destroy_all
+# User.all.destroy_all
+# Role.all.destroy_all
+#
+# role = Role.create!(name: 'admin')
+#
+# admin = User.create!(email: 'admin@hintsly.dev', password: 'password', password_confirmation: 'password')
+# admin.roles << role
 
-role = Role.create!(name: 'admin')
-
-admin = User.create!(email: 'admin@hintsly.dev', password: 'password', password_confirmation: 'password')
-admin.roles << role
+Prompt.all.destroy_all
 
 prompts = [
   { name: 'Hack Discrimination Reduced', code: 'HACK_DISCRIMINATION_REDUCED', prompt: "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.\n
@@ -81,11 +83,25 @@ The itemized objects should be saved as lists, the section titles should be dict
 Expected JSON structure:\n{\n    \"Extended Title\": \"<extended title>\",
     \"Detailed steps\": [\n        {\n            \"Step Title\": \"<step 1 title>\",\n            \"Description\": \"<step 1 description>\",\n        },\n        {\n            \"Step Title\": \"<step 2 title>\",\n            \"Description\": \"<step 2 description>\",\n        },\n        // .. other steps\n    ],
     \"Additional Tools and Resources\": [\n        \" resource 1\",\n        \" resource 2\",\n        // .. other resources\n    ],\n    \"Case Study\": \"<case study>\"\n}\n
-Don't add or remove words. Only convert the markdown to plain text. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' }
+Don't add or remove words. Only convert the markdown to plain text. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' },
+
+  { name: 'Scrap Links',
+    code: 'SCRAP_LINKS',
+    system_prompt: 'You are an expert in web scraping and data analysis, assisting users in extracting information from websites and helping to identify valuable links based on the content of web pages.',
+    prompt: "Given a string containing HTML code, please extract and return a maximum of the 3 more relevant links related to a specific topic that I will provide,
+      You must return them only if they are related but never more than 3 and if it's impossible to find any, dont give any explanation
+
+      Do not include any HTML elements or JavaScript code in your response; focus solely on the most important links concerning the requested topic.
+
+      Only extract links that could contain relevant ideas or information about the given topic and return them in a JSON format as follows: { \"links\": [ ... ] }.
+
+      Please do not include links or any unrelated text that does not convey a specific idea.The topic is: #[{query}] and here is the text: #[{content}]",
+  }
 
 ]
 prompts.each { |prompt| Prompt.create(prompt) }
 
+ValidationSource.all.destroy_all
 validation_sources = [
   { name: 'Finance Consumer',
     url_query: 'https://search.consumerfinance.gov/search?utf8=%E2%9C%93&affiliate=cfpb&query=' },
