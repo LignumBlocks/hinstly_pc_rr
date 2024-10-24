@@ -4,6 +4,7 @@ class ProcessVideoJob < ApplicationJob
   queue_as :default
 
   rescue_from(StandardError) do |exception|
+    video = Video.find(arguments[0])
     video.update_attribute(:state, :failed)
     broadcast_video_state(video)
     raise exception
