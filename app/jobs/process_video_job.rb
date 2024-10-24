@@ -20,12 +20,14 @@ class ProcessVideoJob < ApplicationJob
 
         unless video.process_video_log.has_scraped_pages?
           video.update_attribute(:state, :scraping)
+          broadcast_video_state(video)
           Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
           video.process_video_log.update(has_scraped_pages: true)
         end
 
         unless video.process_video_log.analysed?
           video.update_attribute(:state, :analysing)
+          broadcast_video_state(video)
           hack_processor = Ai::HackProcessor.new(video.hack)
           hack_processor.validate_financial_hack! unless video.hack&.hack_validation
           hack_processor.extend_hack! unless video.hack&.hack_structured_info
@@ -34,6 +36,7 @@ class ProcessVideoJob < ApplicationJob
       end
 
       video.update(state: :processed, processed_at: DateTime.now)
+      broadcast_video_state(video)
     end
 
     update_channel_state!(video)
@@ -55,6 +58,7 @@ class ProcessVideoJob < ApplicationJob
 
   def transcript_video(video, client)
     video.update_attribute(:state, :transcribing)
+    broadcast_video_state(video)
     downloaded_video = URI.open(video.source_download_link)
     puts 'Downloaded Video...'
 
@@ -69,17 +73,24 @@ class ProcessVideoJob < ApplicationJob
     video.transcription.reload
   rescue
     video.update_attribute(:state, :unprocessable)
+    broadcast_video_state(video)
   end
 
   def find_hack(video)
     video.update_attribute(:state, :hacks)
+    broadcast_video_state(video)
     Ai::Video.new(video).find_hack!
     video.process_video_log.update(has_hacks: true)
   end
 
   def find_queries(video)
     video.update_attribute(:state, :queries)
+    broadcast_video_state(video)
     Ai::HackProcessor.new(video.hack).find_queries!
     video.process_video_log.update(has_queries: true)
+  end
+  
+  def broadcast_video_state(video)
+    ActionCable.server.broadcast 'video_state_channel', { id: video.id, state: video.state }
   end
 end
