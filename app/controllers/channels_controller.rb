@@ -73,6 +73,7 @@ class ChannelsController < ApplicationController
     video.share_count = dataset_item[:shareCount]
     video.play_count = dataset_item[:playCount]
     video.source_link = dataset_item[:webVideoUrl]
+    video.text = dataset_item[:text]
     video.duration = dataset_item[:videoMeta][:duration]
     video.source_download_link = dataset_item[:videoMeta][:downloadAddr]
     return nil unless video.save

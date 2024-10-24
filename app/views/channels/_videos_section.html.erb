@@ -42,7 +42,7 @@
       <td class="flex items-center text-gray-900 whitespace-nowrap dark:text-white truncate max-w-md">
         <%= image_tag url_for(video.cover), class: "w-8 h-8 rounded" %>
         <div class="ps-3">
-          <div class="text-base"><%= video.external_source_id %></div>
+          <div class="text-base truncate w-full"><%= video.text.present? ? video.text : "No text"%></div>
           <div class="flex space-x-4 text-sm justify-start pt-1 ">
             <div class="flex items-center">
               <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
