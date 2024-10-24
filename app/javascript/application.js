@@ -18,6 +18,7 @@ import "flowbite/dist/flowbite.turbo.js";
 import 'flowbite-datepicker';
 import 'flowbite/dist/datepicker.turbo.js';
 
+
 // Configurar Stimulus
 const application = Application.start()
 application.register("confirmation", ConfirmationController)
