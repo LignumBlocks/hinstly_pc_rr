@@ -40,7 +40,7 @@ class HacksController < ApplicationController
     end
 
     # @q = current_user.hacks.ransack(params[:q])
-    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 2)
+    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 50)
   end
 
   def show
