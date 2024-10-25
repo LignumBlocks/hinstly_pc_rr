@@ -83,7 +83,6 @@ class ProcessVideoJob < ApplicationJob
   rescue FFMPEG::Error => e
     video.update_attribute(:state, :unprocessable)
     broadcast_video_state(video)
-    update_channel_state!(video)
   end
 
   def find_hack(video)
