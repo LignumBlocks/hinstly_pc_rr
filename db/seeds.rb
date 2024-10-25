@@ -85,6 +85,33 @@ Expected JSON structure:\n{\n    \"Extended Title\": \"<extended title>\",
     \"Additional Tools and Resources\": [\n        \" resource 1\",\n        \" resource 2\",\n        // .. other resources\n    ],\n    \"Case Study\": \"<case study>\"\n}\n
 Don't add or remove words. Only convert the markdown to plain text. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' },
 
+  { name: 'Complexity Classification', code: 'COMPLEXITY_CLASSIFICATION', prompt: "Classify the financial hack into one of the following categories, based on its complexity, accessibility, and level of financial impact:\n
+1. *Accessible*:\n   - *Description*: Simple hacks that are easy to implement by most people without requiring extensive financial knowledge or initial investment. Designed for users with any level of income and experience.\n   - *Examples*: Saving small amounts regularly, reducing non-essential expenses.\n
+2. *Intermediate*:\n   - *Description*: Hacks that require some planning, basic financial knowledge, or a moderate initial investment. Useful for people with medium incomes or some experience in managing their money.\n   - *Examples*: Investing while carrying debt, simple retirement planning strategies.\n
+3. *Advanced*:\n   - *Description*: More complex hacks requiring advanced financial knowledge or considerable resources. Often involve tax strategies, investment in complex assets, or sophisticated legal structures.\n   - *Examples*: Utilizing REITs and advanced tax strategies to maximize returns.\n
+## Financial hack:\n---\n[{hack_description}]\n---\n
+Provide your response only as a JSON object with the values as plain strings, no markdown; in the following format:\n```json\n
+{\n    \"category\": \"<Accessible, Intermediate or Advanced>\",\n    \"explanation\": \"<A short explanation regarding the classification>\",\n}\n```", system_prompt: 'You are a financial analyst specialized in financial hacks for users in the USA.' },
+
+  { name: 'Financial Categories Classification', code: 'FINANCIAL_CLASSIFICATION', prompt: "Bellow you will be provided with a financial hack. According to the following financial categories state the applicable tags to the provided information.\n
+## Financial categories:\n
+- `Corporate Finance`: financial activities of corporations, including investment decisions, financial management, and capital structure.
+- `Investment Management`: strategies and practices of managing financial assets to maximize returns.
+- `Personal Finance`: management of individual or household financial activities, including budgeting, saving, and investing.
+- `Financial Markets`:  facilitate the trading of financial instruments and play a key role in the allocation of resources. Including stock market, bond market and derivative market.
+- `Public Finance`: studies the role of the government in the economy, including taxation, spending, and debt management.
+- `Banking and Financial Institutions`: examines banking systems and financial institutions that provide financial services to individuals and businesses.
+- `Risk Management`: identifies, assesses, and prioritizes risks followed by coordinated efforts to minimize or control their impact.
+- `International Finance`: focuses on the financial interactions between countries, including currency exchange, investments, and regulations.
+- `Financial Planning and Analysis`: managing a company's financial health through analysis and strategic planning.
+- `Fintech and Emerging Technologies`: innovative technologies and their impact on the financial industry.
+- `Behavioral Finance`: investigates the psychological factors influencing investors' decisions and market dynamics.\n
+## Financial hack:\n---\n[{hack_description}]\n---\n\nIf there is more than one category fitting then return them all. Provide your response only as a JSON object, in the following format:\n
+Example for more than one tag:\n```json
+[\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n    \"explanation\": \"<A short explanation regarding the classification>\"\n  },\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n\"breve explanation\": \"<A short explanation regarding the classification>\"\n  },\n  // ...\n]\n```
+Example for one tag:\n```json
+[\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n    \"explanation\": \"<A short explanation regarding the classification>\"\n  }\n]\n```", system_prompt: 'You are a financial analyst specialized in financial hacks for users in the USA.' },
+
   { name: 'Scrap Links',
     code: 'SCRAP_LINKS',
     system_prompt: 'You are an expert in web scraping and data analysis, assisting users in extracting information from websites and helping to identify valuable links based on the content of web pages.',
@@ -95,8 +122,7 @@ Don't add or remove words. Only convert the markdown to plain text. Provide your
 
       Only extract links that could contain relevant ideas or information about the given topic and return them in a JSON format as follows: { \"links\": [ ... ] }.
 
-      Please do not include links or any unrelated text that does not convey a specific idea.The topic is: #[{query}] and here is the text: #[{content}]",
-  }
+      Please do not include links or any unrelated text that does not convey a specific idea.The topic is: #[{query}] and here is the text: #[{content}]" }
 
 ]
 prompts.each { |prompt| Prompt.create(prompt) }
