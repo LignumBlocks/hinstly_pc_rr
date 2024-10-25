@@ -10,7 +10,7 @@ class Channel < ApplicationRecord
 
   def broadcast_state(state)
     update_attribute(:state, state)
-    channel_process = channel.channel_processes.where(finished: false).last
+    channel_process = channel_processes.where(finished: false).last
     remaining_jobs = channel_process.count_videos if channel_process
     remaining_jobs ||= 0
     ActionCable.server.broadcast 'channel_state_channel', { id: id, state: state, remaining_jobs: remaining_jobs }

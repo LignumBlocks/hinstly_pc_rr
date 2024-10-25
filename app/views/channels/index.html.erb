@@ -73,7 +73,7 @@
             </div>
             <div id="channel-text-state-<%= channel.id %>" class="text">
               <%= channel.state.capitalize %>
-              <% if channel.state == :processing %>
+              <% if channel.state.to_sym == :processing %>
               <% channel_process = channel.channel_processes.where(finished: false).last %>
               <%= "(#{channel_process.count_videos})" if channel_process %>
               <% end %>
