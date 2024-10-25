@@ -17,29 +17,31 @@ class ChannelsController < ApplicationController
       avatar = result.delete(:avatar)
       channel = current_user.channels.build(result)
       channel.avatar.attach(io:  URI.open(avatar), filename: File.basename(avatar)) if avatar
-      redirect_to channels_path, notice: "Channel created correctly" and return if channel.save
+      redirect_to channels_path, notice: 'Channel created correctly' and return if channel.save
     end
-    redirect_to channels_path, alert: "Channel cannot be created"
+    redirect_to channels_path, alert: 'Channel cannot be created'
   end
 
   def show
     @channel = current_user.channels.find(params[:id])
+    @q = @channel.videos.ransack(params[:q])
+    @pagy, @videos = pagy(@q.result.order(created_at: :desc), items: 50)
   end
 
   def process_videos
     result = Services::Apify.new.download_videos(@channel)
     if result
-      redirect_to channels_path, notice: "Started channel processing."
+      redirect_to channels_path, notice: 'Started channel processing.'
     else
-      redirect_to channels_path, alert: "Unable to process channel."
+      redirect_to channels_path, alert: 'Unable to process channel.'
     end
   end
 
   def apify_webhook
     run = ApifyRun.where(state: 0, apify_run_id: params[:eventData][:actorRunId]).first
-    render json: {message: "ok"}, state: 200 and return unless run
+    render json: { message: 'ok' }, state: 200 and return unless run
 
-    if params[:eventType] == "ACTOR.RUN.SUCCEEDED"
+    if params[:eventType] == 'ACTOR.RUN.SUCCEEDED'
       channel = run.channel
       count_videos = 0
       items = Services::Apify.new.read_dataset(run.apify_dataset_id)
@@ -50,7 +52,7 @@ class ChannelsController < ApplicationController
           count_videos += 1
         end
       end
-      if count_videos > 0
+      if count_videos.positive?
         channel.channel_processes.create(count_videos: count_videos)
         channel.update(state: 2)
       else
@@ -71,6 +73,7 @@ class ChannelsController < ApplicationController
     video.share_count = dataset_item[:shareCount]
     video.play_count = dataset_item[:playCount]
     video.source_link = dataset_item[:webVideoUrl]
+    video.text = dataset_item[:text]
     video.duration = dataset_item[:videoMeta][:duration]
     video.source_download_link = dataset_item[:videoMeta][:downloadAddr]
     return nil unless video.save
@@ -93,7 +96,7 @@ class ChannelsController < ApplicationController
 
   def check_already_processing
     if @channel.state.to_sym == :checking
-      redirect_to channels_path, alert: "Channel already being processed."
+      redirect_to channels_path, alert: 'Channel already being processed.'
     end
   end
 end

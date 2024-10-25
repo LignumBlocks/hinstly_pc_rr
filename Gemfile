@@ -30,7 +30,7 @@ gem 'webdrivers'
 gem 'aws-sdk-s3'
 gem 'mutex_m'
 gem 'ostruct'
-
+gem 'redis'
 
 # Front-end
 gem 'cssbundling-rails', '~> 1.1'
