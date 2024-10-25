@@ -41,26 +41,27 @@ class ChannelsController < ApplicationController
     run = ApifyRun.where(state: 0, apify_run_id: params[:eventData][:actorRunId]).first
     render json: { message: 'ok' }, state: 200 and return unless run
 
-    if params[:eventType] == 'ACTOR.RUN.SUCCEEDED'
-      channel = run.channel
-      count_videos = 0
-      items = Services::Apify.new.read_dataset(run.apify_dataset_id)
-      items.each do |item|
-        video = create_video!(channel, item)
-        if video.state.to_sym == :created
-          ProcessVideoJob.perform_later(video.id)
-          count_videos += 1
-        end
+    return unless params[:eventType] == 'ACTOR.RUN.SUCCEEDED'
+
+    channel = run.channel
+    count_videos = 0
+    items = Services::Apify.new.read_dataset(run.apify_dataset_id)
+    items.each do |item|
+      video = create_video!(channel, item)
+      if video.state.to_sym == :created
+        ProcessVideoJob.perform_later(video.id)
+        count_videos += 1
       end
-      if count_videos.positive?
-        channel.channel_processes.create(count_videos: count_videos)
-        channel.broadcast_state(:processing)
-      else
-        channel.broadcast_state(:processed)
-        channel.update(checked_at: DateTime.now)
-      end
-      run.update(state: 1)
     end
+    if count_videos.positive?
+      channel.channel_processes.create(count_videos: count_videos)
+      channel.broadcast_state(:processing)
+    else
+      channel.broadcast_state(:processed)
+      channel.update(checked_at: DateTime.now)
+    end
+    run.update(state: 1)
+
   end
 
   private
@@ -90,14 +91,14 @@ class ChannelsController < ApplicationController
 
   def load_channel
     @channel = current_user.channels.find(params[:id])
-    unless @channel
-      redirect_to channels_path, alert: "Channel doesn't exists"
-    end
+    return if @channel
+
+    redirect_to channels_path, alert: "Channel doesn't exists"
   end
 
   def check_already_processing
-    if @channel.state.to_sym == :checking
-      redirect_to channels_path, alert: 'Channel already being processed.'
-    end
+    return unless [:checking, :processing].include?(@channel.state.to_sym)
+
+    redirect_to channels_path, alert: 'Channel already being processed.'
   end
 end
