@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_24_115858) do
+
+ActiveRecord::Schema[7.0].define(version: 2024_10_25_012116) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +52,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_24_115858) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "clasification_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["clasification_id"], name: "index_categories_on_clasification_id"
+  end
+
   create_table "channel_processes", force: :cascade do |t|
     t.integer "channel_id"
     t.integer "count_videos"
@@ -76,6 +86,22 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_24_115858) do
     t.integer "state", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "clasifications", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hack_category_rels", force: :cascade do |t|
+    t.bigint "hack_id", null: false
+    t.bigint "category_id", null: false
+    t.text "justification"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_hack_category_rels_on_category_id"
+    t.index ["hack_id"], name: "index_hack_category_rels_on_hack_id"
   end
 
   create_table "hack_structured_infos", force: :cascade do |t|
@@ -211,5 +237,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_24_115858) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "clasifications"
+  add_foreign_key "hack_category_rels", "categories"
+  add_foreign_key "hack_category_rels", "hacks"
   add_foreign_key "hack_structured_infos", "hacks"
 end

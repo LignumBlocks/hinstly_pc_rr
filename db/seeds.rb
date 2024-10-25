@@ -109,3 +109,43 @@ validation_sources = [
 ]
 
 validation_sources.each { |source| ValidationSource.create(source) }
+
+# Crear clasificaciones
+financial_classification = Clasification.create(name: 'Financial')
+complexity_classification = Clasification.create(name: 'Complexity')
+
+# Crear categorías para Financial_categories
+Category.create([
+                  { name: 'Corporate Finance',
+                    description: 'Financial activities of corporations, including investment decisions, financial management, and capital structure.', clasification: financial_classification },
+                  { name: 'Investment Management',
+                    description: 'Strategies and practices of managing financial assets to maximize returns.', clasification: financial_classification },
+                  { name: 'Personal Finance',
+                    description: 'Management of individual or household financial activities, including budgeting, saving, and investing.', clasification: financial_classification },
+                  { name: 'Financial Markets',
+                    description: 'Facilitate the trading of financial instruments and play a key role in the allocation of resources. Including stock market, bond market, and derivative market.', clasification: financial_classification },
+                  { name: 'Public Finance',
+                    description: 'Studies the role of the government in the economy, including taxation, spending, and debt management.', clasification: financial_classification },
+                  { name: 'Banking and Financial Institutions',
+                    description: 'Examines banking systems and financial institutions that provide financial services to individuals and businesses.', clasification: financial_classification },
+                  { name: 'Risk Management',
+                    description: 'Identifies, assesses, and prioritizes risks followed by coordinated efforts to minimize or control their impact.', clasification: financial_classification },
+                  { name: 'International Finance',
+                    description: 'Focuses on the financial interactions between countries, including currency exchange, investments, and regulations.', clasification: financial_classification },
+                  { name: 'Financial Planning and Analysis',
+                    description: "Managing a company's financial health through analysis and strategic planning.", clasification: financial_classification },
+                  { name: 'Fintech and Emerging Technologies',
+                    description: 'Innovative technologies and their impact on the financial industry.', clasification: financial_classification },
+                  { name: 'Behavioral Finance',
+                    description: "Investigates the psychological factors influencing investors' decisions and market dynamics.", clasification: financial_classification }
+                ])
+
+# Crear categorías para Complexity
+Category.create([
+                  { name: 'Accessible',
+                    description: 'Simple hacks that are easy to implement by most people without requiring extensive financial knowledge or initial investment. Designed for users with any level of income and experience. Examples: Saving small amounts regularly, reducing non-essential expenses.', clasification: complexity_classification },
+                  { name: 'Intermediate',
+                    description: 'Hacks that require some planning, basic financial knowledge, or a moderate initial investment. Useful for people with medium incomes or some experience in managing their money. Examples: Investing while carrying debt, simple retirement planning strategies.', clasification: complexity_classification },
+                  { name: 'Advanced',
+                    description: 'More complex hacks requiring advanced financial knowledge or considerable resources. Often involve tax strategies, investment in complex assets, or sophisticated legal structures. Examples: Utilizing REITs and advanced tax strategies to maximize returns.', clasification: complexity_classification }
+                ])
