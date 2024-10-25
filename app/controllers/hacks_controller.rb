@@ -40,7 +40,7 @@ class HacksController < ApplicationController
     end
 
     # @q = current_user.hacks.ransack(params[:q])
-    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 100)
+    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 2)
   end
 
   def show
@@ -51,6 +51,6 @@ class HacksController < ApplicationController
   private
 
   def hack_params
-    params.require(:hack).permit(:id)
+    params.permit(:page, :filter, q: %i[video_channel_id_eq created_at_gteq created_at_lteq])
   end
 end
