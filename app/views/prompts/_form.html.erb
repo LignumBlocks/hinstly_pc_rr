@@ -1,49 +1,17 @@
-<turbo-frame id="modal-content">
-  <%= form_with(model: prompt) do |form| %>
-    <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
-      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mr-8">
-        <%= prompt.new_record? ? "Add new Prompt" : "Edit Prompt" %>
-      </h3>
-      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="modal" onclick="closeModal()">
-        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-        </svg>
-        <span class="sr-only">Close modal</span>
-      </button>
-      <script>
-          function closeModal() {
-              const modal = document.getElementById('modal');
-              if (modal) {
-                  modal.classList.add('hidden');
-              }
-          }
-      </script>
-    </div>
+<%= form_with(model: prompt) do |form| %>
+  <% if prompt.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(prompt.errors.count, "error") %> prohibited this prompt from being saved:</h2>
 
-    <div class="w-full">
-      <div class="mb-4">
-        <%= form.label :name, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-        <%= form.text_field :name, required: true, class:"p-2 w-full border border-gray-300 rounded-md" %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :code, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-        <%= form.text_field :code, required: true, class:"p-2 w-full border border-gray-300 rounded-md" %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :system_prompt, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-        <%= form.text_area :system_prompt, required: true, rows:2, class:"p-2 w-full border border-gray-300 rounded-md" %>
-      </div>
-
-      <div class="mb-4">
-        <%= form.label :prompt, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
-        <%= form.text_area :prompt, required: true, rows:6, class:"p-2 w-full border border-gray-300 rounded-md" %>
-      </div>
-    </div>
-
-    <div class="flex mt-4">
-      <%= form.submit prompt.new_record? ? "Save" : "Update", class:"btn btn-primary w-full" %>
+      <ul>
+        <% prompt.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
     </div>
   <% end %>
-</turbo-frame>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

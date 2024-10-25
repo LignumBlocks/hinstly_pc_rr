@@ -27,8 +27,7 @@
       </div>
 
       <div class="mr-2">
-        <%= link_to 'New Prompt', new_prompt_path, data: { turbo_frame: "modal-content", turbo_method: :get, modal_toggle: "modal" }, class: "btn btn-primary" %>
-
+        <%= link_to "New prompt", new_prompt_path, class: "btn btn-primary" %>
       </div>
     </div>
   </div>
@@ -40,6 +39,9 @@
       </th>
       <th scope="col" class="px-6 py-3">
         Code
+      </th>
+      <th scope="col" class="px-6 py-3 text-center">
+        Action
       </th>
     </tr>
     </thead>
@@ -69,17 +71,6 @@
   </nav>
 </div>
 
-<div id="modal" style="z-index: 9999;" class="fixed inset-0 flex items-center justify-center hidden bg-gray-600 bg-opacity-50">
-  <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg overflow-auto">
-
-
-    <turbo-frame id="modal-content">
-      <!-- Se cargará el contenido dinámico aquí -->
-    </turbo-frame>
-  </div>
-</div>
-
-
 <script>
     function clearSearch() {
         const input = document.querySelector('input[name="q[name_cont]"]');
@@ -92,15 +83,6 @@
         }
     }
 
-    document.addEventListener("turbo:frame-load", () => {
-        const modal = document.getElementById("modal");
-        const modalContent = document.getElementById("modal-content");
-        if (modalContent.innerHTML.trim() === "") {
-            modal.classList.add("hidden");
-        } else {
-            modal.classList.remove("hidden");
-        }
-    });
-
-
 </script>
+
+<p style="color: green"><%= notice %></p>

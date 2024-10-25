@@ -1,2 +1,43 @@
-<h1>Prompts#new</h1>
-<p>Find me in app/views/prompts/new.html.erb</p>
+<h1>New prompt</h1>
+
+<%= render "form", prompt: @prompt %>
+
+<br>
+
+<div>
+  <%= link_to "Back to prompts", prompts_path %>
+</div>
+
+<%= form_with(model: @prompt) do |form| %>
+    <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mr-8">
+        Add new Prompt"
+      </h3>      
+    </div>
+
+    <div class="w-full">
+      <div class="mb-4">
+        <%= form.label :name, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+        <%= form.text_field :name, required: true, class:"p-2 w-full border border-gray-300 rounded-md" %>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :code, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+        <%= form.text_field :code, required: true, class:"p-2 w-full border border-gray-300 rounded-md" %>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :system_prompt, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+        <%= form.text_area :system_prompt, required: true, rows:2, class:"p-2 w-full border border-gray-300 rounded-md" %>
+      </div>
+
+      <div class="mb-4">
+        <%= form.label :prompt, class:"block mb-2 text-sm font-medium text-gray-900 dark:text-white" %>
+        <%= form.text_area :prompt, required: true, rows:6, class:"p-2 w-full border border-gray-300 rounded-md" %>
+      </div>
+    </div>
+
+    <div class="flex mt-4">
+      <%= form.submit "Save" , class:"btn btn-primary w-full" %>
+    </div>
+  <% end %>
