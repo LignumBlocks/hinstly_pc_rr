@@ -112,6 +112,21 @@ Example for more than one tag:\n```json
 Example for one tag:\n```json
 [\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n    \"explanation\": \"<A short explanation regarding the classification>\"\n  }\n]\n```", system_prompt: 'You are a financial analyst specialized in financial hacks for users in the USA.' },
 
+  { name: 'Generic Single Category Classification', code: 'GENERIC_SINGLE_CATEGORY_CLASSIFICATION', prompt: "Classify the financial hack into one of the following categories, based on [{based_on}]:\n
+[{explained_categories}]\n
+## Financial hack:\n---\n\[{hack_description}]\n---\n
+Provide your response only as a JSON object with the values as plain strings, no markdown; in the following format:\n```json\n
+{\n    \"category\": \"<[{categories}]>\",\n    \"explanation\": \"<A short explanation regarding the classification>\",\n}\n```", system_prompt: 'You are a financial analyst specialized in financial hacks for users in the USA.' },
+
+  { name: 'Generic Multi-Category Classification', code: 'GENERIC_MULTI_CATEGORY_CLASSIFICATION', prompt: "Bellow you will be provided with a financial hack. According to the following [{class_name}] categories, state the applicable tags to the provided information.\n
+##[{class_name}] categories:
+[{explained_categories}]\n
+## Financial hack:\n---\n\[{hack_description}]\n---\n\nIf there is more than one category fitting then return them all. Provide your response only as a JSON object, in the following format:\n
+Example for more than one tag:\n```json
+[\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n    \"explanation\": \"<A short explanation regarding the classification>\"\n  },\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n\"breve explanation\": \"<A short explanation regarding the classification>\"\n  },\n  // ...\n]\n```
+Example for one tag:\n```json
+[\n  {\n    \"category\": \"<category with the same name as it was listed>\",\n    \"explanation\": \"<A short explanation regarding the classification>\"\n  }\n]\n```", system_prompt: 'You are a financial analyst specialized in financial hacks for users in the USA.' },
+
   { name: 'Scrap Links',
     code: 'SCRAP_LINKS',
     system_prompt: 'You are an expert in web scraping and data analysis, assisting users in extracting information from websites and helping to identify valuable links based on the content of web pages.',
