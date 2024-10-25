@@ -37,7 +37,7 @@ class ProcessVideoJob < ApplicationJob
           broadcast_video_state(video)
           hack_processor = Ai::HackProcessor.new(video.hack)
           hack_processor.validate_financial_hack! unless video.hack&.hack_validation
-          hack_processor.extend_hack! unless video.hack&.hack_structured_info && hack_processor.hack_validation.status == true
+          hack_processor.extend_hack! unless video.hack&.hack_structured_info && hack_processor.hack_validation.status == false
           video.process_video_log.update(analysed: true)
         end
       end
