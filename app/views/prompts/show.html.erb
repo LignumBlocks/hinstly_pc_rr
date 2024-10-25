@@ -1,2 +1,10 @@
-<h1>Prompts#show</h1>
-<p>Find me in app/views/prompts/show.html.erb</p>
+<p style="color: green"><%= notice %></p>
+
+<%= render @prompt %>
+
+<div>
+  <%= link_to "Edit this prompt", edit_prompt_path(@prompt) %> |
+  <%= link_to "Back to prompts", prompts_path %>
+
+  <%= button_to "Destroy this prompt", @prompt, method: :delete %>
+</div>

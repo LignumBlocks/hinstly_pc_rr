@@ -41,10 +41,23 @@
         </button>
       </h4>
       <div id="accordion-flush-body-3" class="hidden" aria-labelledby="accordion-flush-heading-3">
-        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
-          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.hack_structured_info.steps_summary %></p>
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <% steps = JSON.parse(@hack.hack_structured_info.steps_summary) rescue [] %>
+
+          <% if steps.present? %>
+            <ol class="list-decimal list-outside pl-5 text-gray-500 dark:text-gray-400">
+              <% steps.each do |step| %>
+                <li class="mb-4">
+                  <p><%= step %></p>
+                </li>
+              <% end %>
+            </ol>
+          <% else %>
+            <p class="text-gray-500 dark:text-gray-400">No steps available.</p>
+          <% end %>
         </div>
       </div>
+
 
       <h4 id="accordion-flush-heading-4">
         <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-4" aria-expanded="false" aria-controls="accordion-flush-body-4">
@@ -55,8 +68,20 @@
         </button>
       </h4>
       <div id="accordion-flush-body-4" class="hidden" aria-labelledby="accordion-flush-heading-3">
-        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
-          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.hack_structured_info.resources_needed %></p>
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <% resources = JSON.parse(@hack.hack_structured_info.resources_needed) rescue [] %>
+
+          <% if resources.present? %>
+            <ul class="list-disc list-outside text-gray-500 dark:text-gray-400 pl-5">
+              <% resources.each do |resource| %>
+                <li class="mb-2">
+                  <p><%= resource %></p>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-gray-500 dark:text-gray-400">No resources available.</p>
+          <% end %>
         </div>
       </div>
 
@@ -69,11 +94,22 @@
         </button>
       </h4>
       <div id="accordion-flush-body-5" class="hidden" aria-labelledby="accordion-flush-heading-3">
-        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
-          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.hack_structured_info.expected_benefits %></p>
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <% benefits = JSON.parse(@hack.hack_structured_info.expected_benefits) rescue [] %>
+
+          <% if benefits.present? %>
+            <ul class="list-disc list-outside text-gray-500 dark:text-gray-400 pl-5">
+              <% benefits.each do |benefit| %>
+                <li class="mb-2">
+                  <p><%= benefit %></p>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-gray-500 dark:text-gray-400">No expected benefits available.</p>
+          <% end %>
         </div>
       </div>
-
       <h4 id="accordion-flush-heading-6">
         <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-6" aria-expanded="false" aria-controls="accordion-flush-body-6">
           <span>Extended title</span>
@@ -97,11 +133,28 @@
         </button>
       </h4>
       <div id="accordion-flush-body-7" class="hidden" aria-labelledby="accordion-flush-heading-3">
-        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
-          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.hack_structured_info.detailed_steps %></p>
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <% begin %>
+            <% detailed_steps_string = @hack.hack_structured_info.detailed_steps.gsub('=>', ':') %>
+            <% detailed_steps = JSON.parse(detailed_steps_string) %>
+
+            <% if detailed_steps.present? %>
+              <ol class="list-decimal list-outside text-gray-500 dark:text-gray-400 pl-5">
+                <% detailed_steps.each do |step| %>
+                  <li class="mb-4">
+                    <h5 class="font-semibold text-gray-900 dark:text-white"><%= step["Step Title"] %></h3>
+                    <p class="text-gray-500 dark:text-gray-400"><%= step["Description"] %></p>
+                  </li>
+                <% end %>
+              </ol>
+            <% else %>
+              <p class="text-gray-500 dark:text-gray-400">No detailed steps available.</p>
+            <% end %>
+          <% rescue => e %>
+            <p>Error parsing JSON: <%= e.message %></p>
+          <% end %>
         </div>
       </div>
-
       <h4 id="accordion-flush-heading-8">
         <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-8" aria-expanded="false" aria-controls="accordion-flush-body-8">
           <span>Additional tools resources</span>
@@ -111,10 +164,23 @@
         </button>
       </h4>
       <div id="accordion-flush-body-8" class="hidden" aria-labelledby="accordion-flush-heading-3">
-        <div class="py-5 border-b border-gray-200 dark:border-gray-700">
-          <p class="mb-2 text-gray-500 dark:text-gray-400"><%= @hack.hack_structured_info.additional_tools_resources %></p>
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+          <% additional_tools = JSON.parse(@hack.hack_structured_info.additional_tools_resources) rescue [] %>
+
+          <% if additional_tools.present? %>
+            <ul class="list-disc list-outside text-gray-500 dark:text-gray-400 pl-5">
+              <% additional_tools.each do |tool| %>
+                <li class="mb-2">
+                  <p><%= tool %></p>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-gray-500 dark:text-gray-400">No additional tools or resources available.</p>
+          <% end %>
         </div>
       </div>
+
 
       <h4 id="accordion-flush-heading-9">
         <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-9" aria-expanded="false" aria-controls="accordion-flush-body-9">

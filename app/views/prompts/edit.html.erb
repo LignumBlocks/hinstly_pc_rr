@@ -1,2 +1,10 @@
-<h1>Prompts#edit</h1>
-<p>Find me in app/views/prompts/edit.html.erb</p>
+<h1>Editing prompt</h1>
+
+<%= render "form", prompt: @prompt %>
+
+<br>
+
+<div>
+  <%= link_to "Show this prompt", @prompt %> |
+  <%= link_to "Back to prompts", prompts_path %>
+</div>
