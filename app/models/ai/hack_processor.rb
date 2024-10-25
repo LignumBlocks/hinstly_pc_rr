@@ -104,8 +104,8 @@ module Ai
       latest_free = free_description
       latest_premium = premium_description
 
-      (0...times).each do |i|
-        section = documents[i * k, (i * k) + k]
+      sections = documents.each_slice(k)
+      sections.each do |section|
         chunks = section.each do |document|
           "Relevant context section:\n\"\"\"\n#{document['metadata']['content']}\n\"\"\""
         end.join("\n---")
