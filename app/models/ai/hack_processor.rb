@@ -37,22 +37,28 @@ module Ai
       structured = @hack.hack_structured_info
       classification_results = classification_from_free_description(structured)
       result_complexity = classification_results[:complexity]
-      result_categories = classification_results[:financial_categories]
-      complexity_class = result_complexity['classification']
-      complexity_details = result_complexity['explanation']
-      financial_categories = result_categories.map { |item| [item['category'], item['breve explanation']] }
-      # Retrieve the complexity classification ID from the value
-      complexity_record = @hack.complexity.find_by(value: complexity_class)
-      complexity_id = complexity_record&.id
-      @hack.create_hack_complexity!(complexity_id:, complexity_details:) if complexity_id
-      # Insert each financial category into the 'hack_financial_category' table
-      financial_categories.each do |category, details|
-        financial_category_record = @hack.financial_category.find_by(value: category)
-        next unless financial_category_record
+      result_financial_categories = classification_results[:financial_categories]
 
-        @hack.create_hack_financial_category!(
-          financial_category_id: financial_category_record.id,
-          financial_category_details: details
+      # Insert complexity classification
+      complexity_category_name = result_complexity['category']
+      complexity_justification = result_complexity['explanation']
+      # Search by the complexity_category_name in the table Category to get the category instance
+      category_instance = Category.find_by_name(complexity_category_name)
+      HackCategoryRel.create(
+        hack: @hack,
+        category: category_instance,
+        justification: complexity_justification
+      )
+
+      # Insert each financial category
+      financial_categories = result_financial_categories.map { |item| [item['category'], item['explanation']] }
+      financial_categories.each do |category, explanation|
+        # Search by category in the table Category to get the category instance
+        category_instance = Category.find_by_name(category)
+        HackCategoryRel.create(
+          hack: @hack,
+          category: category_instance,
+          justification: explanation
         )
       end
     end
@@ -154,47 +160,41 @@ module Ai
       else
         free_description << "#{steps_summary}\n\n"
       end
-      free_description << "Resources Needed\n"
-      if resources_needed.is_a?(Array)
-        resources_needed.each do |resource|
-          free_description << "- #{resource}\n"
-        end
-      else
-        free_description << "#{resources_needed}\n\n"
-      end
-      free_description << "Expected Benefits\n"
-      if expected_benefits.is_a?(Array)
-        expected_benefits.each do |benefit|
-          free_description << "- #{benefit}\n"
-        end
-      else
-        free_description << "#{expected_benefits}\n\n"
-      end
+      # free_description << "Resources Needed\n"
+      # if resources_needed.is_a?(Array)
+      #   resources_needed.each do |resource|
+      #     free_description << "- #{resource}\n"
+      #   end
+      # else
+      #   free_description << "#{resources_needed}\n\n"
+      # end
+      # free_description << "Expected Benefits\n"
+      # if expected_benefits.is_a?(Array)
+      #   expected_benefits.each do |benefit|
+      #     free_description << "- #{benefit}\n"
+      #   end
+      # else
+      #   free_description << "#{expected_benefits}\n\n"
+      # end
       get_hack_classifications(free_description)
     end
 
     def get_hack_classifications(free_description)
       # Classifies a financial hack based on several parameters using the provided free description.
-
-      prompt_complexity = Prompt.find_by_code('complexity_classification')
-      prompt_financial_categories = Prompt.find_by_code('financial_categories_classification')
-
+      prompt_complexity = Prompt.find_by_code('COMPLEXITY_CLASSIFICATION')
+      prompt_financial_categories = Prompt.find_by_code('FINANCIAL_CLASSIFICATION')
       format_hash = { hack_description: free_description }
       prompt_text_complexity = prompt_complexity.build_prompt_text(format_hash)
       prompt_text_financial_categories = prompt_financial_categories.build_prompt_text(format_hash)
-      system_prompt = 'You are a financial analyst specializing in creating financial hacks for users in the USA.'
-
+      system_prompt_text = prompt_complexity.system_prompt
       begin
         model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
-
         # Get classification for complexity and categories
-        result_complexity = model.run(prompt_text_complexity, system_prompt)
-        result_categories = model.run(prompt_text_financial_categories, system_prompt)
-
+        result_complexity = model.run(prompt_text_complexity, system_prompt_text)
+        result_categories = model.run(prompt_text_financial_categories, system_prompt_text)
         # Clean the resulting strings from the model outputs
         result_complexity = result_complexity.gsub("```json\n", '').gsub('```', '').strip
         result_categories = result_categories.gsub("```json\n", '').gsub('```', '').strip
-
         # Parse the cleaned JSON strings
         {
           complexity: JSON.parse(result_complexity),
