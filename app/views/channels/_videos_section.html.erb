@@ -72,7 +72,7 @@
         </div>
       </td>
 
-      <td id="" class="px-4 text-center">
+      <td class="px-4 text-center">
        <span id="container-state-<%= video.id %>" class="<%= class_for_state(video) %> inline-flex items-center">
           <div class="icon mr-1">
             <svg aria-hidden="true" id="icon-state-<%= video.id %>" class="<%= "hidden" if [:created, :processed, :unprocessable, :failed].include?(video.state.to_sym) %> w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +84,6 @@
             <%= video.state.capitalize %>
           </div>
       </span>
-
       </td>
 
       <td class="px-4 text-center">
@@ -92,7 +91,7 @@
       </td>
 
       <td class="px-4 text-center">
-        <span class="<%= class_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : video&.hack&.is_hack?) %> inline-block"><%= text_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : video&.hack&.is_hack?) %></span>
+        <span id="video-possible-hack-<%= video.id %>" class="<%= class_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : video&.hack&.is_hack?) %> inline-block"><%= text_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : video&.hack&.is_hack?) %></span>
       </td>
 
       <td class="px-4 text-center">

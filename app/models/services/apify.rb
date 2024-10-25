@@ -32,7 +32,7 @@ module Services
     def download_videos(channel)
       response = run_actor(body_for_download(channel))
       run = channel.apify_runs.build({ apify_run_id: response[:data][:id], apify_dataset_id: response[:data][:defaultDatasetId]})
-      run.save && channel.update(state: 1)
+      run.save && channel.broadcast_state(:checking)
     end
 
     private
