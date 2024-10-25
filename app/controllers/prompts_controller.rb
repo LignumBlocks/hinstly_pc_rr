@@ -26,12 +26,9 @@ class PromptsController < ApplicationController
   def update
     @prompt = Prompt.find(params[:id])
     if @prompt.update(prompt_params)
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to prompts_path, notice: 'Prompt was successfully updated.' }
-      end
+      redirect_to prompts_path, notice: 'Prompt was successfully updated.'
     else
-      render partial: 'form', locals: { prompt: @prompt }, status: :unprocessable_entity, layout: false
+      redirect_to edit_prompt_path(@prompt), alert: 'Prompt not updated'
     end
   end
 
@@ -48,7 +45,6 @@ class PromptsController < ApplicationController
 
   def edit
     @prompt = Prompt.find(params[:id])
-    render partial: 'form', locals: { prompt: @prompt }, layout: false
   end
 
   private
