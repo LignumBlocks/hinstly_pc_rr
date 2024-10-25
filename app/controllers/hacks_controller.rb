@@ -38,8 +38,6 @@ class HacksController < ApplicationController
       # Si no hay filtro, mostrar todos los hacks
       @q = current_user.hacks.ransack(params[:q])
     end
-    puts '---------------------------PARAMM-------------------------------'
-    puts params
 
     # @q = current_user.hacks.ransack(params[:q])
     @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 100)
