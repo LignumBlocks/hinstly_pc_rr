@@ -18,7 +18,7 @@ module Ai
     def extend_hack!
       free_description = hack_description('FREE_DESCRIPTION')
       premium_description = hack_description('PREMIUM_DESCRIPTION', free_description)
-      grown_descriptions = grow_descriptions(free_description, premium_description, 6)
+      grown_descriptions = grow_descriptions(free_description, premium_description, 4)
       free_structured = hack_structure(grown_descriptions[:free_description], 'STRUCTURED_FREE_DESCRIPTION')
       premium_structured = hack_structure(grown_descriptions[:premium_description], 'STRUCTURED_PREMIUM_DESCRIPTION')
       @hack.create_hack_structured_info!(hack_title: free_structured['Hack Title'],
@@ -78,9 +78,9 @@ module Ai
       JSON.parse(result.gsub("```json\n", '').gsub('```', '').strip)
     end
 
-    def enriched_description(description, prompt_code, chunks)
+    def enriched_description(description, prompt_code, chunks, free = '')
       prompt = Prompt.find_by_code(prompt_code)
-      prompt_text = prompt.build_prompt_text({ chunks:, previous_analysis: description })
+      prompt_text = prompt.build_prompt_text({ chunks:, free_analysis: free, previous_analysis: description })
       system_prompt_text = prompt.system_prompt
       model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       model.run(prompt_text, system_prompt_text)
@@ -95,9 +95,9 @@ module Ai
       model.run(prompt_text, system_prompt_text)
     end
 
-    def grow_descriptions(free_description, premium_description, times, k = 6)
+    def grow_descriptions(free_description, premium_description, times, k = 8)
       rag = Ai::RagLlmHandler.new('gemini-1.5-flash-8b')
-      documents = rag.retrieve_similar_for_hack(@hack.id.to_s, "#{free_description}\\n#{premium_description}",
+      documents = rag.retrieve_similar_for_hack(@hack.id.to_s, "#{free_description}\n#{premium_description}",
                                                 k * times)
       documents.shuffle!
 
@@ -105,9 +105,10 @@ module Ai
       latest_premium = premium_description
 
       (0...times).each do |i|
-        chunks = documents.each do |document|
-          "Relevant context section:\n\"\"\"#{document['metadata']['content']}\n\"\"\""
-        end.join("\n")
+        section = documents[i * k, (i * k) + k]
+        chunks = section.each do |document|
+          "Relevant context section:\n\"\"\"\n#{document['metadata']['content']}\n\"\"\""
+        end.join("\n---")
 
         latest_free = enriched_description(latest_free, 'ENRICH_FREE_DESCRIPTION', chunks)
         latest_premium = enriched_description(latest_premium, 'ENRICH_PREMIUM_DESCRIPTION', chunks)
