@@ -37,7 +37,7 @@ class ProcessVideoJob < ApplicationJob
           broadcast_video_state(video)
           hack_processor = Ai::HackProcessor.new(video.hack)
           hack_processor.validate_financial_hack! unless video.hack&.hack_validation
-          hack_processor.extend_hack! unless video.hack&.hack_structured_info
+          hack_processor.extend_hack! unless video.hack&.hack_structured_info && hack_processor.hack_validation.status == true
           video.process_video_log.update(analysed: true)
         end
       end
@@ -57,9 +57,11 @@ class ProcessVideoJob < ApplicationJob
     remaining_videos_count = channel_process.count_videos - 1
     if remaining_videos_count <= 0
       channel_process.update(finished: true, count_videos: remaining_videos_count)
-      channel.update(state: 3, checked_at: DateTime.now)
+      channel.broadcast_state(:processed)
+      channel.update(checked_at: DateTime.now)
     else
       channel_process.update(finished: false, count_videos: remaining_videos_count)
+      channel.broadcast_state(:processing)
     end
   end
 

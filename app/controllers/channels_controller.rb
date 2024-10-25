@@ -54,9 +54,10 @@ class ChannelsController < ApplicationController
       end
       if count_videos.positive?
         channel.channel_processes.create(count_videos: count_videos)
-        channel.update(state: 2)
+        channel.broadcast_state(:processing)
       else
-        channel.update(state: 3, checked_at: DateTime.now)
+        channel.broadcast_state(:processed)
+        channel.update(checked_at: DateTime.now)
       end
       run.update(state: 1)
     end
