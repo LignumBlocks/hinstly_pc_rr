@@ -5,7 +5,7 @@ namespace :db do
 
     if user
       channel = Channel.create!(
-        name: 'Cubavision',
+        name: 'Tele(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
@@ -14,18 +14,20 @@ namespace :db do
 
       transcription_files = Dir[Rails.root.join('lib', 'tasks', 'transcriptions', '*.txt')]
 
-      if transcription_files.size < 32
+      if transcription_files.size < 2
         puts 'Error: Se requieren al menos 32 archivos .txt para completar las transcripciones.'
         return
       end
 
-      transcription_files.first(32).each_with_index do |file, index|
+      transcription_files.first(2).each_with_index do |file, index|
         video = Video.create!(
           channel: channel,
-          state: 1,
+          state: 2,
           processed_at: Time.at(rand(Time.new(2024, 10, 1).to_f..Time.new(2024, 10, 25).to_f)), # Fecha aleatoria entre 2024-10-01 y 2024-10-25
           external_created_at: Time.at(rand(Time.new(2023, 1, 1).to_f..Time.new(2023, 12, 31).to_f)) # Fecha aleatoria en 2023
         )
+
+        video.process_video_log.update_attribute(:transcribed, true)
 
         content = File.read(file)
         Transcription.create!(
