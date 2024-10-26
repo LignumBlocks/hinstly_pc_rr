@@ -6,19 +6,19 @@ Rails.application.routes.draw do
   get 'prompts/new'
   get 'prompts/edit'
   devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks',
+    omniauth_callbacks: 'users/omniauth_callbacks'
   }
   mount Sidekiq::Web => '/sidekiq'
   mount ActionCable.server => '/cable'
 
-  root "home#index"
+  root 'home#index'
 
   resource :user, only: %i[edit update destroy]
 
   resources :validation_sources
   resources :prompts
 
-  resources :channels, only: [:index, :create, :update, :show, :edit] do
+  resources :channels, only: %i[index create update show edit] do
     collection do
       post :apify_webhook
     end
@@ -26,16 +26,16 @@ Rails.application.routes.draw do
   resource :channel do
     member do
       post :process_videos
+      post :process_videos_test
     end
   end
 
   resources :hacks, only: [:index]
   resource :hack, only: [:show]
 
-
   resources :hack_structured_infos
 
-  get "/pages/:page" => "pages#show", as: :page
+  get '/pages/:page' => 'pages#show', as: :page
 
   match '/404', to: 'errors#not_found', via: :all
   match '/422', to: 'errors#internal_server_error', via: :all

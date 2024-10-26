@@ -87,7 +87,11 @@
 
         <td class="px-4 py-4 text-right">
           <div class="inline-flex gap-2">
-            <%= button_to "Process channel", process_videos_channel_path(id: channel.id), method: :post, class: "btn-sm btn-success"%>
+            <% if channel.name.end_with?("(test)") %>
+              <%= button_to "Test Channel", process_videos_test_channel_path(id: channel.id), method: :post, class: "btn-sm btn-danger" %>
+            <% else %>
+              <%= button_to "Process channel", process_videos_channel_path(id: channel.id), method: :post, class: "btn-sm btn-success" %>
+            <% end %>
             <%= link_to "View channel", channel_path(channel), class: "btn-sm btn-primary" %>
           </div>
         </td>

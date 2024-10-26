@@ -37,6 +37,30 @@ class ChannelsController < ApplicationController
     end
   end
 
+  def process_videos_test
+    redirect_to channels_path, notice: 'Started channel processing.'
+    load_videos_from_db(params[:id])
+  end
+
+  def load_videos_from_db(channel_id)
+    channel = Channel.find_by(id: channel_id)
+    count_videos = 0
+    videos = Video.where(channel_id: channel.id, state: :hacks)
+
+    videos.each do |video|
+      ProcessVideoJob.perform_later(video.id)
+      count_videos += 1
+    end
+
+    if count_videos.positive?
+      channel.channel_processes.create(count_videos: count_videos)
+      channel.broadcast_state(:processing)
+    else
+      channel.broadcast_state(:processed)
+      channel.update(checked_at: DateTime.now)
+    end
+  end
+
   def apify_webhook
     run = ApifyRun.where(state: 0, apify_run_id: params[:eventData][:actorRunId]).first
     render json: { message: 'ok' }, state: 200 and return unless run
@@ -61,7 +85,6 @@ class ChannelsController < ApplicationController
       channel.update(checked_at: DateTime.now)
     end
     run.update(state: 1)
-
   end
 
   private
@@ -80,7 +103,8 @@ class ChannelsController < ApplicationController
     video.source_download_link = dataset_item[:videoMeta][:downloadAddr]
     return nil unless video.save
 
-    video.cover.attach(io: URI.open(dataset_item[:videoMeta][:coverUrl]), filename: File.basename(dataset_item[:videoMeta][:coverUrl]))
+    video.cover.attach(io: URI.open(dataset_item[:videoMeta][:coverUrl]),
+                       filename: File.basename(dataset_item[:videoMeta][:coverUrl]))
     video.update_attribute(:state, :unprocessable) unless video.source_download_link
     video
   end
@@ -97,7 +121,7 @@ class ChannelsController < ApplicationController
   end
 
   def check_already_processing
-    return unless [:checking, :processing].include?(@channel.state.to_sym)
+    return unless %i[checking processing].include?(@channel.state.to_sym)
 
     redirect_to channels_path, alert: 'Channel already being processed.'
   end
