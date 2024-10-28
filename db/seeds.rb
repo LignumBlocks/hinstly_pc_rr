@@ -153,7 +153,9 @@ validation_sources.each { |source| ValidationSource.create(source) }
 
 # Crear clasificaciones
 Clasification.all.destroy_all
+HackCategoryRel.all.destroy_all
 Category.all.destroy_all
+
 financial_classification = Clasification.create(name: 'Financial')
 complexity_classification = Clasification.create(name: 'Complexity')
 

@@ -7,4 +7,5 @@ class Hack < ApplicationRecord
   scope :valid_hacks, -> { where(is_hack: true) }
   has_many :hack_category_rels
   has_many :categories, through: :hack_category_rels
+  has_many :clasifications, through: :categories
 end
