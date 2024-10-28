@@ -6,5 +6,5 @@ class Hack < ApplicationRecord
   has_one :hack_structured_info, dependent: :destroy
   scope :valid_hacks, -> { where(is_hack: true) }
   has_many :hack_category_rels
-  has_many :categorias, through: :hack_category_rels
+  has_many :categories, through: :hack_category_rels
 end
