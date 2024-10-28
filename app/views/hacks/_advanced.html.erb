@@ -30,7 +30,7 @@
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
           <p class="mb-2 text-gray-500 dark:text-gray-400">
           <ul class="list-disc list-outside text-gray-500 dark:text-gray-400 pl-5">
-            <% @hack.clasifications.each do |classification| %>
+            <% @hack.clasifications.uniq.each do |classification| %>
               <li class="mb-2">
                 <%= classification.name %>
               </li>
@@ -57,12 +57,12 @@
                 <div class="inline-flex">
                   <h5 class="font-semibold "><%= hack_category_rels.category.name %></h5>
                   <div class="flex items-center py-0.5 ">
-                    <svg data-popover-target="purchasable-info" data-popover-placement="bottom"
+                    <svg data-popover-target="category-info-<%= hack_category_rels.category.id %>" data-popover-placement="bottom"
                          class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer ms-1"
                          aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm0 16a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm1-5.034V12a1 1 0 0 1-2 0v-1.418a1 1 0 0 1 1.038-.999 1.436 1.436 0 0 0 1.488-1.441 1.501 1.501 0 1 0-3-.116.986.986 0 0 1-1.037.961 1 1 0 0 1-.96-1.037A3.5 3.5 0 1 1 11 11.466Z"/>
                     </svg>
-                    <div data-popover id="purchasable-info" role="tooltip"
+                    <div data-popover id="category-info-<%= hack_category_rels.category.id %>" role="tooltip"
                          class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
                       <div class="p-3 space-y-2">
                         <p class="text-sm text-gray-600 normal-case font-normal"><%= hack_category_rels.category.description %></p>
@@ -78,7 +78,6 @@
           </p>
         </div>
       </div>
-
 
       <h4 id="accordion-flush-heading-2">
         <button type="button" class="flex items-center justify-between w-full py-5 font-medium rtl:text-right text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400 gap-3" data-accordion-target="#accordion-flush-body-2" aria-expanded="false" aria-controls="accordion-flush-body-2">
