@@ -55,7 +55,7 @@ module Ai
         content_chunks.each do |chunk|
           metadata = { "hack_id": hack_id.to_s, "query": query_dict[:query],
                        "link": query_dict[:link], "content": chunk.text }
-          add_document(texts: [chunk.text], metadata: metadata)
+          add_document([chunk.text], metadata)
         end
       end
     end
