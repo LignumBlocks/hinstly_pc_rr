@@ -14,7 +14,6 @@ module Services
       @driver = Selenium::WebDriver.for :chrome, options: options
       @sources = sources
       @queries = queries
-      @results = []
     end
 
     def scrap!
@@ -26,9 +25,6 @@ module Services
           links = extract_links(query, @driver.page_source)
           links = links['links']
           links&.each do |link|
-            already_scraped_content = results_content_by_link(link)
-            add_result(query.id, source.id, link, already_scraped_content) and next if already_scraped_content
-
             @driver.navigate.to(link)
 
             wait = Selenium::WebDriver::Wait.new(timeout: 10)
@@ -36,9 +32,7 @@ module Services
             @driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
 
             cleaned_content = clean_html_content(@driver.page_source)
-
-            add_result(query.id, source.id, link, cleaned_content)
-
+            ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
           rescue StandardError => e
             puts "fails link #{e.message}"
             next
@@ -46,24 +40,10 @@ module Services
         end
       end
       @driver.quit
-      @results.each do |result|
-        ScrapedResult.create(query_id: result[:query_id],
-                             validation_source_id: result[:validation_source_id],
-                             link: result[:link],
-                             content: result[:content])
       end
     end
 
     private
-
-    def add_result(query_id, source_id, link, content)
-      @results << { query_id: query_id, validation_source_id: source_id, link: link, content: content }
-    end
-
-    def results_content_by_link(link)
-      result = @results.find { |r| r[:link] == link }
-      result ? result[:content] : nil
-    end
 
     def extract_links(query, html)
       prompt = Prompt.find_by_code('SCRAP_LINKS')
