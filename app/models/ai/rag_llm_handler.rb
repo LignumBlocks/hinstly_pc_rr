@@ -3,6 +3,7 @@ module Ai
   # This class allows the addition and retrieval of documents from a vector store for better context-aware conversations.
   class RagLlmHandler < BaseHandler
     attr_reader :model_name, :llm
+
     def initialize(model_name = 'gemini-1.5-flash-8b', temperature = 0.4, collection_name = 'validation')
       super(model_name, temperature)
       @collection_name = collection_name
@@ -16,10 +17,10 @@ module Ai
 
     def create_or_load_vs
       environment = if @model_name.include?('gpt')
-                ENV.fetch('PINECONE_ENVIRONMENT_OPENAI')
-              else
-                ENV.fetch('PINECONE_ENVIRONMENT_GEMINI')
-              end
+                      ENV.fetch('PINECONE_ENVIRONMENT_OPENAI')
+                    else
+                      ENV.fetch('PINECONE_ENVIRONMENT_GEMINI')
+                    end
       @vector_store = Langchain::Vectorsearch::Pinecone.new(
         environment:,
         api_key: ENV.fetch('PINECONE_API_KEY'),
@@ -30,16 +31,17 @@ module Ai
     end
 
     # Adds a new document to the Chroma vector store if it doesn't already exist.
-    def add_document(texts, namespace, ids)
-      @vector_store.add_texts(texts:, namespace:, ids:)
+    def add_document(texts, metadata)
+      @vector_store.add_texts(texts:, namespace: @collection_name, metadata:)
     end
 
     # Retrieves the top-k most similar documents to the given text for a specific hack ID.
-    def retrieve_similar_for_hack(namespace, text_to_compare, k = 4)
+    def retrieve_similar_for_hack(namespace, text_to_compare, filter_hash, k = 6)
       @vector_store.similarity_search(
         query: text_to_compare,
         k:,
-        namespace:
+        namespace:,
+        filter: filter_hash
       )
     end
 
@@ -48,27 +50,26 @@ module Ai
       queries_dict.each do |query_dict|
         next unless query_dict[:content]
 
-        documents = []
-        ids = []
         content_chunks = Langchain::Chunker::RecursiveText.new(query_dict[:content], chunk_size: 2000,
-                                                               chunk_overlap: 300).chunks
+                                                                                     chunk_overlap: 300).chunks
         content_chunks.each do |chunk|
-          documents << chunk.text
-          ids << query_dict[:link]
+          metadata = { "hack_id": hack_id.to_s, "query": query_dict[:query],
+                       "link": query_dict[:link], "content": chunk.text }
+          add_document([chunk.text], metadata)
         end
-        add_document(documents, hack_id.to_s, ids)
       end
     end
 
     def validation_retrieval_generation(hack_id, hack_title, hack_summary)
       model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       chunks = ''
-      metadata = []
+      links = []
       # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
-      similar_chunks = retrieve_similar_for_hack(hack_id.to_s, "#{hack_title}:\n#{hack_summary}")
+      similar_chunks = retrieve_similar_for_hack(@collection_name, "#{hack_title}:\n#{hack_summary}",
+                                                 { "hack_id": hack_id.to_s })
       similar_chunks.each do |result|
-        metadata << [result['id'], result['metadata']['content']]
-        chunks += "#{result['metadata']['content']}\n"
+        links << result['metadata']['link']
+        chunks += "Relevant context section:\n#{result['metadata']['content']}\n\n"
       end
       prompt = Prompt.find_by_code('HACK_VALIDATION')
       prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title:, hack_summary: })
@@ -78,7 +79,7 @@ module Ai
       {
         analysis: result['validation analysis'],
         status: result['validation status'] == 'Valid',
-        links: metadata.map { |item| item[0] }.uniq
+        links: links.uniq
       }
     end
 
