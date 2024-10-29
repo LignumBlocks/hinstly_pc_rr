@@ -34,10 +34,12 @@ module Services
             cleaned_content = clean_html_content(@driver.page_source)
             ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
           rescue StandardError => e
-            puts "fails link #{e.message}"
+            puts "fails link #{link} #{e.message}"
             next
           end
         end
+        @driver.quit
+        @driver = Selenium::WebDriver.for :chrome, options: options
       end
       @driver.quit
     end
