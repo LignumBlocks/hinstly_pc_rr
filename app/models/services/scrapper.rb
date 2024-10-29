@@ -40,6 +40,10 @@ module Services
         end
         @driver.quit
         @driver = Selenium::WebDriver.for :chrome, options: @options
+      rescue StandardError => e
+        @driver.quit
+        @driver = Selenium::WebDriver.for :chrome, options: @options
+        next
       end
       @driver.quit
     end
