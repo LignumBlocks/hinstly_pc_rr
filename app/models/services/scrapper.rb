@@ -40,7 +40,6 @@ module Services
         end
       end
       @driver.quit
-      end
     end
 
     private
@@ -63,4 +62,3 @@ module Services
     end
   end
 end
-
