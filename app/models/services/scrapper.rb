@@ -29,7 +29,7 @@ module Services
             links = extract_links(query, driver.page_source)
             process_links(driver, links, source, query)
           rescue StandardError => e
-            puts "Error en la fuente #{source.name} y link #{link}: #{e.message}"
+            puts "Error en la fuente #{source.name}: #{e.message}"
             next
           end
         end
@@ -45,7 +45,7 @@ module Services
     end
     def process_links(driver, links, source, query)
       links['links']&.each do |link|
-        puts "Error en la fuente #{source.name} y link #{link}"
+        puts "Navigating to: #{source.name} y link #{link}"
         navigate_to_url(driver, link)
         wait_for_content(driver)
         cleaned_content = clean_html_content(driver.page_source)
