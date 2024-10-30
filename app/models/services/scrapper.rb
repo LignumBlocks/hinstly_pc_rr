@@ -27,10 +27,11 @@ module Services
           @browser_pool.with do |driver|
             url = source.build_search_url(query)
             navigate_to_url(driver, url)
+            puts "Source: #{source.name}"
             links = extract_links(query, driver.page_source)
             links = links['links']
             links&.each do |link|
-
+              puts "Link: #{link}"
               navigate_to_url(driver, link)
               wait_for_content(driver)
               cleaned_content = clean_html_content(driver.page_source)
