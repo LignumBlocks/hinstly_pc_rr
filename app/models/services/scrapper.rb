@@ -56,7 +56,7 @@ module Services
     end
 
     def wait_for_content(driver)
-      wait = Selenium::WebDriver::Wait.new(timeout: 3)
+      wait = Selenium::WebDriver::Wait.new(timeout: 5)
       wait.until { driver.find_element(:tag_name, 'body').displayed? }
       driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
     rescue Selenium::WebDriver::Error::TimeoutError
