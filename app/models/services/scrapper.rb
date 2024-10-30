@@ -14,33 +14,23 @@ module Services
       @options.add_argument('--disable-extensions')
       @options.add_argument('--remote-debugging-port=9222')
       @options.add_argument('--disable-blink-features=AutomationControlled')
+      @browser_pool = ConnectionPool.new(size: 4, timeout: 5) do
+        Selenium::WebDriver.for :chrome, options: @options
+      end
       @sources = sources
       @queries = queries
     end
     def scrap!
       @sources.each do |source|
-        @browser_pool = ConnectionPool.new(size: 1, timeout: 5) do
-          Selenium::WebDriver.for :chrome, options: @options
-        end
-        @browser_pool.with do |driver|
-          @queries.each do |query|
+        @queries.each do |query|
+          @browser_pool.with do |driver|
             url = source.build_search_url(query)
             navigate_to_url(driver, url)
             links = extract_links(query, driver.page_source)
-            links = links['links']
-            links&.each do |link|
-              puts "Processing: #{source.name}: #{link}"
-              navigate_to_url(driver, link)
-              wait_for_content(driver)
-              cleaned_content = clean_html_content(driver.page_source)
-              ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
-            rescue StandardError => e
-              puts "Error en el enlace #{link}: #{e.message}"
-              
-            end
+            process_links(driver, links, source, query)
           rescue StandardError => e
-            puts "Error en la fuente #{source.id}: #{e.message}"
-            
+            puts "Error en la fuente #{source.name} y link #{link}: #{e.message}"
+            next
           end
         end
       end
@@ -52,7 +42,19 @@ module Services
       end
     rescue Timeout::Error
       puts "Timeout alcanzado al intentar navegar a #{url}"
-      reset_driver(driver)
+    end
+    def process_links(driver, links, source, query)
+      links['links']&.each do |link|
+        puts "Error en la fuente #{source.name} y link #{link}"
+        navigate_to_url(driver, link)
+        wait_for_content(driver)
+        cleaned_content = clean_html_content(driver.page_source)
+        ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
+      rescue StandardError => e
+        puts "Error en el enlace #{link}: #{e.message}"
+        next
+
+      end
     end
     def wait_for_content(driver)
       wait = Selenium::WebDriver::Wait.new(timeout: 3)
@@ -60,10 +62,6 @@ module Services
       driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
     rescue Selenium::WebDriver::Error::TimeoutError
       puts "Tiempo de espera agotado para cargar el contenido del body"
-    end
-    def reset_driver(driver)
-      driver.quit
-      driver = Selenium::WebDriver.for :chrome, options: @options
     end
     def extract_links(query, html)
       prompt = Prompt.find_by_code('SCRAP_LINKS')
