@@ -5,7 +5,7 @@ namespace :db do
 
     if user
       channel = Channel.create!(
-        name: 'LocalFirefox(test)',
+        name: 'Channel-1(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
@@ -14,7 +14,7 @@ namespace :db do
 
       transcription_files = Dir[Rails.root.join('lib', 'tasks', 'transcriptions', '*.txt')]
 
-      if transcription_files.size < 2
+      if transcription_files.size < 32
         puts 'Error: Se requieren al menos 32 archivos .txt para completar las transcripciones.'
         return
       end
