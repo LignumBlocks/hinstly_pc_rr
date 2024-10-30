@@ -5,7 +5,7 @@ namespace :db do
 
     if user
       channel = Channel.create!(
-        name: 'Tele(test)',
+        name: 'LocalFirefox(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
@@ -19,7 +19,7 @@ namespace :db do
         return
       end
 
-      transcription_files.first(2).each_with_index do |file, index|
+      transcription_files.first(1).each_with_index do |file, index|
         video = Video.create!(
           channel: channel,
           state: 2,
