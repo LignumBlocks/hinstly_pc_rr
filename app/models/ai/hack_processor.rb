@@ -99,8 +99,7 @@ module Ai
 
     def grow_descriptions(free_description, premium_description, times, k = 8)
       rag = Ai::RagLlmHandler.new('gemini-1.5-flash-8b')
-      documents = rag.retrieve_similar_for_hack(@hack.id.to_s, "#{free_description}\n#{premium_description}",
-                                                k * times)
+      documents = rag.retrieve_similar_for_hack(rag.collection_name, "#{free_description}\n#{premium_description}", { "hack_id": @hack.id.to_s }, k * times)
       documents.shuffle!
 
       latest_free = free_description
