@@ -80,7 +80,8 @@
         <div class="py-5 border-b border-gray-200 dark:border-gray-700">
           <div class="mb-2 text-gray-500 dark:text-gray-400">
             <ul class="pl-4">
-              <% validation_links = hack.hack_validation&.links rescue "[]" %>
+              <% validation_links = hack.hack_validation&.links%>
+              <% validation_links ||= "[]" %>
               <% validation_links = JSON.parse(validation_links) %>
               <% validation_links.each do |link| %>
                 <li>
