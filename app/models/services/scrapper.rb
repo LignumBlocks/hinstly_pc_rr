@@ -14,34 +14,34 @@ module Services
       @options.add_argument('--disable-extensions')
       @options.add_argument('--remote-debugging-port=9222')
       @options.add_argument('--disable-blink-features=AutomationControlled')
-      @browser_pool = ConnectionPool.new(size: 4, timeout: 5) do
-        Selenium::WebDriver.for :chrome, options: @options
-      end
       @sources = sources
       @queries = queries
     end
-
     def scrap!
       @sources.each do |source|
-        @queries.each do |query|
-          @browser_pool.with do |driver|
+        @browser_pool = ConnectionPool.new(size: 1, timeout: 5) do
+          Selenium::WebDriver.for :chrome, options: @options
+        end
+        @browser_pool.with do |driver|
+          @queries.each do |query|
             url = source.build_search_url(query)
             navigate_to_url(driver, url)
-            puts "Source: #{source.name}"
             links = extract_links(query, driver.page_source)
             links = links['links']
             links&.each do |link|
-              puts "Link: #{link}"
+              puts "Processing: #{source.name}: #{link}"
               navigate_to_url(driver, link)
               wait_for_content(driver)
               cleaned_content = clean_html_content(driver.page_source)
               ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
             rescue StandardError => e
               puts "Error en el enlace #{link}: #{e.message}"
+              
             end
+          rescue StandardError => e
+            puts "Error en la fuente #{source.id}: #{e.message}"
+            
           end
-        rescue StandardError => e
-          puts "Error en la fuente #{source.name}: #{e.message}"
         end
       end
     end
@@ -54,20 +54,17 @@ module Services
       puts "Timeout alcanzado al intentar navegar a #{url}"
       reset_driver(driver)
     end
-
     def wait_for_content(driver)
-      wait = Selenium::WebDriver::Wait.new(timeout: 5)
+      wait = Selenium::WebDriver::Wait.new(timeout: 3)
       wait.until { driver.find_element(:tag_name, 'body').displayed? }
       driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
     rescue Selenium::WebDriver::Error::TimeoutError
-      puts 'Tiempo de espera agotado para cargar el contenido del body'
+      puts "Tiempo de espera agotado para cargar el contenido del body"
     end
-
     def reset_driver(driver)
       driver.quit
       driver = Selenium::WebDriver.for :chrome, options: @options
     end
-
     def extract_links(query, html)
       prompt = Prompt.find_by_code('SCRAP_LINKS')
       prompt_text = prompt.build_prompt_text({ query: query.content, content: html })
@@ -77,7 +74,6 @@ module Services
       result = result.gsub('json', '').gsub('```', '').strip
       JSON.parse(result)
     end
-
     def clean_html_content(page_source)
       doc = Nokogiri::HTML(page_source)
       doc.css('script, style, footer, nav, comment, .ads, .sidebar, #header, #footer').remove
