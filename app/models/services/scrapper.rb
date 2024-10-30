@@ -1,17 +1,22 @@
 require 'capybara'
 require 'capybara/dsl'
-
+require 'timeout'
+require 'connection_pool'
 module Services
   class Scrapper
     include Capybara::DSL
-
     def initialize(sources, queries)
       @options = Selenium::WebDriver::Chrome::Options.new
       @options.add_argument('--headless')
       @options.add_argument('--disable-gpu')
       @options.add_argument('--no-sandbox')
-
-      @driver = Selenium::WebDriver.for :chrome, options: @options
+      @options.add_argument('--disable-dev-shm-usage')
+      @options.add_argument('--disable-extensions')
+      @options.add_argument('--remote-debugging-port=9222')
+      @options.add_argument('--disable-blink-features=AutomationControlled')
+      @browser_pool = ConnectionPool.new(size: 4, timeout: 5) do
+        Selenium::WebDriver.for :chrome, options: @options
+      end
       @sources = sources
       @queries = queries
     end
@@ -19,36 +24,48 @@ module Services
     def scrap!
       @sources.each do |source|
         @queries.each do |query|
-          url = source.build_search_url(query)
-          @driver.navigate.to(url)
+          @browser_pool.with do |driver|
+            url = source.build_search_url(query)
+            navigate_to_url(driver, url)
+            links = extract_links(query, driver.page_source)
+            links = links['links']
+            links&.each do |link|
 
-          links = extract_links(query, @driver.page_source)
-          links = links['links']
-          links&.each do |link|
-            @driver.navigate.to(link)
-
-            wait = Selenium::WebDriver::Wait.new(timeout: 10)
-            wait.until { @driver.find_element(:tag_name, 'body').displayed? }
-            @driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-
-            cleaned_content = clean_html_content(@driver.page_source)
-            ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
-          rescue StandardError => e
-            puts "fails link #{link} #{e.message}"
-            next
+              navigate_to_url(driver, link)
+              wait_for_content(driver)
+              cleaned_content = clean_html_content(driver.page_source)
+              ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link, content: cleaned_content)
+            rescue StandardError => e
+              puts "Error en el enlace #{link}: #{e.message}"
+            end
           end
+        rescue StandardError => e
+          puts "Error en la fuente #{source.name}: #{e.message}"
         end
-        @driver.quit
-        @driver = Selenium::WebDriver.for :chrome, options: @options
-      rescue StandardError => e
-        @driver.quit
-        @driver = Selenium::WebDriver.for :chrome, options: @options
-        next
       end
-      @driver.quit
+    end
+    private
+    def navigate_to_url(driver, url)
+      Timeout.timeout(5) do
+        driver.navigate.to(url)
+      end
+    rescue Timeout::Error
+      puts "Timeout alcanzado al intentar navegar a #{url}"
+      reset_driver(driver)
     end
 
-    private
+    def wait_for_content(driver)
+      wait = Selenium::WebDriver::Wait.new(timeout: 3)
+      wait.until { driver.find_element(:tag_name, 'body').displayed? }
+      driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+    rescue Selenium::WebDriver::Error::TimeoutError
+      puts 'Tiempo de espera agotado para cargar el contenido del body'
+    end
+
+    def reset_driver(driver)
+      driver.quit
+      driver = Selenium::WebDriver.for :chrome, options: @options
+    end
 
     def extract_links(query, html)
       prompt = Prompt.find_by_code('SCRAP_LINKS')
@@ -62,8 +79,8 @@ module Services
 
     def clean_html_content(page_source)
       doc = Nokogiri::HTML(page_source)
-      doc.css('script, style, footer, nav, comment, .ads, .sidebar').remove
-      clean_content = Loofah.fragment(doc.to_html).scrub!(:prune).to_text
+      doc.css('script, style, footer, nav, comment, .ads, .sidebar, #header, #footer').remove
+      clean_content = doc.css('body').text.strip
       clean_content.gsub('&#13;', '').gsub(/\n{2,}/, "\n\n").strip
     end
   end
