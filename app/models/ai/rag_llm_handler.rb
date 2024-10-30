@@ -2,7 +2,7 @@ module Ai
   # A class for managing a Retrieval-Augmented Generation (RAG) model using LLMs and a Chroma vector store.
   # This class allows the addition and retrieval of documents from a vector store for better context-aware conversations.
   class RagLlmHandler < BaseHandler
-    attr_reader :model_name, :llm
+    attr_reader :model_name, :llm,:collection_name
 
     def initialize(model_name = 'gemini-1.5-flash-8b', temperature = 0.4, collection_name = 'validation')
       super(model_name, temperature)
