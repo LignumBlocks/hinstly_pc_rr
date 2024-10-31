@@ -21,7 +21,7 @@ module Services
             ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link)
           end
         rescue StandardError => e
-          puts "Error al preparar los links #{url}: #{e.message}"
+          puts e.message
           next
         end
       end
@@ -40,7 +40,7 @@ module Services
         cleaned_content = clean_html_content(page_html.to_html)
         scraped_result.update(content: cleaned_content, processed: true)
       rescue StandardError => e
-        puts "Error al procesar los links #{url}: #{e.message}"
+        puts e.message
         next
       end
     end
