@@ -5,40 +5,53 @@ module Services
       @queries = queries
     end
 
-    def scrap!
+    # crea los links, siempre va a entrar pero si ya creo un link no lo vuelve a crear
+    def prepare_links
       @sources.each do |source|
         @queries.each do |query|
           url = source.build_search_url(query)
           response = HTTParty.get(url)
           next unless response.code == 200
 
-          html = Nokogiri::HTML(response.body)
+          # html = Nokogiri::HTML(response.body)
+          html = response.body # sin limpiar html
           links = extract_links(query, html)
           links = links['links']
-
           links&.each do |link|
             if ScrapedResult.exists?(link: link, query_id: query.id, validation_source_id: source.id)
               puts "El link #{link} ya existe en la base de datos, saltando..."
               next
             end
+            ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link)
+          end
+        rescue StandardError => e
+          puts "Error al preparar los links #{url}: #{e.message}"
+          next
+        end
+      end
+    end
 
-            page_response = HTTParty.get(link)
+    # Obtiene todos los registros de soruces+query, sino tiene contenido entonces visita ese link
+    def process_links
+      @sources.each do |source|
+        @queries.each do |query|
+          sources_to_visit = ScrapedResult.find_by(query_id: query.id, validation_source_id: source.id)
+
+          sources_to_visit&.each do |visit|
+            next unless visit.content?
+
+            page_response = HTTParty.get(visit.link)
 
             if page_response.code == 200
               page_html = Nokogiri::HTML(page_response.body)
               cleaned_content = clean_html_content(page_html.to_html)
-              ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link,
-                                   content: cleaned_content)
+              visit.update(content: cleaned_content)
             else
               puts "Error al acceder al link #{link}: Código HTTP #{page_response.code}"
+              next
             end
-          rescue StandardError => e
-            puts "Error al procesar el link #{link}: #{e.message}"
-            next
           end
         end
-      rescue StandardError => e
-        next
       end
     end
 
