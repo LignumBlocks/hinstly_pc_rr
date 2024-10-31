@@ -5,39 +5,42 @@ module Services
       @queries = queries
     end
 
-    def scrap!
+    def prepare_links!
       @sources.each do |source|
         @queries.each do |query|
           url = source.build_search_url(query)
           response = HTTParty.get(url)
           next unless response.code == 200
 
-          html = Nokogiri::HTML(response.body)
+          html = response.body
           links = extract_links(query, html)
           links = links['links']
-
           links&.each do |link|
-            if ScrapedResult.exists?(link: link, query_id: query.id, validation_source_id: source.id)
-              puts "El link #{link} ya existe en la base de datos, saltando..."
-              next
-            end
+            next if ScrapedResult.exists?(link: link, query_id: query.id, validation_source_id: source.id)
 
-            page_response = HTTParty.get(link)
-
-            if page_response.code == 200
-              page_html = Nokogiri::HTML(page_response.body)
-              cleaned_content = clean_html_content(page_html.to_html)
-              ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link,
-                                   content: cleaned_content)
-            else
-              puts "Error al acceder al link #{link}: Código HTTP #{page_response.code}"
-            end
-          rescue StandardError => e
-            puts "Error al procesar el link #{link}: #{e.message}"
-            next
+            ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link)
           end
+        rescue StandardError => e
+          puts "Error al preparar los links #{url}: #{e.message}"
+          next
         end
+      end
+    end
+
+    def process_links!
+      scraped_results = ScrapedResult.where(query_id: @queries.ids, validation_source_id: @sources.ids).unprocessed
+      scraped_results.each do |scraped_result|
+        next unless scraped_result.content.blank?
+
+        page_response = HTTParty.get(scraped_result.link)
+
+        next unless page_response.code == 200
+
+        page_html = Nokogiri::HTML(page_response.body)
+        cleaned_content = clean_html_content(page_html.to_html)
+        scraped_result.update(content: cleaned_content, processed: true)
       rescue StandardError => e
+        puts "Error al procesar los links #{url}: #{e.message}"
         next
       end
     end

@@ -25,10 +25,15 @@ class ProcessVideoJob < ApplicationJob
         find_queries(video) unless video.process_video_log.has_queries?
         puts 'has queries'
 
+        scrapper = Services::Scrapper.new(ValidationSource.all, video.queries)
+
         unless video.process_video_log.has_scraped_pages?
           video.update_attribute(:state, :scraping)
           broadcast_video_state(video)
-          Services::Scrapper.new(ValidationSource.all, video.queries).scrap!
+          scrapper.prepare_links! unless video.process_video_log.has_links_to_scrap?
+          video.process_video_log.update(has_links_to_scrap: true)
+
+          scrapper.process_links!
           video.process_video_log.update(has_scraped_pages: true)
         end
 
@@ -99,7 +104,7 @@ class ProcessVideoJob < ApplicationJob
     Ai::HackProcessor.new(video.hack).find_queries!
     video.process_video_log.update(has_queries: true)
   end
-  
+
   def broadcast_video_state(video)
     ActionCable.server.broadcast 'video_state_channel', { id: video.id, state: video.state }
   end
