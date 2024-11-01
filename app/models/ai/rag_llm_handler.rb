@@ -69,24 +69,23 @@ module Ai
       model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       chunks = ''
       links = []
-      # TODO: design a clustering method to select more sources and then make iterations in the validation process or a maxing of the results
       similar_chunks = retrieve_similar_for_hack(@collection_name, "#{hack.title}:\n#{hack.summary}",
                                                  { "hack_id": hack.id.to_s })
-      similar_chunks.each do |result|
-        id_parts = result['id'].split('-')
+      similar_chunks.each do |chunk|
+        id_parts = chunk['id'].split('-')
         scraped_result_id = id_parts[0].to_i
         chunk_index = id_parts[1].to_i
-        sr = ScrapedResult.find(scraped_result_id)
-        next unless sr
+        scraped_result = ScrapedResult.find(scraped_result_id)
+        next unless scraped_result
 
-        content_chunks = Langchain::Chunker::RecursiveText.new(sr.content, chunk_size: 2000,
-                                                                           chunk_overlap: 300).chunks
+        content_chunks = Langchain::Chunker::RecursiveText.new(scraped_result.content, chunk_size: 2000,
+                                                                                       chunk_overlap: 300).chunks
         next unless chunk_index >= 0 && chunk_index < content_chunks.length
 
         chunks += "Relevant context section:\n... #{content_chunks[chunk_index].text} ...\n\n"
-        links << sr.link
+        links << scraped_result.link
       end
-      puts "Warning: No relevant sources found for validation of the hack #{hack.id}" if chunks == ''
+
       prompt = Prompt.find_by_code('HACK_VALIDATION')
       prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title: hack.title,
                                                hack_summary: hack.summary })
@@ -98,29 +97,6 @@ module Ai
         status: result['validation status'] == 'Valid',
         links: links.uniq
       }
-    end
-
-    # deprecated
-    def get_clean_links(metadata)
-      links = metadata.map { |item| item[0] }
-      unique_links = links.uniq
-      unique_links.join(' ')
-    end
-
-    # deprecated
-    def validation_sources_hashes_list(hack)
-      hashes = []
-      hack.queries.each do |query|
-        query.scraped_results.each do |scraped_result|
-          hashes << {
-            query: query.content,
-            source_id: scraped_result.validation_source_id,
-            link: scraped_result.link,
-            content: scraped_result.content
-          }
-        end
-      end
-      hashes
     end
   end
 end
