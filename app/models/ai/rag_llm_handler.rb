@@ -64,7 +64,7 @@ module Ai
             documents << chunk.text
             ids << "#{scraped_result.id}-#{index}"
           end
-          add_document(documents.first(50), ids, metadata)
+          add_document(documents, ids, metadata)
         end
       end
     end
