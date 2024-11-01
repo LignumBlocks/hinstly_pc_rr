@@ -99,7 +99,8 @@ module Ai
 
     def grow_descriptions(free_description, premium_description, times, k = 8)
       rag = Ai::RagLlmHandler.new('gemini-1.5-flash-8b')
-      documents = rag.retrieve_similar_for_hack(rag.collection_name, "#{free_description}\n#{premium_description}", { "hack_id": @hack.id.to_s }, k * times)
+      documents = rag.retrieve_similar_for_hack(rag.collection_name, "#{free_description}\n#{premium_description}",
+                                                { "hack_id": @hack.id.to_s }, k * times)
       documents.shuffle!
 
       latest_free = free_description
@@ -107,9 +108,20 @@ module Ai
 
       sections = documents.each_slice(k)
       sections.each do |section|
-        chunks = section.each do |document|
-          "Relevant context section:\n\"\"\"\n#{document['metadata']['content']}\n\"\"\""
-        end.join("\n---")
+        chunks = ''
+        section.each do |document|
+          id_parts = document['id'].split('-')
+          scraped_result_id = id_parts[0].to_i
+          chunk_index = id_parts[1].to_i
+          sr = ScrapedResult.find(scraped_result_id)
+          next unless sr
+
+          content_chunks = Langchain::Chunker::RecursiveText.new(sr.content, chunk_size: 2000,
+                                                                             chunk_overlap: 300).chunks
+          next unless chunk_index >= 0 && chunk_index < content_chunks.length
+
+          chunks += "Relevant context section:\n... #{content_chunks[chunk_index].text} ...\n---\n"
+        end
 
         latest_free = enriched_description(latest_free, 'ENRICH_FREE_DESCRIPTION', chunks)
         latest_premium = enriched_description(latest_premium, 'ENRICH_PREMIUM_DESCRIPTION', chunks)
