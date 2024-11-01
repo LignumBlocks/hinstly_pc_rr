@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_31_112941) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_01_031401) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -64,14 +65,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_31_112941) do
     t.integer "channel_id"
     t.integer "count_videos"
     t.boolean "finished", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "channel_video_processes", force: :cascade do |t|
-    t.integer "channel_id"
-    t.integer "count_videos_processing"
-    t.boolean "finished"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -137,6 +130,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_31_112941) do
     t.boolean "is_hack"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "free_description"
+    t.text "premium_description"
   end
 
   create_table "process_video_logs", force: :cascade do |t|
