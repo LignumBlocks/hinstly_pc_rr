@@ -33,6 +33,10 @@ module Ai
     # Adds a new document to the Chroma vector store if it doesn't already exist.
     def add_document(texts, ids, metadata)
       @vector_store.add_texts(texts:, ids:, namespace: @collection_name, metadata:)
+    rescue StandardError => e
+      Rails.logger.error '========================================================'
+      Rails.logger.error e.message
+      Rails.logger.error '========================================================'
     end
 
     # Retrieves the top-k most similar documents to the given text for a specific hack ID.
@@ -60,7 +64,7 @@ module Ai
             documents << chunk.text
             ids << "#{scraped_result.id}-#{index}"
           end
-          add_document(documents, ids, metadata)
+          add_document(documents.first(50), ids, metadata)
         end
       end
     end
