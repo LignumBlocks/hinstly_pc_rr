@@ -31,8 +31,8 @@ module Ai
     end
 
     # Adds a new document to the Chroma vector store if it doesn't already exist.
-    def add_document(texts, metadata)
-      @vector_store.add_texts(texts:, namespace: @collection_name, metadata:)
+    def add_document(texts, ids, metadata)
+      @vector_store.add_texts(texts:, ids:, namespace: @collection_name, metadata:)
     end
 
     # Retrieves the top-k most similar documents to the given text for a specific hack ID.
@@ -53,11 +53,14 @@ module Ai
 
           content_chunks = Langchain::Chunker::RecursiveText.new(scraped_result.content, chunk_size: 2000,
                                                                                          chunk_overlap: 300).chunks
-          content_chunks.each do |chunk|
-            metadata = { "hack_id": hack.id.to_s, "query": query.content, "link": scraped_result.link,
-                         "content": chunk.text }
-            add_document([chunk.text], metadata)
+          documents = []
+          ids = []
+          metadata = { "hack_id": hack.id.to_s }
+          content_chunks.each_with_index do |chunk, index|
+            documents << chunk.text
+            ids << "#{scraped_result.id}-#{index}"
           end
+          add_document(documents, ids, metadata)
         end
       end
     end
@@ -70,9 +73,20 @@ module Ai
       similar_chunks = retrieve_similar_for_hack(@collection_name, "#{hack.title}:\n#{hack.summary}",
                                                  { "hack_id": hack.id.to_s })
       similar_chunks.each do |result|
-        links << result['metadata']['link']
-        chunks += "Relevant context section:\n#{result['metadata']['content']}\n\n"
+        id_parts = result['id'].split('-')
+        scraped_result_id = id_parts[0].to_i
+        chunk_index = id_parts[1].to_i
+        sr = ScrapedResult.find(scraped_result_id)
+        next unless sr
+
+        content_chunks = Langchain::Chunker::RecursiveText.new(sr.content, chunk_size: 2000,
+                                                                           chunk_overlap: 300).chunks
+        next unless chunk_index >= 0 && chunk_index < content_chunks.length
+
+        chunks += "Relevant context section:\n... #{content_chunks[chunk_index].text} ...\n\n"
+        links << sr.link
       end
+      puts "Warning: No relevant sources found for validation of the hack #{hack.id}" if chunks == ''
       prompt = Prompt.find_by_code('HACK_VALIDATION')
       prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title: hack.title,
                                                hack_summary: hack.summary })
