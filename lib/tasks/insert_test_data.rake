@@ -5,7 +5,7 @@ namespace :db do
     max = 32
     if user
       channel = Channel.create!(
-        name: 'Toma-103(test)',
+        name: '2-queries-hack(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
