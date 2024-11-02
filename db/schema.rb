@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_11_01_161737) do
+ActiveRecord::Schema[7.0].define(version: 2024_11_01_194356) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "fuzzystrmatch"
   enable_extension "plpgsql"
+  enable_extension "vector"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -65,6 +65,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_01_161737) do
     t.integer "channel_id"
     t.integer "count_videos"
     t.boolean "finished", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "channel_video_processes", force: :cascade do |t|
+    t.integer "channel_id"
+    t.integer "count_videos_processing"
+    t.boolean "finished"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -130,9 +138,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_01_161737) do
     t.boolean "is_hack"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "free_description"
-    t.text "premium_description"
   end
+
+# Could not dump table "hintsly-rag-gemini" because of following StandardError
+#   Unknown type 'vector(1536)' for column 'vectors'
 
   create_table "process_video_logs", force: :cascade do |t|
     t.integer "video_id"
@@ -212,6 +221,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_11_01_161737) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+# Could not dump table "validation_vectors" because of following StandardError
+#   Unknown type 'vector(768)' for column 'vectors'
 
   create_table "videos", force: :cascade do |t|
     t.integer "channel_id"

@@ -312,6 +312,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.8)
+    pgvector (0.3.2)
     pinecone (1.1.0)
       dry-struct (~> 1.6.0)
       dry-validation (~> 1.10.0)
@@ -412,6 +413,8 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sequel (5.86.0)
+      bigdecimal
     sidekiq (7.3.2)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
@@ -505,7 +508,8 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 1.0)
   ostruct
   pagy (~> 5.10)
-  pg (~> 1.4)
+  pg
+  pgvector
   pinecone
   pry-byebug
   puma (~> 6.3)
@@ -516,6 +520,7 @@ DEPENDENCIES
   rubocop
   ruby-openai (~> 6.3.0)
   selenium-webdriver
+  sequel
   sidekiq
   sidekiq-status
   sprockets-rails (~> 3.4)

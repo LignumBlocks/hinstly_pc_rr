@@ -21,31 +21,35 @@ module Ai
                     else
                       ENV.fetch('PINECONE_ENVIRONMENT_GEMINI')
                     end
-      @vector_store = Langchain::Vectorsearch::Pinecone.new(
-        environment:,
-        api_key: ENV.fetch('PINECONE_API_KEY'),
-        index_name: 'hintsly-rag-gemini',
+      @vector_store = Langchain::Vectorsearch::Pgvector.new(
+        url: ENV['DATABASE_URL'],
+        namespace: @collection_name,
+        index_name: 'validation_vectors',
         llm: @llm
       )
-      @vector_store.create_default_schema
+      # @vector_store.create_default_schema not working for gemini but works with openai
     end
 
     # Adds a new document to the Chroma vector store if it doesn't already exist.
-    def add_document(texts, ids, metadata)
-      @vector_store.add_texts(texts:, ids:, namespace: @collection_name, metadata:)
-    rescue StandardError => e
-      Rails.logger.error '========================================================'
-      Rails.logger.error e.message
-      Rails.logger.error '========================================================'
+    def add_document(texts, scraped_result)
+      attempts = 0
+      max_attempts = 3
+
+      begin
+        attempts += 1
+        ids = @vector_store.add_texts(texts: texts)
+        scraped_result.validation_vector_ids += ids
+        scraped_result.save
+      rescue StandardError => e
+        retry if attempts < max_attempts
+      end
     end
 
     # Retrieves the top-k most similar documents to the given text for a specific hack ID.
-    def retrieve_similar_for_hack(namespace, text_to_compare, filter_hash, k = 6)
+    def retrieve_similar_for_hack(text_to_compare, k = 6)
       @vector_store.similarity_search(
         query: text_to_compare,
-        k:,
-        namespace:,
-        filter: filter_hash
+        k:
       )
     end
 
@@ -55,16 +59,8 @@ module Ai
       scrap_results.each do |scraped_result|
         next unless scraped_result.content
 
-        content_chunks = Langchain::Chunker::RecursiveText.new(scraped_result.content, chunk_size: 2000,
-                                                                                       chunk_overlap: 300).chunks
-        documents = []
-        ids = []
-        metadata = { "hack_id": hack.id.to_s }
-        content_chunks.each_with_index do |chunk, index|
-          documents << chunk.text
-          ids << "#{scraped_result.id}-#{index}"
-        end
-        add_document(documents, ids, metadata)
+        content_chunks = Langchain::Chunker::RecursiveText.new(scraped_result.content, chunk_size: 2000, chunk_overlap: 300).chunks
+        content_chunks.each { |chunk| add_document([chunk.text], scraped_result) }
         scraped_result.update(sent_to_pinecone: true)
       end
     end
@@ -73,34 +69,24 @@ module Ai
       model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       chunks = ''
       links = []
-      similar_chunks = retrieve_similar_for_hack(@collection_name, "#{hack.title}:\n#{hack.summary}",
-                                                 { "hack_id": hack.id.to_s })
-      similar_chunks.each do |chunk|
-        id_parts = chunk['id'].split('-')
-        scraped_result_id = id_parts[0].to_i
-        chunk_index = id_parts[1].to_i
-        scraped_result = ScrapedResult.find(scraped_result_id)
-        next unless scraped_result
+      similar_chunks = retrieve_similar_for_hack("#{hack.title}:\n#{hack.summary}")
 
-        content_chunks = Langchain::Chunker::RecursiveText.new(scraped_result.content, chunk_size: 2000,
-                                                                                       chunk_overlap: 300).chunks
-        next unless chunk_index >= 0 && chunk_index < content_chunks.length
-
-        chunks += "Relevant context section:\n... #{content_chunks[chunk_index].text} ...\n\n"
-        links << scraped_result.link
-      end
-
-      prompt = Prompt.find_by_code('HACK_VALIDATION')
-      prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title: hack.title,
-                                               hack_summary: hack.summary })
-      system_prompt_text = prompt.system_prompt
-      result = model.run(prompt_text, system_prompt_text)
-      result = JSON.parse(result.gsub("```json\n", '').gsub('```', '').strip)
-      {
-        analysis: result['validation analysis'],
-        status: result['validation status'] == 'Valid',
-        links: links.uniq
-      }
+      # similar_chunks.each do |chunk|
+      #   chunks += "Relevant context section:\n... #{content_chunks[chunk_index].text} ...\n\n"
+      #   links << scraped_result.link
+      # end
+      #
+      # prompt = Prompt.find_by_code('HACK_VALIDATION')
+      # prompt_text = prompt.build_prompt_text({ chunks: chunks.strip, hack_title: hack.title,
+      #                                          hack_summary: hack.summary })
+      # system_prompt_text = prompt.system_prompt
+      # result = model.run(prompt_text, system_prompt_text)
+      # result = JSON.parse(result.gsub("```json\n", '').gsub('```', '').strip)
+      # {
+      #   analysis: result['validation analysis'],
+      #   status: result['validation status'] == 'Valid',
+      #   links: links.uniq
+      # }
     end
   end
 end

@@ -30,7 +30,8 @@ module Ai
         api_key: GOOGLE_API_KEY,
         default_options: { temperature: @temperature,
                            chat_completion_model_name: @model_name,
-                           embeddings_model_name: 'text-embedding-004' }
+                           embeddings_model_name: 'text-embedding-004'
+        }
       )
     end
   end
