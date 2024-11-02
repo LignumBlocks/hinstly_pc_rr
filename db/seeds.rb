@@ -15,12 +15,8 @@ The output must be a json with the following structure:\n```json
 {\n    \"possible hack title\": \"<A consise title of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",\n    \"brief summary\": \"<A short description of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",\n    \"justification\": \"<Explanation about whether the content includes a valid financial hack>\",\n    \"is_a_hack\": \"<Boolean true or false, about whether the content includes a valid financial hack>\"\n}\n```\n
 Scan the content for financial advice or strategies. Evaluate if any hack can be extracted from it. If the content is not about financial advices \"is_a_hack\" must be false", system_prompt: 'You are an AI financial analyst tasked with classifying content related to financial strategies.' },
 
-  { name: 'Generate queries for hack', code: 'GENERATE_QUERIES', prompt: "Given the following financial 'hack', generate a set of [{num_queries}] relevant queries that allow verifying the validity of the hack. The queries will be used on official financial websites to search for information that can validate or refute the techniques or suggestions of the hack. Make sure to:\n
-- Use key terms from the hack title and summary when possible.\n- Keep the queries concise and direct, without unnecessary filler words.\n- Formulate the queries in a way that they seek specific information related to the validity of the hack.\n
-The validation should check about legality, risks and temporal relevance.\n
-Financial hack title:\n[{hack_title}]\n---\nFinancial hack summary:\n[{hack_summary}]\n
-Provide your response only as a JSON object containing a list of the relevant queries, in the following format:\n
-{\n    \"queries\": [ ... ]\n}\n", system_prompt: 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.' },
+  { name: 'Generate queries for hack', code: 'GENERATE_QUERIES', prompt: "You are tasked with generating search queries to validate or refute a financial hack.  Please generate [{num_queries}] queries, the goal is to find information that assesses the legal validity and temporal relevance of this hack.
+Financial hack title:\n[{hack_title}]\n\n---\nFinancial hack summary:\n[{hack_summary}]\n\n---\n\nProvide your response only as a JSON object containing a list of the relevant queries", system_prompt: 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.' },
 
   { name: 'Hack validation', code: 'HACK_VALIDATION', prompt: "Here is an extract of relevant context from different web pages:\n
   ---\n[{chunks}]\n  ---\n

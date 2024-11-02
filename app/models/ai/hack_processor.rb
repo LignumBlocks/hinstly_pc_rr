@@ -61,14 +61,14 @@ module Ai
 
     private
 
-    def queries_for_hack(num_queries = 4)
+    def queries_for_hack(num_queries = 2)
       prompt = Prompt.find_by_code('GENERATE_QUERIES')
       prompt_text = prompt.build_prompt_text({ num_queries:, hack_title: @hack.title, hack_summary: @hack.summary })
       system_prompt_text = prompt.system_prompt
       model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
       result = model.run(prompt_text, system_prompt_text)
       result = result.gsub('json', '').gsub('```', '').strip
-      JSON.parse(result)['queries']
+      JSON.parse(result)
     end
 
     def hack_structure(description, prompt_code)
