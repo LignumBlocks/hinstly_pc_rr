@@ -5,7 +5,7 @@ namespace :db do
     max = 32
     if user
       channel = Channel.create!(
-        name: '10-jobs(test)',
+        name: '10-jobs-up(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
