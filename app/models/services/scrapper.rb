@@ -12,7 +12,7 @@ module Services
           response = HTTParty.get(url)
           next unless response.code == 200
 
-          base_url = "#{URI.parse(search_url).scheme}://#{URI.parse(search_url).host}"
+          base_url = "#{URI.parse(source.url_query).scheme}://#{URI.parse(source.url_query).host}"
 
           html = response.body
           doc = Nokogiri::HTML(html)
