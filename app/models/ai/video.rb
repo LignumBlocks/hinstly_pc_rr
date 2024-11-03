@@ -6,8 +6,8 @@ module Ai
 
     def find_hack!
       hack = extract_hack_from_video
-      @video.create_hack(title: hack['possible hack title'], summary: hack['brief summary'],
-                         justification: hack['justification'], is_hack: hack['is_a_hack'])
+      @video.create_hack(title: hack['hack title'], summary: hack['summary'],
+                         justification: hack['justification'], is_hack: hack['is_hack'])
       self
     end
 
@@ -19,10 +19,10 @@ module Ai
          @video.transcription&.content&.empty? ||
          (@video.transcription&.content&.split&.size&.<= 50)
         return {
-          "possible hack title": 'None',
-          "brief summary": 'None',
+          "summary": 'None',
+          "is_hack": false,
           "justification": 'Empty or too short source text.',
-          "is_a_hack": false
+          "hack title": 'None'
         }
       end
       # Proceed with the original logic if the content is valid

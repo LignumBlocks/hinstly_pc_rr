@@ -9,11 +9,12 @@
 Prompt.all.destroy_all
 
 prompts = [
-  { name: 'Hack Discrimination Reduced', code: 'HACK_DISCRIMINATION_REDUCED', prompt: "A financial hack is a practical strategy or technique that helps individuals optimize their finances, save money, increase income, or improve their overall economic situation. Hacks range from easily accessible tips to sophisticated strategies used by high-net-worth individuals.\n
-Analize the following content for financial hacks:\n---\n[{source_text}]\n---\n
-The output must be a json with the following structure:\n```json
-{\n    \"possible hack title\": \"<A consise title of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",\n    \"brief summary\": \"<A short description of the possible hacks in the content, regardless of if it is a valid hack under our definitions.>\",\n    \"justification\": \"<Explanation about whether the content includes a valid financial hack>\",\n    \"is_a_hack\": \"<Boolean true or false, about whether the content includes a valid financial hack>\"\n}\n```\n
-Scan the content for financial advice or strategies. Evaluate if any hack can be extracted from it. If the content is not about financial advices \"is_a_hack\" must be false", system_prompt: 'You are an AI financial analyst tasked with classifying content related to financial strategies.' },
+  { name: 'Hack Discrimination Reduced', code: 'HACK_DISCRIMINATION_REDUCED', prompt: "Analyze the following video transcription: \n[{source_text}]\n\n---\n
+A financial hack is any practical strategy or technique aimed at optimizing finances, saving money, increasing income, or enhancing one's economic situation.
+Your task is to evaluate the transcription content to determine if a financial hack is mentioned. If the content is not about financial advices \"is_hack\" must be false.\n\nThe output must be a json with the following structure:
+```json\n{\n    \"summary\": <write the essence of the transcription without referencing where it came from, in form of advise>\n    \"is_hack\": <a boolean indicating if this transcription includes elements of a financial hack (true/false)>
+    \"justification\": <explanation of your reasoning regarding if is_hack or not. In Markdown format, using bullet points for each key point and bold text for particularly important findings.>
+    \"hack title\": <a concise engaging and descriptive title for the hack. If not is_hack the title should be the topic of the transcription>\n}", system_prompt: 'You are an AI financial analyst tasked with classifying content related to financial strategies.' },
 
   { name: 'Generate queries for hack', code: 'GENERATE_QUERIES', prompt: "You are tasked with generating search queries to validate or refute a financial hack.  Please generate [{num_queries}] queries to search for articles relevant to the hack. Use key terms, don't include specific values. Keep the queries concise and direct, without unnecessary filler words.
 Financial hack title:\n[{hack_title}]\n\n---\nFinancial hack summary:\n[{hack_summary}]\n\n---\n\nProvide your response only as a JSON object containing a list of the relevant queries", system_prompt: 'You are an AI financial analyst tasked with accepting or refusing the validity of a financial hack.' },
