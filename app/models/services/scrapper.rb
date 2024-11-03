@@ -12,6 +12,8 @@ module Services
           response = HTTParty.get(url)
           next unless response.code == 200
 
+          base_url = "#{URI.parse(search_url).scheme}://#{URI.parse(search_url).host}"
+
           html = response.body
           doc = Nokogiri::HTML(html)
 
@@ -21,7 +23,8 @@ module Services
           links = extract_links(query, doc)
           links = links['links']
           links&.each do |link|
-            next if ScrapedResult.exists?(link: link, query_id: query.id, validation_source_id: source.id)
+            absolute_link = URI.join(base_url, link).to_s
+            next if ScrapedResult.exists?(link: absolute_link, query_id: query.id, validation_source_id: source.id)
 
             ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link)
           end
