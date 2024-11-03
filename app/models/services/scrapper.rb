@@ -13,7 +13,12 @@ module Services
           next unless response.code == 200
 
           html = response.body
-          links = extract_links(query, html)
+          doc = Nokogiri::HTML(html)
+
+          doc.css('head, metadata, script, style, footer, nav, comment, .ads, .sidebar').remove
+          doc.xpath('//comment()').remove
+
+          links = extract_links(query, doc)
           links = links['links']
           links&.each do |link|
             next if ScrapedResult.exists?(link: link, query_id: query.id, validation_source_id: source.id)
