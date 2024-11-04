@@ -2,6 +2,7 @@ module Ai
   class HackProcessor
     def initialize(hack)
       @hack = hack
+      @model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
     end
 
     def find_queries!
@@ -65,8 +66,7 @@ module Ai
       prompt = Prompt.find_by_code('GENERATE_QUERIES')
       prompt_text = prompt.build_prompt_text({ num_queries:, hack_title: @hack.title, hack_summary: @hack.summary })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
-      result = model.run(prompt_text, system_prompt_text)
+      result = @model.run(prompt_text, system_prompt_text)
       result = result.gsub('json', '').gsub('```', '').strip
       JSON.parse(result)
     end
@@ -75,8 +75,7 @@ module Ai
       prompt = Prompt.find_by_code(prompt_code)
       prompt_text = prompt.build_prompt_text({ analysis: description })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
-      result = model.run(prompt_text, system_prompt_text)
+      result = @model.run(prompt_text, system_prompt_text)
       JSON.parse(result.gsub("```json\n", '').gsub('```', '').strip)
     end
 
@@ -84,8 +83,7 @@ module Ai
       prompt = Prompt.find_by_code(prompt_code)
       prompt_text = prompt.build_prompt_text({ chunks:, free_analysis: free, previous_analysis: description })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
-      model.run(prompt_text, system_prompt_text)
+      @model.run(prompt_text, system_prompt_text)
     end
 
     def hack_description(prompt_code, analysis = '')
@@ -93,8 +91,7 @@ module Ai
       prompt_text = prompt.build_prompt_text({ hack_title: @hack.title, hack_summary: @hack.summary,
                                                original_text: @hack.video.transcription.content, analysis: })
       system_prompt_text = prompt.system_prompt
-      model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
-      model.run(prompt_text, system_prompt_text)
+      @model.run(prompt_text, system_prompt_text)
     end
 
     def grow_descriptions(free_description, premium_description, times, k = 8)
@@ -178,9 +175,8 @@ module Ai
       prompt_text_financial_categories = prompt_financial_categories.build_prompt_text(format_hash)
       system_prompt_text = prompt_complexity.system_prompt
       begin
-        model = Ai::LlmHandler.new('gemini-1.5-flash-8b')
-        result_complexity = model.run(prompt_text_complexity, system_prompt_text)
-        result_categories = model.run(prompt_text_financial_categories, system_prompt_text)
+        result_complexity = @model.run(prompt_text_complexity, system_prompt_text)
+        result_categories = @model.run(prompt_text_financial_categories, system_prompt_text)
         result_complexity = result_complexity.gsub("```json\n", '').gsub('```', '').strip
         result_categories = result_categories.gsub("```json\n", '').gsub('```', '').strip
         {

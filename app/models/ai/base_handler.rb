@@ -1,7 +1,7 @@
 module Ai
   class BaseHandler
     OPENAI_API_KEY = ENV['OPENAI_API_KEY']
-    GOOGLE_API_KEY = ENV['GOOGLE_API_KEY']
+    GOOGLE_API_KEYS = ENV.fetch('GOOGLE_API_KEYS', '')
 
     MODELS = %w[gpt-4o-mini gpt-3.5-turbo gemini-1.5-flash gemini-1.5-flash-8b].freeze
 
@@ -26,8 +26,10 @@ module Ai
     end
 
     def load_gemini
+      keys = GOOGLE_API_KEYS.split(',')
+      max = keys.size - 1
       Langchain::LLM::GoogleGemini.new(
-        api_key: GOOGLE_API_KEY,
+        api_key: keys[rand(0..max)],
         default_options: { temperature: @temperature,
                            chat_completion_model_name: @model_name,
                            embeddings_model_name: 'text-embedding-004' }
