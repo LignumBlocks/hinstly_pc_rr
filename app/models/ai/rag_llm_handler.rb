@@ -51,9 +51,9 @@ module Ai
 
     # Stores documents from a list of query results into the Chroma vector store, splitting them into chunks.
     def store_from_queries(hack)
-      scrap_results = ScrapedResult.where(query_id: hack.query_ids).unsent_to_pinecone
+      scrap_results = ScrapedResult.where(query_id: hack.query_ids).processed.unsent_to_pinecone
       scrap_results.each do |scraped_result|
-        next unless scraped_result.content
+        next unless scraped_result.content.present?
 
         content_chunks = Langchain::Chunker::RecursiveText.new(scraped_result.content, chunk_size: 2000,
                                                                                        chunk_overlap: 300).chunks
