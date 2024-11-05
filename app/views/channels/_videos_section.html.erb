@@ -32,6 +32,9 @@
       possible hack
     </th>
     <th scope="col" class="text-center">
+      valid hack
+    </th>
+    <th scope="col" class="text-center">
       Action
     </th>
   </tr>
@@ -95,7 +98,11 @@
       </td>
 
       <td class="px-4 text-center">
-        <span id="video-possible-hack-<%= video.id %>" class="<%= class_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : video&.hack&.is_hack?) %> inline-block"><%= text_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : video&.hack&.is_hack?) %></span>
+        <span id="video-possible-hack-<%= video.id %>" class="<%= class_for_boolean(video&.hack&.is_hack? == true) %> inline-block"><%= text_for_boolean(video&.hack&.is_hack? == true) %></span>
+      </td>
+
+      <td class="px-4 text-center">
+        <span id="video-possible-hack-<%= video.id %>" class="<%= class_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : false) %> inline-block"><%= text_for_boolean(video&.hack&.hack_validation.present? ? video&.hack&.hack_validation.status : false) %></span>
       </td>
 
       <td class="px-4 text-center">
