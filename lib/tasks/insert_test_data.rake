@@ -5,7 +5,7 @@ namespace :db do
     max = 32
     if user
       channel = Channel.create!(
-        name: '14-jobs(test)',
+        name: 'Prueba(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
@@ -23,8 +23,9 @@ namespace :db do
         video = Video.create!(
           channel: channel,
           state: 2,
-          processed_at: Time.at(rand(Time.new(2024, 10, 1).to_f..Time.new(2024, 10, 25).to_f)), # Fecha aleatoria entre 2024-10-01 y 2024-10-25
-          external_created_at: Time.at(rand(Time.new(2023, 1, 1).to_f..Time.new(2023, 12, 31).to_f)) # Fecha aleatoria en 2023
+          processed_at: Time.at(rand(Time.new(2024, 10, 1).to_f..Time.new(2024, 10, 25).to_f)),
+          external_created_at: Time.at(rand(Time.new(2023, 1, 1).to_f..Time.new(2023, 12, 31).to_f)),
+          text: File.basename(file)
         )
 
         video.process_video_log.update_attribute(:transcribed, true)
@@ -42,5 +43,25 @@ namespace :db do
     else
       puts 'No se encontró un usuario para asociar el canal y los videos.'
     end
+  end
+
+  desc 'Completa el campo file_name en los videos existentes con el nombre del archivo de transcripción correspondiente'
+  task update_file_name_for_videos: :environment do
+    transcription_files = Dir[Rails.root.join('lib', 'tasks', 'transcriptions', '*.txt')]
+
+    Video.find_each do |video|
+      matching_file = transcription_files.find do |file|
+        File.read(file).strip == video.transcription&.content&.strip
+      end
+
+      if matching_file
+        video.update(text: File.basename(matching_file))
+        puts "Actualizado file_name para Video ID #{video.id} con #{File.basename(matching_file)}."
+      else
+        puts "No se encontró un archivo de transcripción coincidente para Video ID #{video.id}."
+      end
+    end
+
+    puts 'Actualización del campo file_name completada.'
   end
 end
