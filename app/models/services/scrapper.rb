@@ -7,12 +7,11 @@ module Services
 
     def prepare_links!
       @sources.each do |source|
+        base_url = "#{URI.parse(source.url_query).scheme}://#{URI.parse(source.url_query).host}"
         @queries.each do |query|
           url = source.build_search_url(query)
           response = HTTParty.get(url)
           next unless response.code == 200
-
-          base_url = "#{URI.parse(source.url_query).scheme}://#{URI.parse(source.url_query).host}"
 
           html = response.body
           doc = Nokogiri::HTML(html)
@@ -24,9 +23,10 @@ module Services
           links = links['links']
           links&.each do |link|
             absolute_link = URI.join(base_url, link).to_s
+
             next if ScrapedResult.exists?(link: absolute_link, query_id: query.id, validation_source_id: source.id)
 
-            ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: link)
+            ScrapedResult.create(query_id: query.id, validation_source_id: source.id, link: absolute_link)
           end
         rescue StandardError => e
           puts e.message
