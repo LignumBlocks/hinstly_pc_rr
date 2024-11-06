@@ -8,4 +8,18 @@ class Hack < ApplicationRecord
   has_many :hack_category_rels
   has_many :categories, through: :hack_category_rels
   has_many :clasifications, through: :categories
+
+  def self.total_count
+    count
+  end
+  
+  def self.valid_count
+    joins(:hack_validation).where(hack_validations: { status: true }).count
+  end
+  
+  def self.not_valid_count
+    left_joins(:hack_structured_info, :hack_validation)
+      .where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL')
+      .count
+  end
 end

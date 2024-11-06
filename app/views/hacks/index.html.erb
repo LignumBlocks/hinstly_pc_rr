@@ -28,6 +28,11 @@
     </div>
   </div>
   <style>
+    .underline {
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
     .subsubsub{
       list-style: none;
       margin: 40px 0 0;
@@ -64,13 +69,13 @@
   <div class="container wrap" style="max-width: 100%;">
       <ul class="subsubsub">
         <li class="">          
-            <%= link_to "All (#{@total.count})", hacks_path(filter: 'all'), class: "text-blue-500" %> |
+            <%= link_to "All (#{Hack.total_count})", hacks_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter] == 'all'}" %> |
         </li>
         <li>
-           <%= link_to "Valid (#{@total.joins(:hack_validation).where('hack_validations.status = true').count})", hacks_path(filter: 'valid'), class: "text-blue-500" %> |
+           <%= link_to "Valid (#{Hack.valid_count})", hacks_path(filter: 'valid'), class: "text-blue-500 #{'underline' if params[:filter] == 'valid'}" %> |
         </li>
         <li>
-          <%= link_to "Not-valid (#{current_user.hacks.left_joins(:hack_structured_info, :hack_validation).where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL').count})", hacks_path(filter: 'not_valid'), class: "text-blue-500" %> |
+          <%= link_to "Not-valid (#{Hack.not_valid_count})", hacks_path(filter: 'not_valid'), class: "text-blue-500 #{'underline' if params[:filter] == 'not_valid'}" %> |
         </li>
         <li>
           <%= link_to "Channels (#{@channels.count})", channels_path, class: "text-blue-500" %>
@@ -94,14 +99,17 @@
             class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
         </div>
 
-        <div id="date-range-picker" date-rangepicker class="flex items-center">
+        <div id="date-range-picker" date-rangepicker class="flex items-center" datepicker-format="yyyy-mm-dd">
           <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                 </svg>
             </div>
-            <input id="datepicker-range-start" name="q[created_at_gteq]" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+            <input id="datepicker-range-start" name="q[created_at_gteq]" type="text" 
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                  value="<%= params.dig(:q, :created_at_gteq) %>"
+                  placeholder="Select date start">
           </div>
           <span class="mx-4 text-gray-500">to</span>
           <div class="relative">
@@ -110,7 +118,10 @@
                   <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                 </svg>
             </div>
-            <input id="datepicker-range-end" name="q[created_at_lteq]" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+            <input id="datepicker-range-end" name="q[created_at_lteq]" type="text"
+                  value="<%= params.dig(:q, :created_at_lteq) %>"  
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                  placeholder="Select date end">
         </div>
         </div>
         <!-- Botón para filtrar -->
@@ -123,15 +134,15 @@
               <%= t("helpers.page.showing") %> <span class="font-semibold text-gray-900 dark:text-white"><%= "#{@pagy.from}-#{@pagy.to}" %></span> <%= t("helpers.page.of") %> <span class="font-semibold text-gray-900 dark:text-white"><%= @pagy.count %></span></span>
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 list-none">
           <li>
-            <%= link_to t("helpers.page.previous"), hacks_path(page: @pagy.prev, filter: params[:filter]), { disabled: @pagy.prev.blank?, class: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
+            <%= link_to t("helpers.page.previous"), hacks_path(params.to_unsafe_h.merge(page: @pagy.prev)), { disabled: @pagy.prev.blank?, class: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
           </li>
           <% @pagy.pages.times do |page| %>
             <li>
-              <%= link_to "#{page + 1}", hacks_path(page: page + 1, filter: params[:filter]), class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" %>
+              <%= link_to "#{page + 1}", hacks_path(params.to_unsafe_h.merge(page: page + 1)), class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" %>
             </li>
           <% end %>
           <li>
-            <%= link_to t("helpers.page.next"), hacks_path(page: @pagy.next, filter: params[:filter]), { disabled: @pagy.next.blank?, class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
+            <%= link_to t("helpers.page.next"), hacks_path(params.to_unsafe_h.merge(page: @pagy.next)), { disabled: @pagy.next.blank?, class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" } %>
           </li>
         </ul>
       </nav>

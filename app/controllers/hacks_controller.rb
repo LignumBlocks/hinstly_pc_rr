@@ -3,44 +3,21 @@ require 'open-uri'
 class HacksController < ApplicationController
   def index
     @channels = Channel.all
-    @total = Hack.all
-
+    hack_filter = params[:filter] || 'valid'
     @q = current_user.hacks.ransack(params[:q])
 
-    # Si el canal no está seleccionado, eliminar el parámetro del filtro
-    params[:q].delete(:video_channel_id_eq) if params[:q] && params[:q][:video_channel_id_eq].blank?
+    params[:q]&.delete(:video_channel_id_eq) if params.dig(:q, :video_channel_id_eq).blank?
 
-    # Convertir las fechas al formato YYYY-MM-DD si están presentes
-    if params[:q] && params[:q][:created_at_gteq].present? && params[:q][:created_at_lteq].present?
-      begin
-        # Convertir la fecha de inicio
-        params[:q][:created_at_gteq] = Date.strptime(params[:q][:created_at_gteq], '%m/%d/%Y').strftime('%Y-%m-%d')
-        # Convertir la fecha de fin
-        params[:q][:created_at_lteq] = Date.strptime(params[:q][:created_at_lteq], '%m/%d/%Y').strftime('%Y-%m-%d')
-      rescue ArgumentError
-        flash[:alert] = 'Invalid date format'
-      end
-    end
-
-    hack_filter = params[:filter] || 'valid'
+    #convert_dates_to_yyyymmdd(params[:q], :created_at_gteq, :created_at_lteq)
 
     case hack_filter
     when 'valid'
-      @q = current_user.hacks.joins(:hack_structured_info,
-                                    :hack_validation).where('hack_validations.status = true').ransack(params[:q])
+      @q = valid_hacks_ransack(params[:q])
     when 'not_valid'
-      # Mostrar hacks no válidos (sin `hack_structured_info` o con `hack_validations.status = false o NULL`)
-      @q = current_user.hacks
-                       .left_joins(:hack_structured_info, :hack_validation)
-                       .where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL')
-                       .ransack(params[:q])
-    else
-      # Si no hay filtro, mostrar todos los hacks
-      @q = current_user.hacks.ransack(params[:q])
+      @q = not_valid_hacks_ransack(params[:q])
     end
 
-    # @q = current_user.hacks.ransack(params[:q])
-    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 50)
+    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 20)
   end
 
   def show
@@ -49,6 +26,32 @@ class HacksController < ApplicationController
   end
 
   private
+
+  def convert_dates_to_yyyymmdd(params, *keys)
+    keys.each do |key|
+      next unless params&.dig(key).present?
+
+      begin
+        params[key] = Date.strptime(params[key], '%m/%d/%Y').strftime('%Y-%m-%d')
+      rescue ArgumentError
+        flash[:alert] = 'Invalid date format'
+      end
+    end
+  end
+
+  def valid_hacks_ransack(query_params)
+    current_user.hacks.joins(:hack_structured_info, :hack_validation)
+              .where(hack_validations: { status: true })
+              .ransack(query_params)
+  end
+
+  # Scope para hacks no válidos
+  def not_valid_hacks_ransack(query_params)
+    current_user.hacks
+              .left_joins(:hack_structured_info, :hack_validation)
+              .where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL')
+              .ransack(query_params)
+  end
 
   def hack_params
     params.permit(:page, :filter, q: %i[video_channel_id_eq created_at_gteq created_at_lteq])
