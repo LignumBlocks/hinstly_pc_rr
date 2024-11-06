@@ -67,21 +67,17 @@ Write it like a Medium post abount financial strategies.\n\nThe format should fo
 ## Additional Tools and Resources:\n  Advanced apps, bank accounts and services that users can use to enhance the strategy. Recommendations for tools that offer more complex tracking, customization, or integration with other financial plans (e.g., debt payoff calculators, investment tools, detailed budgeting systems).\n
 ## Case Study Outline:\n  Brief outline for a realistic case study that demonstrates how a hypothetical user applies the hack and benefits from it.", system_prompt: 'You are an expert financial analyst with a deep understanding of financial hacks and strategies.' },
 
-  { name: 'Structured FREE description', code: 'STRUCTURED_FREE_DESCRIPTION', prompt: "Hack analysis
-#[{analysis}]\n---\nYour task is to structure the provided analysis into a json dictionary. The itemized objects should be saved as lists, the section titles should be dictionary keys. Below is a guide for the expected JSON object, if in the text a field is missing fill it as null.\n
-Expected JSON structure:\n{\n    \"Hack Title\": \"<title>\",\n    \"Description\": \"<description>\",\n    \"Main Goal\": \"<goal or purpose>\",\n    \"steps(Summary)\": [\n        \"<step 1>\",\n        \"<step 2>\",\n        // .. other steps
-    ],\n    \"Resources Needed\": [\n        \"<resource 1>\",\n        \"<resource 2>\",\n        // .. other resources
-    ],\n    \"Expected Benefits\": [\n        \"<benefit 1>\",\n        \"<benefit 2>\",\n        // .. other benefits
-    ]\n}\n
-Don't add or remove words. Only convert the markdown to plain text. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' },
+  { name: 'Structured FREE description', code: 'STRUCTURED_FREE_DESCRIPTION', prompt: "Your task is to structure the provided analysis into a json dictionary.\n\nHack analysis:\n[{analysis}]\n---\n
+Maintain the markdown text style inside the JSON. Below is a guide for the expected JSON object, if in the text a field is missing fill it as null.\n
+Expected JSON structure:\n{\n    \"Hack Title\": \"<title>\",\n    \"Description\": \"<description>\",\n    \"Main Goal\": \"<goal or purpose>\",\n    \"steps(Summary)\": <steps>,
+    \"Resources Needed\": <resources>,    \"Expected Benefits\": <benefits>\n}\n
+Don't add or remove words. Nothing should be in list format, only string. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' },
 
-  { name: 'Structured PREMIUM description', code: 'STRUCTURED_PREMIUM_DESCRIPTION', prompt: "Your task is to structure the provided analysis into a json dictionary. \n
-Hack analysis:\n[{analysis}]\n---\n
-The itemized objects should be saved as lists, the section titles should be dictionary keys. Below is a guide for the expected JSON object, if in the text a field is missing fill it as null.\n
+  { name: 'Structured PREMIUM description', code: 'STRUCTURED_PREMIUM_DESCRIPTION', prompt: "Your task is to structure the provided analysis into a json dictionary.\n\nHack analysis:\n[{analysis}]\n---\n
+Maintain the markdown text style inside the JSON. Below is a guide for the expected JSON object, if in the text a field is missing fill it as null.\n
 Expected JSON structure:\n{\n    \"Extended Title\": \"<extended title>\",
-    \"Detailed steps\": [\n        {\n            \"Step Title\": \"<step 1 title>\",\n            \"Description\": \"<step 1 description>\",\n        },\n        {\n            \"Step Title\": \"<step 2 title>\",\n            \"Description\": \"<step 2 description>\",\n        },\n        // .. other steps\n    ],
-    \"Additional Tools and Resources\": [\n        \" resource 1\",\n        \" resource 2\",\n        // .. other resources\n    ],\n    \"Case Study\": \"<case study>\"\n}\n
-Don't add or remove words. Only convert the markdown to plain text. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' },
+    \"Detailed steps\": <steps>,\n    \"Additional Tools and Resources\": <resources>,\n    \"Case Study\": \"<case study>\"\n}\n
+Don't add or remove words. Nothing should be in list format, only string. Provide your response only as a JSON object containing the structured information provided.", system_prompt: 'You are an expert at text processing, in particular, financial related information.' },
 
   { name: 'Complexity Classification', code: 'COMPLEXITY_CLASSIFICATION', prompt: "Classify the financial hack into one of the following categories, based on its complexity, accessibility, and level of financial impact:\n
 1. *Accessible*:\n   - *Description*: Simple hacks that are easy to implement by most people without requiring extensive financial knowledge or initial investment. Designed for users with any level of income and experience.\n   - *Examples*: Saving small amounts regularly, reducing non-essential expenses.\n
