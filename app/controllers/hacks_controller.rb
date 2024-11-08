@@ -8,8 +8,6 @@ class HacksController < ApplicationController
 
     params[:q]&.delete(:video_channel_id_eq) if params.dig(:q, :video_channel_id_eq).blank?
 
-    #convert_dates_to_yyyymmdd(params[:q], :created_at_gteq, :created_at_lteq)
-
     case hack_filter
     when 'valid'
       @q = valid_hacks_ransack(params[:q])

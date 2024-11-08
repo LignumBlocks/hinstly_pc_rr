@@ -156,6 +156,9 @@
           Title
         </th>
         <th scope="col" class="px-6 py-3 text-center">
+          Actions
+        </th>
+        <th scope="col" class="px-6 py-3 text-center">
           Valid
         </th>
 
@@ -164,9 +167,6 @@
         </th>
         <th scope="col" class="px-6 py-3 text-center">
           Created at
-        </th>
-        <th scope="col" class="px-6 py-3 text-center">
-          Actions
         </th>
       </tr>
       </thead>
@@ -179,7 +179,11 @@
               <div class="font-normal text-gray-500 line-clamp-2"><%= hack.summary %></div>
             </div>
           </td>
-
+          <td class="px-4 py-4 text-right w-32">
+            <div class="inline-flex gap-2">
+              <%= link_to "View hack", hack_path(id: hack), class: "" %>
+            </div>
+          </td>
           <td class="px-4 py-4 text-center w-32">
             <span class="<%= class_for_boolean(hack.hack_structured_info.present? && hack.hack_validation&.status == true) %> inline-block"><%= text_for_boolean(hack.hack_structured_info.present? && hack.hack_validation&.status == true) %></span>
           </td>
@@ -189,13 +193,8 @@
             </div>
           </td>
           <td>
-            <%= hack.created_at&.strftime("%d/%m/%Y") %>
-          </td>
-          <td class="px-4 py-4 text-right w-32">
-            <div class="inline-flex gap-2">
-              <%= link_to "View hack", hack_path(id: hack), class: "" %>
-            </div>
-          </td>
+            <%= hack.created_at&.strftime("%Y/%m/%d") %>
+          </td>          
         </tr>      
       <% end %>
       </tbody>
