@@ -2473,3 +2473,7 @@ VideoStateChannel is transmitting the subscription confirmation
 VideoStateChannel is streaming from video_state_channel
 ChannelStateChannel is transmitting the subscription confirmation
 ChannelStateChannel is streaming from channel_state_channel
+[dotenv] Set [36mOPENAI_ACCESS_TOKEN[0m, [36mAPIFY_API_TOKEN[0m, [36mAPIFY_ACTOR_ID[0m, [36mNGROK_HOST[0m, [36mHUGGINGFACE_API_KEY[0m, [36mPINECONE_API_KEY[0m, [36mPINECONE_ENVIRONMENT_GEMINI[0m, [36mPINECONE_ENVIRONMENT_OPENAI[0m, [36mPINECONE_ENVIRONMENT_OPEN_SOURCE[0m, [36mSECRET_KEY_BASE[0m, and [36mGOOGLE_API_KEYS[0m
+[dotenv] Loaded [33m.env[0m
+[dotenv] Set [36mOPENAI_ACCESS_TOKEN[0m, [36mAPIFY_API_TOKEN[0m, [36mAPIFY_ACTOR_ID[0m, [36mNGROK_HOST[0m, [36mHUGGINGFACE_API_KEY[0m, [36mPINECONE_API_KEY[0m, [36mPINECONE_ENVIRONMENT_GEMINI[0m, [36mPINECONE_ENVIRONMENT_OPENAI[0m, [36mPINECONE_ENVIRONMENT_OPEN_SOURCE[0m, [36mSECRET_KEY_BASE[0m, and [36mGOOGLE_API_KEYS[0m
+[dotenv] Loaded [33m.env[0m
