@@ -69,10 +69,10 @@
   <div class="container wrap" style="max-width: 100%;">
       <ul class="subsubsub">
         <li class="">          
-            <%= link_to "All (#{Hack.total_count})", hacks_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter] == 'all'}" %> |
+            <%= link_to "All (#{Hack.total_count})", hacks_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter] == 'all' }" %> |
         </li>
         <li>
-           <%= link_to "Valid (#{Hack.valid_count})", hacks_path(filter: 'valid'), class: "text-blue-500 #{'underline' if params[:filter] == 'valid'}" %> |
+           <%= link_to "Valid (#{Hack.valid_count})", hacks_path(filter: 'valid'), class: "text-blue-500 #{'underline' if params[:filter].nil? || params[:filter] == 'valid'}" %> |
         </li>
         <li>
           <%= link_to "Not-valid (#{Hack.not_valid_count})", hacks_path(filter: 'not_valid'), class: "text-blue-500 #{'underline' if params[:filter] == 'not_valid'}" %> |
