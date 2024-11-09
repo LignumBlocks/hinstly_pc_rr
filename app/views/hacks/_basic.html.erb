@@ -7,10 +7,10 @@
   </p>
 
   <p class="font-bold mt-4">Summary</p>
-  <p><%= raw(@markdown.render(hack.summary)) %></p>
+  <p><%= raw(@markdown.render(hack.summary)) if hack.summary%></p>
 
   <p class="font-bold mt-4">Justification</p>
-  <p><%= raw(@markdown.render(hack.justification)) %></p>
+  <p><%= raw(@markdown.render(hack.justification)) if hack.justification %></p>
 
   <p class="font-bold mt-4">Video Transcription</p>
   <p><%= raw(@markdown.render(hack.video.transcription.content)) %></p>
