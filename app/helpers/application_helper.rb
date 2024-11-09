@@ -28,10 +28,10 @@ module ApplicationHelper
 
   def class_for_boolean(flag)
     if flag
-      return "bg-green-100 text-green-800 text-xs font-medium border border-green-300 me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-    else
-      return "bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+      return 'bg-green-100 text-green-800 text-xs font-medium border border-green-300 me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'
     end
+
+    'bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'
   end
 
   def format_number(number)
@@ -44,22 +44,35 @@ module ApplicationHelper
 
   def class_for_boolean(flag)
     if flag
-      return "bg-green-100 text-green-800 text-xs font-medium border border-green-300 me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300"
-    else
-      return "bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300"
+      return 'bg-green-100 text-green-800 text-xs font-medium border border-green-300 me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'
     end
+
+    'bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'
   end
 
   def text_for_boolean(flag)
     if flag
-      "Yes"
+      'Yes'
     else
-      "No"
+      'No'
     end
   end
 
   def capitalize_first_letter(sentence)
     sentence[0] = sentence[0].capitalize if sentence.present?
     sentence
+  end
+
+  def compact_number(number)
+    case number
+    when 1_000_000_000..Float::INFINITY
+      "#{(number / 1_000_000_000.0).round(1)}B+"
+    when 1_000_000..999_999_999
+      "#{(number / 1_000_000.0).round(1)}M+"
+    when 1_000..999_999
+      "#{(number / 1_000.0).round(1)}K+"
+    else
+      number.to_s
+    end
   end
 end
