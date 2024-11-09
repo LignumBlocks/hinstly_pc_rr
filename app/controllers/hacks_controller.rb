@@ -15,7 +15,7 @@ class HacksController < ApplicationController
       @q = not_valid_hacks_ransack(params[:q])
     end
 
-    @pagy, @hacks = pagy(@q.result.order(created_at: :desc), items: 20)
+    @pagy, @hacks = pagy(@q.result.reorder(created_at: :desc), items: 50, size: [1, 3, 3, 1])
   end
 
   def show
@@ -40,16 +40,16 @@ class HacksController < ApplicationController
 
   def valid_hacks_ransack(query_params)
     current_user.hacks.joins(:hack_structured_info, :hack_validation)
-              .where(hack_validations: { status: true })
-              .ransack(query_params)
+                .where(hack_validations: { status: true })
+                .ransack(query_params)
   end
 
   # Scope para hacks no válidos
   def not_valid_hacks_ransack(query_params)
     current_user.hacks
-              .left_joins(:hack_structured_info, :hack_validation)
-              .where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL')
-              .ransack(query_params)
+                .left_joins(:hack_structured_info, :hack_validation)
+                .where('hack_structured_infos.id IS NULL OR hack_validations.status = false OR hack_validations.status IS NULL')
+                .ransack(query_params)
   end
 
   def hack_params

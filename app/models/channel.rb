@@ -15,4 +15,8 @@ class Channel < ApplicationRecord
     remaining_jobs ||= 0
     ActionCable.server.broadcast 'channel_state_channel', { id: id, state: state, remaining_jobs: remaining_jobs }
   end
+
+  def self.total_count
+    count
+  end
 end

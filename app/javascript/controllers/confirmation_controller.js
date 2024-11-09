@@ -7,7 +7,6 @@ export default class extends Controller {
     }
 
     confirm(event) {
-        console.log('Evento de confirmación disparado');
         // Mostrar un mensaje de confirmación
         if (!confirm(this.messageValue)) {
             event.preventDefault(); // Evitar la acción si el usuario cancela

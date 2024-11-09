@@ -1,8 +1,11 @@
 <div class="relative overflow-x-auto mb-8">
   <div class="flex items-center justify-between flex-column pl-6 flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
-    <div class="">
+    <div class="flex gap-4">
       <% breadcrumbs = [["Prompts", prompts_path]] %>
       <%= render partial: "layouts/breadcrumbs", locals: { breadcrumbs: breadcrumbs } %>
+      <div>
+        <%= link_to 'New Prompt', new_prompt_path, data: { turbo_frame: "modal-content", turbo_method: :get, modal_toggle: "modal" }, class: "btn btn-primary" %>
+      </div>
     </div>
     <div class="flex items-center justify-end flex-column flex-wrap md:flex-row md:space-y-0 bg-white dark:bg-gray-900">
       <div class="mr-4 mt-2">
@@ -26,10 +29,7 @@
         <% end %>
       </div>
 
-      <div class="mr-2">
-        <%= link_to 'New Prompt', new_prompt_path, data: { turbo_frame: "modal-content", turbo_method: :get, modal_toggle: "modal" }, class: "btn btn-primary" %>
-
-      </div>
+      
     </div>
   </div>
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
