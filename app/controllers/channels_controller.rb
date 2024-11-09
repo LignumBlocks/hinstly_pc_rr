@@ -8,7 +8,15 @@ class ChannelsController < ApplicationController
   def index
     @channel = Channel.new
     @q = current_user.channels.ransack(params[:q])
-    @pagy, @channels = pagy(@q.result.order(created_at: :desc), items: 25)
+
+    channel_filter = params[:filter] || 'all'
+
+    case channel_filter
+    when 'processed'
+      @q = processed_channels_ransack(params[:q])
+    end
+
+    @pagy, @channels = pagy(@q.result.reorder(created_at: :desc), items: 50)
   end
 
   def create
@@ -88,6 +96,10 @@ class ChannelsController < ApplicationController
   end
 
   private
+
+  def processed_channels_ransack(query_params)
+    current_user.channels.where(state: 3).ransack(query_params)
+  end
 
   def create_video!(channel, dataset_item)
     video = channel.videos.new
