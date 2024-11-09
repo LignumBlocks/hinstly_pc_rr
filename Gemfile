@@ -32,6 +32,7 @@ gem 'mutex_m'
 gem 'ostruct'
 gem 'redis'
 gem 'redcarpet'
+gem 'honeybadger'
 
 # Front-end
 gem 'cssbundling-rails', '~> 1.1'
