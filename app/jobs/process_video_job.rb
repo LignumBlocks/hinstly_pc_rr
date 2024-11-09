@@ -77,7 +77,7 @@ class ProcessVideoJob < ApplicationJob
     downloaded_video = URI.open(video.source_download_link)
     puts 'Downloaded Video...'
 
-    output_path = Tempfile.new(['output', "#{downloaded_video.path.split('/').last}.mp3"]).path
+    output_path = Tempfile.new(['output', "#{video.id}.mp3"]).path
     movie = FFMPEG::Movie.new(downloaded_video.path)
     audio = movie.transcode(output_path, audio_codec: 'mp3')
     puts 'Converted downloaded_video to MP3...'
