@@ -15,9 +15,6 @@ class HacksController < ApplicationController
       @q = not_valid_hacks_ransack(params[:q])
     end
 
-    puts '============================================================================================='
-    puts params
-
     @pagy, @hacks = pagy(@q.result.reorder(created_at: :desc), items: 50, size: [1, 3, 3, 1])
   end
 
