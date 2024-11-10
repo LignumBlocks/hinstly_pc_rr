@@ -75,10 +75,10 @@
   <div class="container wrap" style="max-width: 100%;">
       <ul class="subsubsub">
         <li class="">          
-          <%= link_to "All (#{Channel.total_count})", channels_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter] == 'all' }" %> |
+          <%= link_to "All (#{Channel.total_count})", channels_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter].nil? || params[:filter] == 'all' }" %> |
         </li>
         <li>
-          <%= link_to "Processed (#{Channel.where(state: 3).count})", channels_path(filter: 'processed'), class: "text-blue-500 #{'underline' if params[:filter].nil? || params[:filter] == 'valid'}" %> |
+          <%= link_to "Processed (#{Channel.where(state: 3).count})", channels_path(filter: 'processed'), class: "text-blue-500 #{'underline' if params[:filter] == 'processed'}" %> |
         </li>         
       </ul>
       <div class="tablenav top">
@@ -138,9 +138,9 @@
               <td class="px-4 py-4 text-center">
                 <div class="inline-flex gap-2">
                   <% if channel.name.end_with?("(test)") %>
-                    <%= button_to "Test Channel", process_videos_test_channel_path(id: channel.id), method: :post, data: { controller: 'confirmation', confirmation_message_value: 'Are you sure you want to process that channel?', action: 'click->confirmation#confirm' },class: "btn-sm btn-danger" %>
+                    <%= button_to "Test Channel", process_videos_test_channel_path(id: channel.id), method: :post, data: { controller: 'confirmation', confirmation_message_value: 'Are you sure you want to process that channel?', action: 'click->confirmation#confirm' }, class: "btn-sm btn-danger" %>
                   <% else %>
-                    <%= button_to "Process channel", process_videos_channel_path(id: channel.id), method: :post, class: "btn-sm btn-success" %>
+                    <%= button_to "Process channel", process_videos_channel_path(id: channel.id), method: :post, data: { controller: 'confirmation', confirmation_message_value: 'Are you sure you want to process that channel?', action: 'click->confirmation#confirm' }, class: "btn-sm btn-success" %>
                   <% end %>
                   <%= link_to "View channel", channel_path(channel), class: "btn-sm btn-primary" %>
                 </div>

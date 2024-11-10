@@ -46,23 +46,22 @@ class ChannelsController < ApplicationController
   end
 
   def process_videos_test
-    redirect_to channels_path, notice: 'Started channel processing.'
     load_videos_from_db(params[:id])
+    redirect_to channels_path, notice: 'Started channel processing.'
   end
 
   def load_videos_from_db(channel_id)
     channel = Channel.find_by(id: channel_id)
-    count_videos = 0
-    videos = Video.where(channel_id: channel.id, state: :hacks)
 
-    videos.each do |video|
-      ProcessVideoJob.perform_later(video.id)
-      count_videos += 1
-    end
+    videos = Video.where(channel_id: channel.id, state: :hacks)
+    count_videos = videos.size
 
     if count_videos.positive?
       channel.channel_processes.create(count_videos: count_videos)
       channel.broadcast_state(:processing)
+      videos.each do |video|
+        ProcessVideoJob.perform_later(video.id)
+      end
     else
       channel.broadcast_state(:processed)
       channel.update(checked_at: DateTime.now)
@@ -76,22 +75,25 @@ class ChannelsController < ApplicationController
     return unless params[:eventType] == 'ACTOR.RUN.SUCCEEDED'
 
     channel = run.channel
-    count_videos = 0
     items = Services::Apify.new.read_dataset(run.apify_dataset_id)
-    items.each do |item|
+
+    created_videos = items.map do |item|
       video = create_video!(channel, item)
-      if video.state.to_sym == :created
-        ProcessVideoJob.perform_later(video.id)
-        count_videos += 1
-      end
-    end
-    if count_videos.positive?
-      channel.channel_processes.create(count_videos: count_videos)
+      video if video.state.to_sym == :created
+    end.compact
+
+    if created_videos.any?
+      channel.channel_processes.create(count_videos: created_videos.size)
       channel.broadcast_state(:processing)
+
+      created_videos.each do |video|
+        ProcessVideoJob.perform_later(video.id)
+      end
     else
       channel.broadcast_state(:processed)
       channel.update(checked_at: DateTime.now)
     end
+
     run.update(state: 1)
   end
 

@@ -2,10 +2,10 @@ namespace :db do
   desc 'Inserta canales y videos con transcripciones cargadas desde cualquier archivo .txt en lib/tasks/transcriptions/'
   task insert_test_channels_and_videos: :environment do
     user = User.first
-    max = 32
+    max = 10
     if user
       channel = Channel.create!(
-        name: '25_sources(test)',
+        name: 'ChanelInfo(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
