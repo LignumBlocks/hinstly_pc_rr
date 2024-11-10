@@ -2,10 +2,10 @@ namespace :db do
   desc 'Inserta canales y videos con transcripciones cargadas desde cualquier archivo .txt en lib/tasks/transcriptions/'
   task insert_test_channels_and_videos: :environment do
     user = User.first
-    max = 10
+    max = 37
     if user
       channel = Channel.create!(
-        name: 'ChanelInfo(test)',
+        name: '37Transcriptions(test)',
         state: :unchecked,
         user: user,
         external_source: 'ICRT',
@@ -15,7 +15,7 @@ namespace :db do
       transcription_files = Dir[Rails.root.join('lib', 'tasks', 'transcriptions', '*.txt')]
 
       if transcription_files.size < max
-        puts 'Error: Se requieren al menos 32 archivos .txt para completar las transcripciones.'
+        puts 'Error: Se requieren al menos 37 archivos .txt para completar las transcripciones.'
         return
       end
 
@@ -39,7 +39,7 @@ namespace :db do
         puts "Video #{index + 1} y transcripción desde #{File.basename(file)} insertados."
       end
 
-      puts 'Canal y 32 videos con transcripciones insertados exitosamente.'
+      puts 'Canal y 37 videos con transcripciones insertados exitosamente.'
     else
       puts 'No se encontró un usuario para asociar el canal y los videos.'
     end
