@@ -24,6 +24,19 @@ class HacksController < ApplicationController
     @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
   end
 
+  def download_pdf
+    @hack = Hack.find(params[:id])
+    @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML)
+
+    respond_to do |format|
+      format.html
+      format.pdf do
+        render pdf: "Hack_#{@hack.id}",
+               template: "hacks/pdf"
+      end
+    end
+  end
+
   private
 
   def convert_dates_to_yyyymmdd(params, *keys)

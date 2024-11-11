@@ -33,6 +33,8 @@ gem 'ostruct'
 gem 'redis'
 gem 'redcarpet'
 gem 'honeybadger'
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
 
 # Front-end
 gem 'cssbundling-rails', '~> 1.1'

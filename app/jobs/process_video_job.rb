@@ -106,6 +106,8 @@ class ProcessVideoJob < ApplicationJob
   end
 
   def broadcast_video_state(video)
-    ActionCable.server.broadcast 'video_state_channel', { id: video.id, state: video.state }
+    possible_hack = video&.hack&.is_hack? == true
+    is_hack = video&.hack&.hack_validation&.status == true
+    ActionCable.server.broadcast 'video_state_channel', { id: video.id, state: video.state, possible_hack: possible_hack, is_hack: is_hack }
   end
 end

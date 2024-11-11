@@ -35,5 +35,26 @@ consumer.subscriptions.create("VideoStateChannel", {
     }
     const elemText = document.getElementById(`text-state-${data.id}`);
     elemText.innerText = data.state.charAt(0).toUpperCase() + data.state.slice(1).toLowerCase();
+
+    const possible_column = document.getElementById(`video-possible-hack-${data.id}`);
+    if (data.possible_hack === true){
+      possible_column.className = 'bg-green-100 text-green-800 text-xs font-medium border border-green-300 me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'
+      possible_column.innerText = "Yes"
+    }
+    else{
+      possible_column.className = 'bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'
+      possible_column.innerText = "No"
+    }
+
+    const is_hack_column = document.getElementById(`video-is-hack-${data.id}`);
+    if (data.is_hack === true){
+      is_hack_column.className = 'bg-green-100 text-green-800 text-xs font-medium border border-green-300 me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'
+      is_hack_column.innerText = "Yes"
+    }
+    else{
+      is_hack_column.className = 'bg-red-100 text-red-800 text-xs font-medium border border-red-300 me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'
+      is_hack_column.innerText = "No"
+    }
+
   }
 });

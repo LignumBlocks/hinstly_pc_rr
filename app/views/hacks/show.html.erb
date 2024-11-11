@@ -6,7 +6,19 @@
       <%= render partial: "layouts/breadcrumbs", locals: { breadcrumbs: breadcrumbs } %>
     </div>
     <div class="mr-2">
+      <%= link_to download_pdf_hack_path(id: @hack.id, format: :pdf), target: "_blank", class: "text-gray-500 border border-gray-500 hover:bg-gray-200 hover:text-white font-medium rounded text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500" do %>
+        <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2 2 2 0 0 0 2 2h12a2 2 0 0 0 2-2 2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V4a2 2 0 0 0-2-2h-7Zm-6 9a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h.5a2.5 2.5 0 0 0 0-5H5Zm1.5 3H6v-1h.5a.5.5 0 0 1 0 1Zm4.5-3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h1.376A2.626 2.626 0 0 0 15 15.375v-1.75A2.626 2.626 0 0 0 12.375 11H11Zm1 5v-3h.375a.626.626 0 0 1 .625.626v1.748a.625.625 0 0 1-.626.626H12Zm5-5a1 1 0 0 0-1 1v5a1 1 0 1 0 2 0v-1h1a1 1 0 1 0 0-2h-1v-1h1a1 1 0 1 0 0-2h-2Z" clip-rule="evenodd"/>
+        </svg>
+    <% end %>
 
+      <button onclick="copyHackToClipboard()" type="button"
+              class="text-gray-500 border border-gray-500 hover:bg-gray-200 hover:text-white font-medium rounded text-sm p-2.5 text-center inline-flex items-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500">
+        <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M9 8v3a1 1 0 0 1-1 1H5m11 4h2a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v1m4 3v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7.13a1 1 0 0 1 .24-.65L7.7 8.35A1 1 0 0 1 8.46 8H13a1 1 0 0 1 1 1Z"/>
+        </svg>
+        <span class="sr-only">Copy hack</span>
+      </button>
     </div>
   </div>
 
@@ -42,3 +54,63 @@
   </div>
 
 </div>
+
+<script>
+    function copyHackToClipboard() {
+        let textToCopy = "Title\n";
+        textToCopy += "<%= j @hack.title %>\n\n";
+        textToCopy += "Summary\n";
+        textToCopy += "<%= j @hack.summary if @hack.summary %>\n\n";
+        textToCopy += "Justification\n";
+        textToCopy += "<%= j @hack.justification if @hack.justification %>\n\n";
+        textToCopy += "Video Transcription\n";
+        textToCopy += "<%= j @hack.video.transcription.content %>\n\n";
+
+        textToCopy += "Queries\n";
+        textToCopy += "<%= j @hack.queries.pluck(:content).join('\n') %>";
+        textToCopy += '\n\n'
+
+        textToCopy += "Validation Sources\n";
+        <% validation_links = @hack.hack_validation&.links %>
+        <% validation_links ||= "[]" %>
+        <% validation_links = JSON.parse(validation_links) %>
+        textToCopy += "<%= j validation_links.join('\n') %>";
+
+        const hasAdvanceData = "<%= @hack.hack_structured_info.present? %>"
+        if (hasAdvanceData == "true"){
+            textToCopy += "Extended Title\n";
+            textToCopy += "<%= j @hack.hack_structured_info.extended_title %>\n\n";
+            textToCopy += "Description\n";
+            textToCopy += "<%= j @hack.hack_structured_info.description %>\n\n";
+            textToCopy += "Main goal\n";
+            textToCopy += "<%= j @hack.hack_structured_info.main_goal %>\n\n";
+            textToCopy += "Steps Summary\n";
+            textToCopy += "<%= j @hack.hack_structured_info.steps_summary %>\n\n";
+            textToCopy += "Resources Needed\n";
+            textToCopy += "<%= j @hack.hack_structured_info.resources_needed %>\n\n";
+            textToCopy += "Expected Benefits\n";
+            textToCopy += "<%= j @hack.hack_structured_info.expected_benefits %>\n\n";
+            textToCopy += "Detailed Steps\n";
+            textToCopy += "<%= j @hack.hack_structured_info.detailed_steps %>\n\n";
+            textToCopy += "Detailed Steps\n";
+            textToCopy += "<%= j @hack.hack_structured_info.detailed_steps %>\n\n";
+            textToCopy += "Additional tools resources\n";
+            textToCopy += "<%= j @hack.hack_structured_info.additional_tools_resources %>\n\n";
+            try {
+                textToCopy += "Case Study\n";
+                textToCopy += "<%= j @hack.hack_structured_info.case_study %>";
+            } catch (e) {
+                console.log(e.message)
+            }
+
+        }
+
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                // alert("Información copiada al portapapeles.");
+            })
+            .catch(err => {
+                console.error("Error al copiar al portapapeles: ", err);
+            });
+    }
+</script>
