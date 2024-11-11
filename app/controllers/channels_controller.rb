@@ -74,6 +74,8 @@ class ChannelsController < ApplicationController
 
     return unless params[:eventType] == 'ACTOR.RUN.SUCCEEDED'
 
+    run.update(state: 1)
+
     channel = run.channel
     items = Services::Apify.new.read_dataset(run.apify_dataset_id)
 
