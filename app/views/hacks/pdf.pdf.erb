@@ -264,7 +264,7 @@
 </div>
 
 <% if @hack.hack_structured_info %>
-  <div class="p-6">
+  <div class="p-6 pt-2">
     <p class="font-bold">Extended Title</p>
     <p>
       <span><%= @hack.hack_structured_info.extended_title %>
@@ -280,9 +280,8 @@
     <% @hack.hack_category_rels.each do |hack_category_rels| %>
       <li class="mb-2">
         <div class="inline-flex">
-          <h5 class="font-semibold"><%= hack_category_rels.category.name %></h5>
+          <span class="font-bold"><%= "#{hack_category_rels.category.name}: #{hack_category_rels.justification}" %></span>
         </div>
-        <p><%= hack_category_rels.justification %></p>
       </li>
     <% end %>
   </ul></p>
