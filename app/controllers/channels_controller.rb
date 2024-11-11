@@ -33,7 +33,7 @@ class ChannelsController < ApplicationController
   def show
     @channel = current_user.channels.find(params[:id])
     @q = @channel.videos.ransack(params[:q])
-    @pagy, @videos = pagy(@q.result.order(created_at: :desc), items: 50)
+    @pagy, @videos = pagy(@q.result.order(created_at: :desc).distinct, items: 50)
   end
 
   def process_videos

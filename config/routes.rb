@@ -31,7 +31,11 @@ Rails.application.routes.draw do
   end
 
   resources :hacks, only: [:index]
-  resource :hack, only: [:show]
+  resource :hack, only: [:show] do
+    member do
+      get :download_pdf
+    end
+  end
 
   resources :hack_structured_infos
 

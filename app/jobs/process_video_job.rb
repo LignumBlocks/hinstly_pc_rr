@@ -72,21 +72,26 @@ class ProcessVideoJob < ApplicationJob
   end
 
   def transcript_video(video, client)
-    video.update_attribute(:state, :transcribing)
-    broadcast_video_state(video)
-    downloaded_video = URI.open(video.source_download_link)
-    puts 'Downloaded Video...'
+    attempts = 0
+    begin
+      attempts += 1
+      video.update_attribute(:state, :transcribing)
+      broadcast_video_state(video)
+      downloaded_video = URI.open(video.source_download_link)
+      puts 'Downloaded Video...'
 
-    output_path = Tempfile.new(['output', "#{video.id}.mp3"]).path
-    movie = FFMPEG::Movie.new(downloaded_video.path)
-    audio = movie.transcode(output_path, audio_codec: 'mp3')
-    puts 'Converted downloaded_video to MP3...'
+      output_path = Tempfile.new(['output', "#{video.id}.mp3"]).path
+      movie = FFMPEG::Movie.new(downloaded_video.path)
+      audio = movie.transcode(output_path, audio_codec: 'mp3')
+      puts 'Converted downloaded_video to MP3...'
 
-    response = client.audio.translate(parameters: { model: 'whisper-1', file: File.open(audio.path, 'rb') })
-    Transcription.create(video_id: video.id, content: response['text'])
-    video.process_video_log.update(transcribed: true)
-    video.transcription.reload
+      response = client.audio.translate(parameters: { model: 'whisper-1', file: File.open(audio.path, 'rb') })
+      Transcription.create(video_id: video.id, content: response['text'])
+      video.process_video_log.update(transcribed: true)
+      video.transcription.reload
+    end
   rescue FFMPEG::Error => e
+    retry if attempts < 3
     video.update_attribute(:state, :unprocessable)
     broadcast_video_state(video)
   end
@@ -106,6 +111,8 @@ class ProcessVideoJob < ApplicationJob
   end
 
   def broadcast_video_state(video)
-    ActionCable.server.broadcast 'video_state_channel', { id: video.id, state: video.state }
+    possible_hack = video&.hack&.is_hack? == true
+    is_hack = video&.hack&.hack_validation&.status == true
+    ActionCable.server.broadcast 'video_state_channel', { id: video.id, state: video.state, possible_hack: possible_hack, is_hack: is_hack }
   end
 end
