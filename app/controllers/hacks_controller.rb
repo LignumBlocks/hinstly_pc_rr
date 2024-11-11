@@ -2,7 +2,7 @@ require 'open-uri'
 
 class HacksController < ApplicationController
   def index
-    @channels = Channel.all
+    @channels = current_user.channels.all
     hack_filter = params[:filter] || 'valid'
 
     @q = current_user.hacks.ransack(params[:q])

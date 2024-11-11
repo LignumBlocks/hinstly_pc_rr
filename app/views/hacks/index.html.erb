@@ -17,12 +17,14 @@
                 <%= f.text_field :title_or_summary_or_video_channel_name_cont,
                                 class: "block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
                                 placeholder: "Search ..." %>
+
                 <button type="button" onclick="clearSearch()" class="absolute inset-y-0 right-0 flex items-center p-0 m-0 mr-2 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-0">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
+
             <% end %>
       </div>   
     </div>
@@ -83,80 +85,119 @@
       </ul>  
     <div class="tablenav top">
       <%= search_form_for @q, url: hacks_path, method: :get, local: true do |f| %>
-      <div class="alignright filters flex items-center gap-4">
-         <%= hidden_field_tag :filter, params[:filter] %>
-         <%= hidden_field_tag :page, 1 %>
-        <!-- Campo para filtrar por canal -->
-        <div class="pt-2 pb-4">
-          <%= f.select :video_channel_id_eq, 
-            options_for_select([["Select Channel", ""]] + @channels.map { |channel| [channel.name, channel.id] }, params.dig(:q, :video_channel_id_eq)), 
-            {}, 
-            class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" %>
-        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <!-- Campos ocultos para el filtro y la paginación -->
+          <%= hidden_field_tag :filter, params[:filter] %>
+          <%= hidden_field_tag :page, 1 %>
 
-        <div id="date-range-picker" date-rangepicker class="flex items-center" datepicker-format="yyyy-mm-dd">
-          <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                </svg>
+          <!-- Primera columna -->
+          <div class="">
+            <!-- Campo de búsqueda -->
+            <div>
+              <%= f.text_field :title_or_summary_or_video_channel_name_cont,
+                               class: "block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",
+                               placeholder: "Search ..." %>
             </div>
-            <input id="datepicker-range-start" name="q[created_at_gteq]" type="text" 
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                  value="<%= params.dig(:q, :created_at_gteq) %>"
-                  placeholder="Select date start">
+
+            <!-- Filtro por canal -->
+            <div class="">
+              <%= f.select :video_channel_id_eq,
+                           options_for_select([["Select Channel", ""]] + @channels.map { |channel| [channel.name, channel.id] }, params.dig(:q, :video_channel_id_eq)),
+                           {},
+                           class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
+            </div>
           </div>
-          <span class="mx-4 text-gray-500">to</span>
-          <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+
+          <!-- Segunda columna -->
+          <div class="flex flex-col gap-4">
+            <!-- Filtro por clasificación -->
+            <div>
+              <%= f.select :clasifications_id_eq,
+                           options_for_select(Clasification.pluck(:name, :id)),
+                           { include_blank: "All Classifications" },
+                           class: "bg-gray-50 mt-2 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
+            </div>
+
+            <!-- Filtro por categoría -->
+            <div>
+              <%= f.select :hack_category_rels_category_id_eq,
+                           options_for_select(Category.pluck(:name, :id)),
+                           { include_blank: "All Categories" },
+                           class: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" %>
+            </div>
+          </div>
+
+          <!-- Tercera columna con el selector de rango de fechas -->
+          <div date-rangepicker>
+
+          
+
+            <div class="relative">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                 </svg>
+              </div>
+              <input id="datepicker-range-end" name="q[created_at_lteq]" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
             </div>
-            <input id="datepicker-range-end" name="q[created_at_lteq]" type="text"
-                  value="<%= params.dig(:q, :created_at_lteq) %>"  
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                  placeholder="Select date end">
-        </div>
-        </div>
-        <!-- Botón para filtrar -->
-        <%= f.submit "Filter", class: "btn-success btn-sm" %>
-      </div> 
-      <% end %>
 
-      <nav class="flex gap-4 p-2 pl-6 px-4 items-center flex-column flex-wrap md:flex-row justify-between" aria-label="Table navigation">
+            <div class="relative">
+              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
+              </div>
+              <input id="datepicker-range-end" name="q[created_at_lteq]" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+            </div>
+          </div>
+
+
+          <!-- Botón de filtro -->
+          <div class="col-span-3">
+            <%= f.submit "Filter", class: "btn btn-success text-white bg-green-500 hover:bg-green-600 text-sm rounded" %>
+          </div>
+        </div>
+
+    <% end %>
+   <div>
+   </div>
+    </div>
+    <div class="flex justify-end">
+      <nav class="flex gap-4 p-2 pl-6 px-4 items-center justify-end flex-column flex-wrap md:flex-row justify-between" aria-label="Table navigation">
             <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
               <%= t("helpers.page.showing") %> <span class="font-semibold text-gray-900 dark:text-white"><%= "#{@pagy.from}-#{@pagy.to}" %></span> <%= t("helpers.page.of") %> <span class="font-semibold text-gray-900 dark:text-white"><%= @pagy.count %></span></span>
         <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8 list-none">
           <li>
-            <%= link_to t("helpers.page.previous"), hacks_path(params.to_unsafe_h.merge(page: @pagy.prev)), 
-              { 
-                disabled: @pagy.prev.blank?, 
-                class: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-              } %>
+            <%= link_to t("helpers.page.previous"), hacks_path(params.to_unsafe_h.merge(page: @pagy.prev)),
+                        {
+                          disabled: @pagy.prev.blank?,
+                          class: "flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        } %>
           </li>
           <% @pagy.series.each do |page| %>
             <li>
               <% if page.is_a?(Integer) %>
-                <%= link_to page.to_s, hacks_path(params.to_unsafe_h.merge(page: page)), 
-                  class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" %>
+                <%= link_to page.to_s, hacks_path(params.to_unsafe_h.merge(page: page)),
+                            class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" %>
               <% else %>
                 <span class="flex items-center justify-center px-3 h-8 text-gray-500">...</span>
               <% end %>
             </li>
           <% end %>
           <li>
-            <%= link_to t("helpers.page.next"), hacks_path(params.to_unsafe_h.merge(page: @pagy.next)), 
-              { 
-                disabled: @pagy.next.blank?, 
-                class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" 
-              } %>
+            <%= link_to t("helpers.page.next"), hacks_path(params.to_unsafe_h.merge(page: @pagy.next)),
+                        {
+                          disabled: @pagy.next.blank?,
+                          class: "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        } %>
           </li>
         </ul>
 
       </nav>
+
     </div>
-    
+
+
     <div class="table-container">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
