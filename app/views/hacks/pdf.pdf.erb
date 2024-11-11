@@ -19,6 +19,9 @@
       .p-6 {
           padding: 1.5rem;
       }
+      .pt-4 {
+          padding-top: 1rem;
+      }
       .bg-white {
           background-color: white;
       }
@@ -129,8 +132,105 @@
       .text-gray-900 {
           color: #111827;
       }
-      .text-center {
-          text-align: center;
+      .text-blue-600 {
+          color: #2563eb;
+      }
+      .dark\:text-blue-500 {
+          color: #3b82f6;
+      }
+      .hover\:underline:hover {
+          text-decoration: underline;
+      }
+      .list-disc {
+          list-style-type: disc;
+      }
+      .list-outside {
+          list-style-position: outside;
+      }
+      .pl-5 {
+          padding-left: 1.25rem;
+      }
+      .mb-2 {
+          margin-bottom: 0.5rem;
+      }
+      .inline-flex {
+          display: inline-flex;
+      }
+      .items-center {
+          align-items: center;
+      }
+      .py-0\.5 {
+          padding-top: 0.125rem;
+          padding-bottom: 0.125rem;
+      }
+      .w-3\.5 {
+          width: 0.875rem;
+      }
+      .h-3\.5 {
+          height: 0.875rem;
+      }
+      .dark\:text-gray-400 {
+          color: #9ca3af;
+      }
+      .hover\:text-gray-900:hover {
+          color: #111827;
+      }
+      .cursor-pointer {
+          cursor: pointer;
+      }
+      .ms-1 {
+          margin-inline-start: 0.25rem;
+      }
+      .absolute {
+          position: absolute;
+      }
+      .z-10 {
+          z-index: 10;
+      }
+      .invisible {
+          visibility: hidden;
+      }
+      .inline-block {
+          display: inline-block;
+      }
+      .transition-opacity {
+          transition-property: opacity;
+      }
+      .duration-300 {
+          transition-duration: 300ms;
+      }
+      .border {
+          border-width: 1px;
+      }
+      .border-gray-200 {
+          border-color: #e5e7eb;
+      }
+      .rounded-lg {
+          border-radius: 0.5rem;
+      }
+      .shadow-sm {
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+      .opacity-0 {
+          opacity: 0;
+      }
+      .w-72 {
+          width: 18rem;
+      }
+      .dark\:bg-gray-800 {
+          background-color: #1f2937;
+      }
+      .dark\:border-gray-600 {
+          border-color: #4b5563;
+      }
+      .space-y-2 > :not([hidden]) ~ :not([hidden]) {
+          margin-top: 0.5rem;
+      }
+      .normal-case {
+          text-transform: none;
+      }
+      .font-normal {
+          font-weight: 400;
       }
   </style>
 </head>
@@ -181,20 +281,6 @@
       <li class="mb-2">
         <div class="inline-flex">
           <h5 class="font-semibold"><%= hack_category_rels.category.name %></h5>
-          <div class="flex items-center py-0.5 ">
-            <svg data-popover-target="category-info-<%= hack_category_rels.category.id %>" data-popover-placement="bottom"
-                 class="w-3.5 h-3.5 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer ms-1"
-                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm0 16a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm1-5.034V12a1 1 0 0 1-2 0v-1.418a1 1 0 0 1 1.038-.999 1.436 1.436 0 0 0 1.488-1.441 1.501 1.501 0 1 0-3-.116.986.986 0 0 1-1.037.961 1 1 0 0 1-.96-1.037A3.5 3.5 0 1 1 11 11.466Z"/>
-            </svg>
-            <div data-popover id="category-info-<%= hack_category_rels.category.id %>" role="tooltip"
-                 class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
-              <div class="p-3 space-y-2">
-                <p class="text-sm normal-case font-normal"><%= hack_category_rels.category.description %></p>
-              </div>
-              <div data-popper-arrow></div>
-            </div>
-          </div>
         </div>
         <p><%= hack_category_rels.justification %></p>
       </li>
