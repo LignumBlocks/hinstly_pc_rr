@@ -76,32 +76,30 @@
         <% validation_links = JSON.parse(validation_links) %>
         textToCopy += "<%= j validation_links.join('\n') %>";
 
-        const hasAdvanceData = "<%= @hack.hack_structured_info.present? %>"
-        if (hasAdvanceData == "true"){
+        const hasAdvanceData = "<%= @hack&.hack_structured_info&.present? %>"
+
+        if (hasAdvanceData == "true") {
             textToCopy += "Extended Title\n";
-            textToCopy += "<%= j @hack.hack_structured_info.extended_title %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.extended_title %>\n\n";
             textToCopy += "Description\n";
-            textToCopy += "<%= j @hack.hack_structured_info.description %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.description %>\n\n";
             textToCopy += "Main goal\n";
-            textToCopy += "<%= j @hack.hack_structured_info.main_goal %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.main_goal %>\n\n";
             textToCopy += "Steps Summary\n";
-            textToCopy += "<%= j @hack.hack_structured_info.steps_summary %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.steps_summary %>\n\n";
             textToCopy += "Resources Needed\n";
-            textToCopy += "<%= j @hack.hack_structured_info.resources_needed %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.resources_needed %>\n\n";
             textToCopy += "Expected Benefits\n";
-            textToCopy += "<%= j @hack.hack_structured_info.expected_benefits %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.expected_benefits %>\n\n";
             textToCopy += "Detailed Steps\n";
-            textToCopy += "<%= j @hack.hack_structured_info.detailed_steps %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.detailed_steps %>\n\n";
             textToCopy += "Detailed Steps\n";
-            textToCopy += "<%= j @hack.hack_structured_info.detailed_steps %>\n\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.detailed_steps %>\n\n";
             textToCopy += "Additional tools resources\n";
-            textToCopy += "<%= j @hack.hack_structured_info.additional_tools_resources %>\n\n";
-            try {
-                textToCopy += "Case Study\n";
-                textToCopy += "<%= j @hack.hack_structured_info.case_study %>";
-            } catch (e) {
-                console.log(e.message)
-            }
+            textToCopy += "<%= j @hack&.hack_structured_info&.additional_tools_resources %>\n\n";
+            textToCopy += "Case Study\n";
+            textToCopy += "<%= j @hack&.hack_structured_info&.case_study %>";
+
 
         }
 

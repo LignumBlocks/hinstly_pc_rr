@@ -8,6 +8,10 @@
   <link rel="icon" href="/favicon.ico">
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= wicked_pdf_stylesheet_link_tag "application", media: "all" %>
+  <%= wicked_pdf_stylesheet_link_tag "tailwind" %>
+  <%= wicked_pdf_stylesheet_pack_tag %>
+  <%= wicked_pdf_javascript_include_tag "number_pages" %>
 </head>
 
 <body class="<%= body_class %>">
