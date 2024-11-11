@@ -75,10 +75,10 @@
   <div class="container wrap" style="max-width: 100%;">
       <ul class="subsubsub">
         <li class="">          
-          <%= link_to "All (#{Channel.total_count})", channels_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter].nil? || params[:filter] == 'all' }" %> |
+          <%= link_to "All (#{current_user.channels.count})", channels_path(filter: 'all'), class: "text-blue-500 #{'underline' if params[:filter].nil? || params[:filter] == 'all' }" %> |
         </li>
         <li>
-          <%= link_to "Processed (#{Channel.where(state: 3).count})", channels_path(filter: 'processed'), class: "text-blue-500 #{'underline' if params[:filter] == 'processed'}" %> |
+          <%= link_to "Processed (#{current_user.channels.where(state: 3).count})", channels_path(filter: 'processed'), class: "text-blue-500 #{'underline' if params[:filter] == 'processed'}" %> |
         </li>         
       </ul>
       <div class="tablenav top">

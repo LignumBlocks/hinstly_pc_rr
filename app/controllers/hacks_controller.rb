@@ -4,6 +4,7 @@ class HacksController < ApplicationController
   def index
     @channels = Channel.all
     hack_filter = params[:filter] || 'valid'
+
     @q = current_user.hacks.ransack(params[:q])
 
     params[:q]&.delete(:video_channel_id_eq) if params.dig(:q, :video_channel_id_eq).blank?
@@ -32,7 +33,7 @@ class HacksController < ApplicationController
       format.html
       format.pdf do
         render pdf: "Hack_#{@hack.id}",
-               template: "hacks/pdf"
+               template: 'hacks/pdf'
       end
     end
   end
@@ -57,7 +58,6 @@ class HacksController < ApplicationController
                 .ransack(query_params)
   end
 
-  # Scope para hacks no válidos
   def not_valid_hacks_ransack(query_params)
     current_user.hacks
                 .left_joins(:hack_structured_info, :hack_validation)
