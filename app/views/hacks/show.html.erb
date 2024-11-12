@@ -83,6 +83,8 @@
             textToCopy += "<%= j @hack&.hack_structured_info&.extended_title %>\n\n";
             textToCopy += "Description\n";
             textToCopy += "<%= j @hack&.hack_structured_info&.description %>\n\n";
+            textToCopy += "Analysis\n";
+            textToCopy += "<%= j @hack&.hack_validation.analysis %>\n\n";
             textToCopy += "Main goal\n";
             textToCopy += "<%= j @hack&.hack_structured_info&.main_goal %>\n\n";
             textToCopy += "Steps Summary\n";

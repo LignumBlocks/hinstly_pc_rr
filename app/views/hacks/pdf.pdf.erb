@@ -275,6 +275,9 @@
     <p class="font-bold mt-4">Description</p>
     <p class=""><%= raw(@markdown.render(@hack.hack_structured_info.description)) %></p>
 
+    <p class="font-bold mt-4">Analysis</p>
+    <p class=""><%= raw(@markdown.render(@hack.hack_validation.analysis)) if @hack.hack_validation %></p>
+
     <p class="font-bold mt-4">Categories</p>
     <p><ul class="list-disc list-outside pl-5">
     <% @hack.hack_category_rels.each do |hack_category_rels| %>
